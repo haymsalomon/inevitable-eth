@@ -1,0 +1,53 @@
+<!--
+title: KZG Part 2: Open
+description: 
+published: true
+date: 2022-12-03T05:10:17.913Z
+tags: 
+editor: undefined
+dateCreated: 2022-12-03T04:52:41.977Z
+-->
+
+<figure class="image"><img src="/kzg-open-1.jpeg"></figure>
+<p style="text-align:center;"><i>This is part 2 of a 3 part series on KZG Commitments. Here are links to </i><a href="/home/concepts/kzg-commitment/commit"><i>part 1</i></a><i>, </i><a href="/home/concepts/kzg-commitment/verify"><i>part 3</i></a><i> and the </i><a href="/home/concepts/kzg-commitment"><i>summary article</i></a><i>.</i></p>
+<h1 style="text-align:center;">KZG Commitments Part 2: Open</h1>
+<h2>Prerequisites</h2>
+<h3>Elliptic Curve Cryptography</h3>
+<p>Elliptic curve cryptography looks unapproachable, but it's totally understandable with a decent amount of high school algebra.&nbsp;</p>
+<p>Check out this <a href="https://inevitableeth.com/home/concepts/elliptic-curve-cryptography">Into to Elliptic Curve Cryptography</a> and you'll have the math you need to get through this article.</p>
+<h2>Notation</h2>
+<figure class="image"><img src="/kzg-open-3.jpeg"></figure>
+<p>At this point our graphic has become too cluttered to be useful, so we will simplify in the name of readability.&nbsp;</p>
+<p>Nothing has changed, we are still working in modular arithmetic.&nbsp;</p>
+<h2>KZG Commitment Scheme</h2>
+<p><a href="/home/concepts/polynomial-commitment">Deep Dive: Polynomial Commitment Schemes</a></p>
+<p>A polynomial commitment scheme allows one party to publicly commit to a specific dataset without giving away any info about the underlying data.&nbsp;</p>
+<p>Once a commitment has been calculated, the data is locked in; any changes to the data will result in invalid proof generation.</p>
+<p>A KZG polynomial commit can be "opened" with any data point without revealing the entire dataset.&nbsp;</p>
+<p>Let's say I am thinking of 10 words. I write them each down on different pieces of paper. If you guess correct, i ONLY show you the correct 1 (keeping the other 9 hidden).</p>
+<h3>KZG Commitments Part 1: Commit</h3>
+<p><a href="/home/concepts/kzg-commitment/commit">Deep Dive: KZG Commitments Part 1 - Commit</a></p>
+<p>First, we generate a polynomial from our data using a mathematical process called a Lagrange Interpolation.&nbsp;</p>
+<p>Then, we calculate the value of this polynomial evaluated with a secret number S (hidden within an elliptic curve).</p>
+<p>Once the commitment is calculated, the prover is bound to this specific data. The scheme is going to pivot around this specific value, derived from this specific polynomial.&nbsp;</p>
+<p>A change to even a single bit will result in a brand new polynomial (and therefore commit value).</p>
+<h2>Opening a Commitment</h2>
+<figure class="image"><img src="/kzg-open-4.jpeg"></figure>
+<p>Now that the prover has been bound to this specific set of data, we can test the commitment by opening a proof at singular piece of data.&nbsp;</p>
+<p>The verifier, an independent entity who may or may not have access to the entire dataset, now chooses a piece of data to verify.</p>
+<p>Let z be the piece of data the verifier is going to test... and so he sends z over to the prover.&nbsp;</p>
+<p>First, the prover calculates f(z).&nbsp;</p>
+<p>This is very easy for the prover; he has already built the polynomial in order to generate the commitment. He simply runs z through.</p>
+<h2>Dividing Polynomials</h2>
+<figure class="image"><img src="/kzg-open-5.jpeg"></figure>
+<p>We are going to hand wave through the math, but <a href="https://www.cuemath.com/algebra/dividing-polynomials/">here's a great resource to learn more</a>.</p>
+<p>tl;dr you can divide polynomials. It's not a particularly complicated operation, in fact it (can) look like long division.&nbsp;</p>
+<p>Because the prover has built the polynomial, it is very easy for them to create the new polynomial h(x).&nbsp;</p>
+<p>h(x) is the quotient polynomial built off of our proof data z.</p>
+<h2>Summary</h2>
+<figure class="image"><img src="/kzg-open-6.jpeg"></figure>
+<p>The important takeaway: the verifier provides a value (a piece of data in the dataset to which the prover is committed) around which the prover is going to create an elliptic curve point and one other value.</p>
+<p>And that's it! Our commitment is open and the prover has created all the pieces that the verifier needs to verify the proof!&nbsp;</p>
+<h2>Resources</h2>
+<p>Source Material - <a href="https://twitter.com/SalomonCrypto/status/1583283784761233408">Twitter Link</a></p>
+<p>Source Material - <a href="/twitter-pdf-2022-10-21_kzg_open.pdf">PDF</a></p>

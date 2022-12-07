@@ -1,0 +1,107 @@
+<!--
+title: Danksharding P2P Network
+description: 
+published: true
+date: 2022-12-03T19:40:28.712Z
+tags: 
+editor: undefined
+dateCreated: 2022-12-03T16:58:59.975Z
+-->
+
+<figure class="image"><img src="/p2p-network-1.jpeg"></figure>
+<h1 style="text-align:center;">Danksharding P2P Network</h1>
+<h2>Prerequisites</h2>
+<h3>Time in Ethereum</h3>
+<p><a href="https://inevitableeth.com/home/ethereum/network/consensus/time">Deep Dive: Time in Ethereum</a></p>
+<p>Every 12 seconds, Ethereum opens a new slot, expecting a new block.&nbsp;</p>
+<p>Within a block there are thousands <a href="https://inevitableeth.com/home/ethereum/blockchain/block">transactions</a>, but they execute atomically: either all together or none at all.</p>
+<p>An epoch is made up of 32 slots.</p>
+<h2>The World Computer</h2>
+<p>Ethereum exists between a network of 1,000s of computers (<a href="https://inevitableeth.com/home/ethereum/network/node">nodes</a>), each running a local version of the <a href="https://inevitableeth.com/home/ethereum/evm">Ethereum Virtual Machine</a> (EVM). All copies of the EVM are kept perfectly in sync.&nbsp;</p>
+<p>Any individual EVM is a window into the shared state of the <a href="https://inevitableeth.com/home/ethereum/world-computer">World Computer</a>.</p>
+<p>Today, the World Computer is... just ok. Execution is expensive and there isn't that much storage space. Yes, you can do (almost) anything, it's just going to be expensive and slow.</p>
+<p><a href="/home/ethereum/upgrades/scaling/execution">The solution: rollups</a>. Independent blockchains that use Ethereum as a <a href="/home/concepts/settlement">settlement</a> layer.</p>
+<h2>The Data Availability Bottleneck</h2>
+<figure class="image"><img src="/data-availability-sampling-2.jpeg"></figure>
+<p><a href="/home/ethereum/upgrades/scaling/data/data-availability-bottleneck">Deep Dive: Data Availability Bottleneck</a></p>
+<p>Rollups are fantastic; we're barely in the opening inning and we've already seen just how fast and cheap we can get execution.&nbsp;</p>
+<p>Unfortunately, rollups only solve the execution problem. If anything they actually make handling data even more of a challenge.</p>
+<p>And so, this is the problem space we are entering: how can we scale the data capabilities of Ethereum without increasing the individual node requirements?</p>
+<p>There really only is one option: we have to distribute the data.</p>
+<h2>Ethereum Actors</h2>
+<p>Node - real computer running Ethereum software, can run many validators</p>
+<p>Validator - a role granted by staking $ETH, requires operating a node</p>
+<p>Ethereum itself doesn't distinguish; from the protocol's perspective, a validator = node = IRL computer</p>
+<h2>Types of Networks</h2>
+<figure class="image"><img src="/p2p-network-2.png"></figure>
+<p>Let's consider two models of network: hub-and-spoke and peer-to-peer.&nbsp;</p>
+<ul>
+  <li>Hub-and-spoke = centralized (trusted) super-nodes route traffic through the network.&nbsp;</li>
+  <li>Peer-to-peer (P2P) = each node connects directly to its peer nodes. No node is more trusted than another.</li>
+</ul>
+<p>Ethereum is an example of a P2P network: each validator has the same privileges and responsibilities as the other validators and send messages directly to their peer nodes.&nbsp;</p>
+<p>The problem: there are ~450k validators, all chattering back and forth.&nbsp;</p>
+<p>That is SO MUCH noise.</p>
+<p>Fortunately, we have a solution: we can implement communication channels.&nbsp;</p>
+<p>Remember those push-to-talk radios? Same idea, you can only send/receive messages from the channel you are currently tuned into.</p>
+<figure class="image"><img src="/p2p-network-3.png"></figure>
+<h2>Distributing the Data</h2>
+<p>We are going to apply two separate strategies.&nbsp;</p>
+<h3>Randomly Sampled Committees</h3>
+<p><a href="/home/ethereum/upgrades/scaling/data/p2p-network/randomly-sampled-committees">Deep Dive: Randomly Sampled Committees</a></p>
+<p>First, randomly sampled committees.&nbsp;</p>
+<p>The validator set will be broken into committees, each responsible for ensuring data availability for only a single blob.</p>
+<h3>Data Availability Sampling</h3>
+<p><a href="/home/ethereum/upgrades/scaling/data/p2p-network/data-availability-sampling">Deep Dive: Data Availability Sampling</a></p>
+<p>Second, we will apply data availability sampling.&nbsp;</p>
+<p>Every validator engages in data availability sampling, selecting a tiny portion of the data across every block/blob and attempting to download it.</p>
+<h2>P2P Network Design</h2>
+<figure class="image"><img src="/p2p-network-4.png"></figure>
+<p>Now we can begin to see our P2P Network design.&nbsp;</p>
+<p>We start with our unit of time: epochs. We need channels for each blob and each index, implying a two-dimensional design.&nbsp;</p>
+<p>And so, we'll build out a P2P grid!</p>
+<p>Rows represent horizontal channels for randomly sampled committees (assigned at the beginning of each epoch).&nbsp;</p>
+<p>Columns represent vertical channels for data availability sampling.&nbsp;</p>
+<p>Each channel is responsible for sampling ALL blobs at that specific index.</p>
+<figure class="image"><img src="/p2p-network-5.jpeg"></figure>
+<h2>Publishing to the Network</h2>
+<figure class="image"><img src="/p2p-network-6.png"></figure>
+<p>Publishing blobs to the network is a 3 step process:</p>
+<ol>
+  <li>The blob proposer broadcasts the blob header to a global subnet.&nbsp;</li>
+  <li>All nodes receive this header and use it for verification. The proposer broadcasts the blob to all peers on the appropriate horizontal subnet.</li>
+  <li>As each node on the horizontal subnet receives a copy of the (full) blob, they identify the data samples corresponding to the vertical subnets they are subscribed to. They then isolate those samples and broadcast them to the appropriate vertical subnet.</li>
+</ol>
+<h3>Data Implications</h3>
+<p>Let's add in some (realistic) numbers so you can get a sense of the idea.&nbsp;</p>
+<p><a href="https://hackmd.io/@vbuterin/sharding_proposal">In his blog, Vitalik talks about</a>:&nbsp;</p>
+<ul>
+  <li>~20 data samples per node/validator&nbsp;</li>
+  <li>512 byte data sample size&nbsp;</li>
+  <li>1 MB blob size&nbsp;</li>
+</ul>
+<p>And some basics, 1 epoch = 32 slots = 2,048 blobs</p>
+<p>Let's imagine an entire epoch has passed under this system and consider the data implications.&nbsp;</p>
+<ul>
+  <li>Each node is subscribed to a single horizontal subnet and so must download one blob.&nbsp;</li>
+  <li>Each node is also subscribed to 20 vertical subnets and so must download 20 data samples.</li>
+</ul>
+<p>1 blob (1 MB) + 20 samples (10 kB) = 1.1 MB of required data download/processing per epoch.&nbsp;</p>
+<p>In contrast, if we made every blob download 100% of the data, each epoch would required 2,048 blobs (2 GB) and 0 samples.&nbsp;</p>
+<p>We are talking about a 99.95% reduction.</p>
+<p>BUT the result is that the data doesn't actually exist in its full form on the network. And so, before we can call our P2P design complete, we need to devise a way to recover the data.&nbsp;</p>
+<p>We must reconstruct the blob using the pieces distributed around Ethereum.&nbsp;</p>
+<h2>Retrieving from the Network</h2>
+<figure class="image"><img src="/p2p-network-7.jpeg"></figure>
+<p>Fortunately, our design makes this process incredibly easy; we just run the publication process in reverse!&nbsp;</p>
+<p>We begin with the vertical subnets. Each participant publishes the relevant sample to the appropriate horizontal subnet where it is reconstructed.&nbsp;</p>
+<h2>Summary</h2>
+<p>This is the basic structure behind data scaling in Ethereum: we ensure all of the data is readily available within the system WITHOUT requiring any single node to hold it all.</p>
+<p>The secret: clever P2P design that allows the efficient storage of movement and data.</p>
+<p>But designing the network and creating a data-scheme is only half the battle.&nbsp;</p>
+<p>The second half is actually designing the system.&nbsp;</p>
+<p>For that, we are going to need something intricate... something secure enough to protect the World Computer.&nbsp;</p>
+<p>Something super DANK!</p>
+<h2>Resources</h2>
+<p>Source Material - <a href="https://twitter.com/SalomonCrypto/status/1585042835459387392">Twitter Link</a></p>
+<p>Source Material - <a href="/twitter-pdf-2022-10-25_p2p_network.pdf">PDF</a></p>

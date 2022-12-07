@@ -1,0 +1,81 @@
+<!--
+title: Polynomial Encoding
+description: 
+published: true
+date: 2022-11-30T22:04:51.355Z
+tags: 
+editor: undefined
+dateCreated: 2022-11-30T22:04:47.313Z
+-->
+
+<figure class="image"><img src="/polynomial-encoding-1.jpeg"></figure>
+<h1 style="text-align:center;">Polynomial Encoding</h1>
+<h2>Prerequisites</h2>
+<h3>Polynomials</h3>
+<figure class="image"><img src="/polynomial-encoding-2.png"></figure>
+<p>A polynomial is an equation made up of one or more groups of terms that are combined together with addition or subtraction.&nbsp;</p>
+<p>Normally you would see a polynomial written in function form (as seen below).&nbsp;</p>
+<h3>Functions</h3>
+<figure class="image"><img src="/polynomial-encoding-3.png"></figure>
+<p>The f(x) notation can be read as "x is a placeholder in this function. When I am ready to evaluate it, replace x with the evaluation number and calculate the result."</p>
+<p>A function can generate an infinite number of points; you control the input (x) and so you can just keep changing it to produce more and more outputs.&nbsp;</p>
+<p>And so, a function is an incredibly efficient way to express data. One line can represent infinite points.</p>
+<h2>Lagrange Polynomial</h2>
+<p>So, here's a question: if a function can represent a huge amount of data in one expression, can we go backward?&nbsp;</p>
+<p>Can you take a huge amount of data and create a representative single expression?&nbsp;</p>
+<p>The answer, of course, is yes! <a href="https://en.wikipedia.org/wiki/Joseph-Louis_Lagrange">And we've know how for over 200 years</a>!</p>
+<p>A <a href="https://en.wikipedia.org/wiki/Lagrange_polynomial">Lagrange polynomial</a> the simplest, unique polynomial that fits a particular set of data (simplest meaning it has the least possible polynomial terms -- lowest possible degree).&nbsp;</p>
+<p>Frankly, the math is absurd; we will take it for granted.</p>
+<figure class="image"><img src="/polynomial-encoding-4.png">
+  <figcaption><a href="https://mathworld.wolfram.com/LagrangeInterpolatingPolynomial.html"><i>source</i></a></figcaption>
+</figure>
+<p>Regardless of how wild your data is, there exists a line that passes through all of it.&nbsp;</p>
+<p>All you really need to know about a Lagrange polynomial that is is the simplest function that will evaluate to all of your points. And that it's (relatively) easy/quick to compute.</p>
+<p>In fact, let's just assume that it's actually so quick and easy to commute that it is entirely irrelevant to modern computing.&nbsp;</p>
+<figure class="image"><img src="/polynomial-encoding-5.png"></figure>
+<p>That we can basically consider a function and a set of evaluation points equivalent.</p>
+<h2>Encoding Data</h2>
+<p>Let's take a step away from polynomials for a moment; I want you to think about computer data. For example, let's take a look at a single world: STUART.&nbsp;</p>
+<p>These 6 letters are displayed to you, but that's not how your computer understands them. <a href="/home/background/mass-comm/computer">Your computer thinks in numbers and math</a>, and so must represent STUART numerically. Behind the scenes, each letter is represented by a number.&nbsp;</p>
+<p>The number is stored by the computer, it is only changed to a letter for human eyes.</p>
+<p>Here is an encoding table for the Latin alphabet:</p>
+<figure class="image"><img src="/polynomial-encoding-6.png">
+  <figcaption><a href="https://blog.cloudflare.com/a-relatively-easy-to-understand-primer-on-elliptic-curve-cryptography/"><i>source</i></a></figcaption>
+</figure>
+<p>Every letter has a unique number; a computer will store and process the numerical version, a human will be able to work with the letter version.&nbsp;</p>
+<p>And so, STUART is 83, 84, 85, 65, 82, 84</p>
+<p>Using this method, we can convert any data into an ordered list of numbers.&nbsp;</p>
+<h2>Data to Data Points</h2>
+<p>STUART = 83, 84, 85, 65, 82, 84.&nbsp;</p>
+<p>Put another way:&nbsp;</p>
+<ul>
+  <li>First position: 83&nbsp;</li>
+  <li>Second position: 84&nbsp;</li>
+  <li>Third position: 85&nbsp;</li>
+  <li>Fourth position: 65&nbsp;</li>
+  <li>Fifth position: 82&nbsp;</li>
+  <li>Sixth position: 84&nbsp;</li>
+</ul>
+<p>How about we just write it like this: (1, 83), (2, 84), (3, 85), (4, 65), (5, 82), (6, 84)</p>
+<p>In fact, you can transform any data into a set of points of an x,y graph by breaking the data into pieces.&nbsp;</p>
+<ul>
+  <li>X: the piece number&nbsp;</li>
+  <li>Y: the specific data at that piece number&nbsp;</li>
+</ul>
+<p>Once you have a set of points, you can derive the Lagrange polynomial.</p>
+<h2>Generating a Polynomial</h2>
+<figure class="image"><img src="/polynomial-encoding-7.jpeg"></figure>
+<p>Take your data (converted into numbers, broken into chunks) and add it to a graph, one chunk at a time.&nbsp;</p>
+<p>When all the data is graphed, "draw" the polynomial through it to derive a single formula that expresses every data point.</p>
+<h2>Summary</h2>
+<p>This is what we are here to learn:&nbsp;</p>
+<ul>
+  <li>it is possible to represent an arbitrary set of data as a polynomial&nbsp;</li>
+  <li>you can (relatively) quickly and easily find the equation of said polynomial through a process known as the Lagrange Interpolation</li>
+</ul>
+<p>As we continue forward, we will learn why this is a useful property. For now, just remember the big picture:&nbsp;</p>
+<p>Data → polynomial → data&nbsp;</p>
+<p>Data = polynomial</p>
+<h2>Resources</h2>
+<p>Source Material - <a href="https://twitter.com/SalomonCrypto/status/1581314867243327489">Twitter Link</a></p>
+<p>Source Material - <a href="/twitter-pdf-2022-10-15_polynomial_encoding.pdf">PDF</a><br>&nbsp;</p>

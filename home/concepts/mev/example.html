@@ -1,0 +1,65 @@
+<!--
+title: MEV Example
+description: 
+published: true
+date: 2022-11-30T04:59:25.018Z
+tags: 
+editor: undefined
+dateCreated: 2022-11-30T04:54:26.641Z
+-->
+
+<figure class="image"><img src="/mev-1.jpeg"></figure>
+<h1 style="text-align:center;">Maximum Extractable Value (MEV)</h1>
+<h2>Prerequisites</h2>
+<h3>Arbitrage</h3>
+<p><a href="/home/concepts/arbitrage">Arbitrage</a> is the opportunity to secure a guaranteed profit by identifying and exploiting an information discrepancy.&nbsp;</p>
+<h3>Gas</h3>
+<p><a href="/home/concepts/gas">Gas</a> is the unit of computation on Ethereum, paid for by the person/entity who generated the transaction.</p>
+<h2>MEV</h2>
+<p>Maximum Extractable Value (MEV) is value that can be extracted from a blockchain system by a participant with privileged knowledge or access.&nbsp;</p>
+<p>The classic and most common example of MEV comes from the execution process of blockchain transactions.&nbsp;</p>
+<p>Let’s walk through.</p>
+<h2>In an Ideal World</h2>
+<h3>Generating a Transaction</h3>
+<figure class="image"><img src="/mev-2.jpeg"></figure>
+<p>First a user generates a transaction.&nbsp;</p>
+<p>A transaction can be anything: a transfer, a trade, a deposit, etc.&nbsp;</p>
+<p>Users typically use a wallet, but transactions can also be generated programmatically or directly on <a href="https://etherscan.io/">Etherscan</a>.</p>
+<h3>Pending in the Mempool</h3>
+<figure class="image"><img src="/mev-3.jpeg"></figure>
+<p>A transaction is bundled up into packets of data and sent to the Mempool. There it wait with all the pending transactions, waiting to selected to be included into the next block.&nbsp;</p>
+<p>Transaction selection is based on how much gas the user bid when s/he created the transaction.</p>
+<h3>Building a Block</h3>
+<figure class="image"><img src="/mev-4.jpeg"></figure>
+<p>As transactions are selected, they are bundled into a block.&nbsp;</p>
+<p>Once the block fills up, it is ready to be sent to the blockchain for approval and inclusion.</p>
+<h3>Joining the Chain</h3>
+<figure class="image"><img src="/mev-5.jpeg"></figure>
+<p>Blocks are sent to validators, who hold a current copy of the blockchain. They evaluate every new block; if it is a valid block (uses the correct start &amp; end state and no invalid transactions).&nbsp;</p>
+<p>If the block is approved by the network, it is added to the blockchain.</p>
+<h3>Complete Process</h3>
+<figure class="image"><img src="/mev-6.jpeg"></figure>
+<h2>Mempool Risk</h2>
+<p>The issue is the openly accessible mempool.&nbsp;</p>
+<p>The process we described assumed everyone was a good actor and transactions were all mutually independent.&nbsp;</p>
+<p>Poor assumption.</p>
+<p>Think about what’s in the mempool. Not only is every specific transaction out there in the open, but a smart watcher can figure out what order they’ll be executed in.&nbsp;</p>
+<p>I mean, all you have to do is rank by gas cost. And suddenly you have a roadmap to extract MEV.</p>
+<h2>Extracting Value</h2>
+<h3>Gathering Information</h3>
+<figure class="image"><img src="/mev-7.jpeg"></figure>
+<p>MEV is a function of the specific network conditions and the specific transactions that happen. An MEV attacker will watch the mempool, patiently waiting and looking for opportunities.</p>
+<h3>Profiting</h3>
+<figure class="image"><img src="/mev-8.jpeg"></figure>
+<p>When s/he (it’s usually a bot) sees an opportunity, s/he quickly constructs the perfect transaction to extract value without taking any risk. S/he then gets them to the producer ASAP.&nbsp;</p>
+<p>By carefully crafting gas bids, the transaction executes around the extractable value</p>
+<p>The txns are valid (although malicious) and so the block passed consensus and is added to the blockchain. MEV was extracted and whoever generated the transaction is none the wiser.&nbsp;</p>
+<p>Their transactions keep executing, the MEV bot keeps extracting, and the world keeps turning.</p>
+<h2>Resources</h2>
+<p>Further Reading/Listening</p>
+<ul>
+  <li><a href="https://twitter.com/hasufl">Hasu</a>/<a href="https://twitter.com/thegostep">Stephane Gosselin</a> on <a href="https://twitter.com/hasufl/status/1529401140097466368">Uncommon Core</a></li>
+</ul>
+<p>Source Material - <a href="https://twitter.com/SalomonCrypto/status/1540870370437107712">Twitter Link</a></p>
+<p>Source Material - <a href="/twitter-pdf-2022-06-25_mev_101.pdf">PDF</a></p>
+<p>&nbsp;</p>

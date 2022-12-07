@@ -1,0 +1,78 @@
+<!--
+title: PCS Trusted Setup
+description: 
+published: true
+date: 2022-12-02T01:38:02.778Z
+tags: 
+editor: undefined
+dateCreated: 2022-12-02T01:35:58.530Z
+-->
+
+<figure class="image"><img src="/pcs-trusted-setup-1.jpeg"></figure>
+<p style="text-align:center;"><i>This is part of a series on elliptic curve cryptography and its applications for Ethereum. This is simplified to a MINIMAL level, aiming at ~high-school math.</i></p>
+<h1 style="text-align:center;">Polynomial Commitment Scheme Trusted Setup</h1>
+<h2>Prerequisites</h2>
+<h3>Modular Arithmetic&nbsp;</h3>
+<p>The <a href="https://en.wikipedia.org/wiki/Modular_arithmetic">modulo operator</a> (written as "mod") is the operation that finds the remainder.&nbsp;</p>
+<ul>
+  <li>10 / 3 = 3 with a remainder of 1 = 10 mod 3 = 1</li>
+  <li>14 / 6 = 2 with a remainder of 2 = 14 mod 6 = 2</li>
+  <li>3 / 10 = 0 with a remainder of 3 = 3 mod 10 = 3</li>
+</ul>
+<p>Imagine a clock being mod 12.</p>
+<h3>Elliptic Curve Cryptography</h3>
+<p><a href="/home/concepts/elliptic-curve-cryptography">Deep Dive: Elliptic Curve Cryptography</a></p>
+<p>It is very difficult to solve the elliptic curve discrete logarithm problem (that is, if you add two points over and over again using modular arithmetic, it takes A LOT of work to find out how many times you did it).</p>
+<p>If a clock is mod 12, then consider the following question: "Alice left at 4 and arrived at 6. How many hours did she spend traveling?" 2 hours? 14 hours? 26 hours? The only way to figure it out is to start guessing.&nbsp;</p>
+<p>This is the discrete logarithm problem.</p>
+<h2>Elliptic Curve Foundation</h2>
+<p>Any (decent) cryptographic system has the same two part goal:&nbsp;</p>
+<ul>
+  <li>transform data into digital-nonsense, indistinguishable from random noise</li>
+  <li>allow specific individuals (and only those individuals) to reverse the process and recover the original data</li>
+</ul>
+<p>Again, it is very hard to solve the elliptic curve discrete logarithm problem. Like "1,000s of gigabrains have been working for 30+ years/there are trillions of dollars at stake and we still just guessing" hard.</p>
+<p>This is the property we are going to build our system out of.</p>
+<p>We are going to start off by hiding a secret number inside an elliptic curve.&nbsp;</p>
+<h2>A Hidden Secret</h2>
+<p>First, pick a number.</p>
+<p>The number must be 100% random and secret. At the end of this process this number will be thrown away; it will never be known directly, it will just exist hidden in an elliptic curve.</p>
+<p>For now, just use god mode: we are just going to assert that a single computer generates a random number S and permanently discards it at the end of this process.&nbsp;</p>
+<p>In practice, we use methods based around secure multiparty computation... but we'll get to that part later.</p>
+<h2>Preparing the Curve</h2>
+<p>Now that we have our secret S, it's time to prepare our elliptic curve.&nbsp;</p>
+<p>First, we must bind our curve to a minimum and maximum bounds using modular arithmetic. As previously discussed, this will (intentionally) introduce the elliptic curve discrete logarithm problem.</p>
+<figure class="image"><img src="/pcs-trusted-setup-2.jpeg"></figure>
+<p>Next, we are going to use our (modular) elliptic curve and our secret (number) S to generate a series of values.&nbsp;</p>
+<p>We want to start with S<sup>0</sup> and end with S<sup>n</sup>, each time feeding it into our elliptic curve formula and generate a new value, representing a point on the curve.</p>
+<figure class="image"><img src="/pcs-trusted-setup-3.jpeg"></figure>
+<p>Take a look at the example below. Don't pay attention to the specific numbers (I literally bashed my keyboard like an ape).&nbsp;</p>
+<figure class="image"><img src="/pcs-trusted-setup-4.jpeg"></figure>
+<p>The point is&nbsp;</p>
+<ul>
+  <li>to illustrate how S progresses with each round</li>
+  <li>to understand the outputs are real values/numbers, not formulas.</li>
+</ul>
+<p>In fact, both parts components of the elliptic curve point (x and y) are provided - which includes S, S<sup>2</sup>, S<sup>3</sup>, etc. But this is when the discrete logarithm problem comes into play.&nbsp;</p>
+<p>The difficult problem: discovering S in precisely this situation.</p>
+<h2>A Lost Number</h2>
+<figure class="image"><img src="/pcs-trusted-setup-5.jpeg"></figure>
+<p>Without access to S, the list of points look like noise. Yes, we can see the clear horizontal symmetry, but otherwise it seems near random (for the record, this randomness is at the mathematical level, no need to rely on my graphic).&nbsp;</p>
+<p>But that's the point! It's NOT random!</p>
+<p>We use this process to generate n points - n is as many as we desire, we’ll understand how many we need a little later in the series.&nbsp;</p>
+<p>At the end of the process we permanently discard S. After this step, the true value of S becomes forever lost.</p>
+<figure class="image"><img src="/pcs-trusted-setup-6.jpeg"></figure>
+<p>This is all that remains of S. A secret number lost in a scattered mess of points.&nbsp;</p>
+<p>An arbitrary splattering of points, indistinguishable from random data.&nbsp;</p>
+<p>Exactly what we are looking for in a robust cryptographic system!</p>
+<h2>Summary</h2>
+<p>If nothing else, here's what you should walk away with:</p>
+<ul>
+  <li>we want to hide a secret number S</li>
+  <li>we generate points by repeatedly multiplying S with itself and applying our elliptic curve function</li>
+  <li>the specific points - related by S - are indistinguishable from random data</li>
+  <li>the true value of S is destroyed and lost, forever</li>
+</ul>
+<h2>Resources</h2>
+<p>Source Material - <a href="https://twitter.com/SalomonCrypto/status/1581864402076151809">Twitter Link</a></p>
+<p>Source Material - <a href="/twitter-pdf-2022-10-17_pcs_trusted_setup.pdf">PDF</a><br>&nbsp;</p>

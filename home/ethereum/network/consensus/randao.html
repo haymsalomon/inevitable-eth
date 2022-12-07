@@ -1,0 +1,74 @@
+<!--
+title: RANDAO
+description: 
+published: true
+date: 2022-12-01T05:11:12.837Z
+tags: 
+editor: undefined
+dateCreated: 2022-11-30T18:38:29.292Z
+-->
+
+<figure class="image"><img src="/randao-1.jpeg"></figure>
+<h1 style="text-align:center;">RANDAO</h1>
+<h2>Prerequisites</h2>
+<h3>BLS Digital Signatures</h3>
+<p><a href="/home/concepts/bls-signatures">BLS Digital Signatures</a> - A method of generating <a href="/home/concepts/digital-signatures">digital signatures</a>; digital signatures appear as random data (there is no way to discover anything about the signer with just the signature.</p>
+<h2>Randomness</h2>
+<p>Randomness is a quality of unpredictability, an inability to foresee what comes next.&nbsp;</p>
+<p>It is not a binary quality; some things can be more random than others. Weather seems random, but we can (try to) predict it; the lottery is (hopefully) completely random.</p>
+<p>In general, computers are supposed to execute in expected ways. The same input should generate the same output, every single time.&nbsp;</p>
+<p>A computer that introduces randomness into execution would be practically unusable.</p>
+<p>And yet, there are clearly important applications that depend on credible randomness (for example, generating private keys).&nbsp;</p>
+<p>So where does this randomness come from?&nbsp;</p>
+<h2>Unpredictable Input</h2>
+<p>Computers (generally) rely on the concept of reasonably unpredictable external input.</p>
+<p>For example, a normal computer might use its users mouse movements as a basis of generating a random number. Mouse movements are very specific; it is very unlikely that two people will move their mice in the same way over a long enough period of time - intentionally or not.</p>
+<h2>Isolated World Computer</h2>
+<p><a href="/home/concepts/oracle">Deep Dive: Oracles</a></p>
+<p>Ethereum is the <a href="/home/ethereum/world-computer">World Computer</a>, a globally shared computing platform that exists between a network of 1,000s of <a href="/home/ethereum/network/node">computers</a>, each running a local version of the <a href="/home/ethereum/evm">Ethereum Virtual Machine (EVM)</a>.&nbsp;</p>
+<p>Fortunately or not, the EVM is isolated from the outside world.</p>
+<p>One way to solve this issue is with oracles, a type of service that bridge information between the World Computer and the internet.&nbsp;</p>
+<p>However, oracles are not native to Ethereum.&nbsp;</p>
+<p>Relying on an oracle has external trust assumptions and can be very gas intensive (expensive).</p>
+<p>Instead, Ethereum relies on a RANDAO mechanism to create protocol-level randomness.</p>
+<h2>RANDAO</h2>
+<p>The RANDAO is a value maintained by the beacon chain; with each block, the proposer mixes in their own random contribution to the existing RANDAO value.</p>
+<h3>Shuffling Cards</h3>
+<figure class="image"><img src="/randao-2.png"></figure>
+<p>Imagine you have a deck of cards you want randomly shuffled.&nbsp;</p>
+<p>One way to achieve credible randomness is to pass the deck around the table, with each person shuffling it in turn.&nbsp;</p>
+<p>Even if one person tries to cheat, the cumulative result is still very random.</p>
+<h3>RANDAO Reveal</h3>
+<p>For Ethereum, the chain maintains a RANDAO value.&nbsp;</p>
+<p>When a block proposer creates a new block, it adds in its contribution. <a href="/home/ethereum/blockchain/block">You can see the contribution in the block (randao_reveal)</a>.&nbsp;</p>
+<p>Each contribution needs to satisfy 2 properties: it should be unpredictable yet verifiable</p>
+<h2>Contributing Randomness</h2>
+<h3>Hash Onion</h3>
+<p>Early ideas for the RANDAO contribution had each validator create a "hash onion," a data structure built from hashing a random number repeatedly. However, this method is clunky and begins to fall apart with some edge cases.&nbsp;</p>
+<p>A natural alternative became available when Ethereum changed its digital signature scheme to be built around BLS signatures.</p>
+<h3>BLS Signatures</h3>
+<p>At the data level, an aggregate BLS key is identical to a single BLS key; they share the same size and use the same verification algorithm.&nbsp;</p>
+<p>This property is extremely important for the consensus process, but it is particularly useful as a RANDAO function.</p>
+<p>With BLS signatures, every validator already has a closely guarded random number - their private key - achieving unpredictability. Furthermore, every node can verify the RANDAO contribution just by verifying the BLS signature - achieving verifiability.</p>
+<p>Specifically, the RANDAO contribution is its normal BLS signature with the the epoch number (think block number) as the message.&nbsp;</p>
+<p>This contribution is both stamped into the block (randao_reveal) and mixed into the EVMs RANDAO value.</p>
+<h2>Combining Contributions</h2>
+<figure class="image"><img src="/randao-3.png"></figure>
+<p>In a RANDAO scheme, mixing is the process of combining the contributions; in our card metaphor mixing is shuffling the cards.&nbsp;</p>
+<p>For Ethereum, we first hash the BLS signature and then we mix this has with the previous RANDAO value using an operation called xor.</p>
+<h3>xor</h3>
+<figure class="image"><img src="/randao-4.jpeg"></figure>
+<h2>Sufficient Randomness</h2>
+<p>Each time a new block is created, RANDAO is updated with just a little more randomness. And so, through the trustless contribution of every proposing validator, we generate a sufficiently random value.</p>
+<p>This value is now available to both Ethereum consensus and the EVM.</p>
+<p>Practically speaking, if a dApp relies on true randomness, they are probably going to use a Verifiable Random Function (VRF) form an oracle like Chainlink. The true purpose of RANDAO is to provide randomness for consensus.</p>
+<p>A protocol that is fully predictable is very vulnerable. An attacker could:&nbsp;</p>
+<ul>
+  <li>DDoS a proposer or a committee to attempt to halt the chain</li>
+  <li>bribe an upcoming proposer</li>
+  <li>attempt to register advantageous validator number to try to gain control over a committee - etc</li>
+</ul>
+<p>Ethereum's RANDAO isn't perfect, but it is very strong. Just think "RANDAO is random enough for Proof of Stake."</p>
+<h2>Resources</h2>
+<p>Source Material - <a href="https://twitter.com/SalomonCrypto/status/1576951211659390981">Twitter Link</a></p>
+<p>Source Material - <a href="/twitter-pdf-2022-10-03_randao.pdf">PDF</a></p>

@@ -1,0 +1,56 @@
+<!--
+title: Zero-Knowledge Proof
+description: 
+published: true
+date: 2022-12-02T22:04:39.848Z
+tags: 
+editor: undefined
+dateCreated: 2022-12-02T22:04:34.297Z
+-->
+
+<figure class="image"><img src="/zk-proof-banner.jpeg">
+  <figcaption><a href="https://www.mangrovia.solutions/en/zero-knowledge-proof-how-it-works-and-why-its-important/"><i>source</i></a></figcaption>
+</figure>
+<h1 style="text-align:center;">Zero-Knowledge Proofs</h1>
+<h2>Social Security Numbers</h2>
+<p>In America, citizens don't have ID numbers... and yet we live in a society that necessitates them.&nbsp;</p>
+<p>If you've ever applied for a loan, tried to rent a house or opened a bank account you already know: we've just decided to use our social security numbers instead.</p>
+<p>Originally intended to be specific to a single government benefits program, the <a href="https://en.wikipedia.org/wiki/Social_Security_number">social security number</a> (SSN) have become an American's unique identifier.&nbsp;</p>
+<p>Almost like private keys for meat-space.&nbsp;</p>
+<p>And yet, we're required to give it to basically anyone who asks.</p>
+<p>Imagine a world where you could prove, with 100% certainty, that you were who you said you were (corresponding to your SSN) without revealing ANY information about your SSN.&nbsp;</p>
+<p>The world would look entirely the same, expect with &gt;90% less identity theft.</p>
+<h2>Zero-Knowledge</h2>
+<p>A Zero-Knowledge Proof (ZK-proof) is a way of proving a statement is valid without revealing it.&nbsp;</p>
+<p>A ZK-proof relies on verifiable algorithms that take input data and return "true" or "false" without sharing the statement's contents or how you discovered the truth.</p>
+<p>A ZK-proof must be:&nbsp;</p>
+<ul>
+  <li>complete (all valid inputs return true)&nbsp;</li>
+  <li>sound (all invalid inputs return false)&nbsp;</li>
+  <li>zero-knowledge (the party requesting verification learns nothing about the statement that they didn't already know)</li>
+</ul>
+<p>ZK-proofs are a category of mathematical tools with applications far beyond cryptography and cryptocurrency, but the technology has important implications on-chain, particularly for privacy and scalability.</p>
+<h2>Implications on Blockchain</h2>
+<h3>Privacy</h3>
+<p>Privacy (Most) blockchain computers are built on top of public, decentralized ledgers. By their very design, every txn is visible for all to see... forever.</p>
+<p>ZK-proofs allow users to securely interact on-chain while obfuscate txn details and guaranteeing financial privacy</p>
+<h3>Scalability</h3>
+<p>Scalability ZK-proofs introduce a new paradigm: <a href="https://en.wikipedia.org/wiki/Verifiable_computing">verifiable computation</a>.&nbsp;</p>
+<p>Verifiable computing allows us to send computation to another entity while maintaining verifiable results.</p>
+<p>Verifiable computation is critical to improving processing speeds on blockchains without reducing security.&nbsp;</p>
+<p>Instead of processing every transaction on-chain, Ethereum can offload execution. After processing, that chain can return the results to mainnet with a ZK-proof.</p>
+<h2>Current Technology</h2>
+<p>ZK-technology is still very young.&nbsp;</p>
+<p>Generating proofs is extremely challenging and computationally expensive. Verifying proofs is also costly (although significantly computationally cheaper) and must be done on-chain, where costs are high.</p>
+<p>Current implementations have a few important weakness:</p>
+<ul>
+  <li>Some ZK-proofs require a <a href="/home/concepts/pcs-trusted-setup">reference string</a> that must be generated from trusted parties</li>
+  <li>Some ZK-proofs are vulnerable to quantum computers</li>
+</ul>
+<p>Fortunately, development is moving quickly and accelerating.</p>
+<h2>Summary</h2>
+<p>In summary, ZK-proofs allows one party (prover) to prove to another party (verifier) that a statement is true while also ensuring that the prover does not give the verifier any info that the verifier didn't already have.&nbsp;</p>
+<p>All with cryptographic, mathematical certainty.</p>
+<h2>Resources</h2>
+<p>Source Material - <a href="https://twitter.com/SalomonCrypto/status/1569119846952235008">Twitter Link</a></p>
+<p>Source Material - <a href="/twitter-pdf-2022-09-12_zk_proofs.pdf">PDF</a></p>

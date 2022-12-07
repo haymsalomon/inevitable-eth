@@ -1,0 +1,125 @@
+<!--
+title: Scaling Data
+description: 
+published: true
+date: 2022-12-04T15:55:44.601Z
+tags: 
+editor: undefined
+dateCreated: 2022-12-03T00:49:26.503Z
+-->
+
+<figure class="image"><img src="/danksharding-1.png"></figure>
+<h1 style="text-align:center;">Danksharding</h1>
+<h2>Prerequisites</h2>
+<h3>Settlement</h3>
+<p><a href="https://inevitableeth.com/home/concepts/settlement">Settlement</a> is the "final step in the transfer of ownership, involving the physical exchange of securities or payment".&nbsp;</p>
+<p>After settlement, the obligations of all the parties have been discharged and the transaction is considered complete.</p>
+<h2>The World Computer</h2>
+<p>Ethereum exists between a network of 1,000s of computers (<a href="https://inevitableeth.com/home/ethereum/network/node">nodes</a>), each running a local version of the <a href="https://inevitableeth.com/home/ethereum/evm">Ethereum Virtual Machine</a> (EVM). All copies of the EVM are kept perfectly in sync.&nbsp;</p>
+<p>Any individual EVM is a window into the shared state of the <a href="https://inevitableeth.com/home/ethereum/world-computer">World Computer</a>.</p>
+<p>As of mid-September 2022, Ethereum has switched its consensus mechanism from Proof of Work to <a href="/home/ethereum/network/consensus/pos">Proof of Stake</a> (PoS).</p>
+<p>Tl;dr node operators stake $ETH to gain the role of validator, earning $ETH and securing Ethereum. If the operator acts maliciously, he forfeits his stake.</p>
+<p>At the end of the day, real computers need to run the Ethereum software. And so, the World Computer is limited by the min requirements it sets for nodes.</p>
+<p>Our primary goal: <a href="/home/concepts/credible-neutrality">credible neutrality</a> through decentralization. If we lose $ETH decentralization, we lose everything.</p>
+<h2>The Scalability Trilemma</h2>
+<figure class="image"><img src="/danksharding-2.jpeg"></figure>
+<p>Enter the Scalability Trilemma. The classic framing goes "A blockchain can only have two of these three properties: scalability, security and decentralization."</p>
+<p>But <a href="https://twitter.com/VitalikButerin">Vitalik Buterin</a>, <a href="https://twitter.com/dankrad">Dankrad Feist</a> and the gigabrains of the Ethereum foundation just reject the framing.</p>
+<p>Ethereum PoS delivers incredible security, both through direct economic implications and through the defensive mechanisms built into PoS.</p>
+<p>And Ethereum is decentralization maxi; full nodes can run in your girlfriend's closet, taking ~1 hr/month (based on experience).</p>
+<p>Scalability is where things get interesting. After years of research, Ethereum has solved the execution problem: move it off-chain!</p>
+<h2>Scaling Execution</h2>
+<figure class="image"><img src="/danksharding-3.jpeg"></figure>
+<p><a href="https://inevitableeth.com/home/ethereum/upgrades/scaling/execution">Deep Dive: Scaling Execution</a></p>
+<p>The problem: as Ethereum/the EVM becomes more simple, its capabilities/speed stop improving.&nbsp;</p>
+<p>The solution: move the execution environment off-chain.&nbsp;</p>
+<p>The Ethereum blockchain will always be the settlement layer of The World Computer, but execution will migrate to layer 2. <a href="https://polynya.medium.com/understanding-ethereums-rollup-centric-roadmap-1c60d30c060f">Rollups will focus on execution, users will interact with rollups</a>.&nbsp;</p>
+<p>Settlement is a loaded word that gets thrown around a lot, so let's make this simple.&nbsp;</p>
+<p>Settlement refers to the ultimate source of ownership. When things go wrong, the place you go to get your stuff.&nbsp;</p>
+<p>Rollups compute off-chain and then post the canonical record of who owns what back on to Ethereum. If something goes wrong, the dispute is resolved on Ethereum, within the EVM.</p>
+<p>This is what settlement means.</p>
+<h2>The Data Bottleneck</h2>
+<figure class="image"><img src="/randomly-sampled-committees-2.jpeg"></figure>
+<p><a href="/home/ethereum/upgrades/scaling/data/data-availability-bottleneck">Deep Dive: Data Availability Bottleneck</a></p>
+<p>Today, we're still in the infancy of rollup technology and even still we're seeing execution time and cost drop orders of magnitude.&nbsp;</p>
+<p>But rollups only address the execution problem.&nbsp;</p>
+<p>In fact, as they scale they will create enormous amounts of data.</p>
+<p>If we were to stop here, the World Computer would still be the most secure, fastest smart contract platform on the planet... but the cost of posting data (even by rollups) might be too expensive for anything but the highest value financial transactions.&nbsp;</p>
+<p>Fortunately, we are not going to stop here.</p>
+<h2>Looking Forward&nbsp;</h2>
+<p>&lt; NOTE &gt;</p>
+<p>The subjects beyond this tweet are the active development-part of the Ethereum roadmap. Implementations WILL change. Details WILL change. I am confident that some of this is already out of data.</p>
+<p>We do, however, know A LOT about what's coming...</p>
+<p>&lt; /NOTE &gt;</p>
+<p>Rollup development will continue and even accelerate, but this activity will be increasingly taken up by private companies.</p>
+<p>The Ethereum core devs will focus on data scalability through a 3 part plan:</p>
+<ol>
+  <li>Proto-Danksharding (EIP-4844)</li>
+  <li>Protocol-Enshrined PBS</li>
+  <li>Danksharding</li>
+</ol>
+<h2>Proto-Danksharding</h2>
+<p><a href="/home/ethereum/upgrades/scaling/data/proto-danksharding">Deep Dive: EIP-4844 Proto-Danksharding</a></p>
+<p>The first step - Proto-Danksharding - does a lot of the preparation for Danksharding. Interestingly, Proto-Danksharding is named after people (<a href="https://twitter.com/protolambda">protolambda </a>&amp; <a href="https://twitter.com/dankrad">Dankrad Feist</a>), but it works descriptively.&nbsp;</p>
+<p>The most important thing to understand about Proto-Danksharding is blobs.</p>
+<p>Today, we post data to the blockchain by passing it into a smart contract through <a href="/home/ethereum/blockchain/transaction">the "calldata" field</a>. This is a field that is intended for code and other data to be passed into the EVM.&nbsp;</p>
+<p>Therefore, Rollups post their receipts INTO the EVM.&nbsp;</p>
+<p>But... do they need to?</p>
+<p>Let's consider a (hypothetical) <a href="/home/ethereum/upgrades/scaling/execution/zk-rollup">ZK-rollup</a>.&nbsp;</p>
+<p>The rollup bundles txns, creates a <a href="/home/concepts/zk-proof">ZK-proof</a> (ensuring the batch is valid and final) and posts it on-chain.&nbsp;</p>
+<p>Once on-chain, the EVM never needs to access this data. The important thing is just that it is publicly available.</p>
+<p>This is the idea behind blobs: huge amounts of data (think 10x the size of blocks), unaccessible to the EVM, that are MUCH cheaper than the old way (calldata).&nbsp;</p>
+<p>Blobs will get their own independent <a href="/home/concepts/gas">gas</a> market; the supply/demand of execution gas will not affect data gas.</p>
+<p>Proto-Danksharding introduces blobs (including the independent gas market) to Ethereum via a new transaction type. Post EIP-4844, proposers will be able to attach a single blob to the blockchain.</p>
+<p>A single blob that every node will have to download.</p>
+<h2>Protocol-Enshrined PBS</h2>
+<figure class="image"><img src="/pbs-1.jpeg"></figure>
+<p><a href="/home/ethereum/upgrades/pbs">Deep Dive: Protocol-Enshrined Proposer-Builder Separation</a></p>
+<p>The transition from Proto-Danksharding to Danksharding involves two important changes:&nbsp;</p>
+<ul>
+  <li>available blobs per block will increase from 1 to 64 (as of now)</li>
+  <li>blob data will be distributed across the network, so that no single node needs to download them all</li>
+</ul>
+<p>This increase from 1 to 64 blocks is massive, both in terms of network data capacity but also in terms of the computational power needed to build them.&nbsp;</p>
+<p>A Ethereum node with minimum specs couldn't realistically keep up with a professional operation.</p>
+<p>Fortunately, we already have a solution for these types of problems: protocol enshrined Proposer-Builder Separation (PBS). The concept was born out <a href="/home/concepts/mev">MEV</a> research but maps perfectly to our problem.&nbsp;</p>
+<p>We simply separate the action of building and proposing a block.</p>
+<p>With PBS, node min spec remains low, we get the benefits of centralized performance and we maintain decentralization.&nbsp;</p>
+<p>Builders will create blocks/blobs, bidding for inclusion.&nbsp;</p>
+<p>And, of course, nodes will always be able to be built solo (they just wont earn optimal fees).</p>
+<h2>Distributed Data</h2>
+<figure class="image"><img src="/p2p-network-1.jpeg"></figure>
+<p><a href="/home/ethereum/upgrades/scaling/data/p2p-network">Deep Dive: Danksharding P2P Network</a></p>
+<p>PBS gives us the ability to propose our blobs, but we still need to address our biggest problem: how can we achieve 100% data availability without forcing any nodes to download 100% of the data?</p>
+<p>Well, we'll just distribute it across the P2P network!</p>
+<p>Here's what's important: each node will download just a small data sample from each blob. No single node will be required hold an entire blob, just tiny fractions. These tiny fractions will be efficiently distributed across the network to ensure that it is always available.</p>
+<p>Upon request, the network will be able to quickly/efficiently reconstruct a blob.&nbsp;</p>
+<p>We've just got one final question: how can we securely sample the data?</p>
+<h2>KZG Commitments</h2>
+<figure class="image"><img src="/kzg-commitment-summary-1.jpeg"></figure>
+<p>If you've made it this far, you've found the nugget of gold at the center, the true magic: KZG Polynomial Commitments.&nbsp;</p>
+<p>TL;DR KZG Commitments are a type of <a href="/home/concepts/polynomial-commitment">polynomial commitment scheme</a> that use <a href="/home/concepts/elliptic-curve-cryptography">elliptic curve cryptography</a> to commit to the data in VERY useful way.</p>
+<p>Underneath some intimidating (but doable, try the article above) math, KZG commitments are simple:&nbsp;</p>
+<ol>
+  <li>commitment is made to specific data</li>
+  <li>a node can "open" the commitment at any point</li>
+  <li>the prover sends the data and a proof of validity</li>
+  <li>the node verifies the proof</li>
+</ol>
+<p>It's creating the KZG commitments and proofs for 64 blobs in a <a href="/home/ethereum/network/consensus/time">single slot timeframe</a> (12 sec) that is particularly intense and will require a centralized actor.&nbsp;</p>
+<p>But, again, a node can do all of this itself. It just (probably) wont be able to fill all the blob spaces.</p>
+<h2>Ethereum Consensus Changes</h2>
+<p><a href="/home/ethereum/upgrades/scaling/data/consensus-changes">Deep Dive: Danksharding Consensus Changes</a></p>
+<p>Now look, at the end of the day we are putting a HUGE amount of data onto Ethereum. The P2P design is cute, but eventually this will catch up to us.</p>
+<p>The solution is blob expiry. After ~a month, nodes will be allowed to delete the samples they have collected.</p>
+<p>The nature of Ethereum will change; instead of a permeant database, think public notice board.&nbsp;</p>
+<p>~1 month for archive nodes, <a href="https://etherscan.io/">Etherscan</a> and a imminent cohort of data-availability companies to grab everything for perpetuity.</p>
+<p>But don't worry... the KZG commitment will always be available on-chain to verify data.</p>
+<p>Proto-Danksharding will do a large part of the work; the actual Danksharding upgrade is much more about the implementation of KZG commitments, P2P storage and other non-consensus changes.</p>
+<h2>Summary</h2>
+<p>Ethereum is slow. And mainnet isn't getting any faster.</p>
+<p>Instead, we will scale by moving execution to rollups while retaining settlement mainnet.</p>
+<p>Danksharding is the upgrade that will increase the space Ethereum has for rollup data by orders of magnitude.</p>
+<h2>Resources</h2>
+<p>Source Material - <a href="https://twitter.com/SalomonCrypto/status/1585441288341508096">Twitter Link</a></p>
+<p>Source Material - <a href="/twitter-pdf-2022-10-27_danksharding.pdf">PDF</a></p>

@@ -1,0 +1,71 @@
+<!--
+title: Merkle Tree Scaling
+description: 
+published: true
+date: 2022-12-04T15:39:13.266Z
+tags: 
+editor: undefined
+dateCreated: 2022-12-04T15:39:08.536Z
+-->
+
+<figure class="image"><img src="/merkle-scaling-1.jpeg"></figure>
+<h1 style="text-align:center;">Merkle Tree Scaling</h1>
+<h2>Prerequisites</h2>
+<h3>Hashing</h3>
+<p>Applying a <a href="https://inevitableeth.com/home/concepts/hash">hash function</a> takes data (of arbitrary contents and size) and reduces it to a unique, compact string.&nbsp;</p>
+<p>Every input produces a unique output, even if two inputs are nearly identical.</p>
+<h3>Merkle Tree</h3>
+<p>A <a href="/home/concepts/merkle-tree">Merkle&nbsp;tree</a> is a (tree) data structure in which each leaf node is labeled with the cryptographic hash of a data block, and each non-leaf node is labeled with the cryptographic hash of its child nodes' labels.</p>
+<p>A Merkle proof can be used to efficiently prove that a single piece of data exists in a dataset without transferring the entire dataset.</p>
+<h2>The World Computer</h2>
+<p>Ethereum exists between a network of 1,000s of computers (<a href="https://inevitableeth.com/home/ethereum/network/node">nodes</a>), each running a local version of the <a href="https://inevitableeth.com/home/ethereum/evm">Ethereum Virtual Machine</a> (EVM). All copies of the EVM are kept perfectly in sync.&nbsp;</p>
+<p>Any individual EVM is a window into the shared state of the <a href="https://inevitableeth.com/home/ethereum/world-computer">World Computer</a>.</p>
+<h2>Merkle Trees</h2>
+<figure class="image"><img src="/merkle-scaling-2.png"></figure>
+<p>A Merkle Tree is a data structure that allows the efficient verification of the contents of a large dataset.&nbsp;</p>
+<p>Merkle Trees are made by successive rounds of hashing (applying a hash function to a set of data). A hash function transforms data of arbitrary contents (and length) into a unique, compact string.&nbsp;</p>
+<p>Think of a hash like a unique serial number for a set of data.&nbsp;</p>
+<p>We begin by placing our data into the bottom row and picking a tree width (number of children per node). To move up a level, we simply select [width] number of nodes and hash them together. This continues until a single hash is reached.&nbsp;</p>
+<p>We call this hash the Merkle root.&nbsp;</p>
+<p>Remember, hashing creates an identifier for whatever was put into the hash function. This method will generate a unique string for each node, irrevocably tied to the underlying dataset.&nbsp;</p>
+<p>Any changes to the data will require updating the tree, all the way up to the root.&nbsp;</p>
+<p>Once we have our Merkle root, we are in business.&nbsp;</p>
+<h2>Merkle Proofs</h2>
+<figure class="image"><img src="/merkle-scaling-3.png"></figure>
+<p>The root is a lightweight string that can be used to verify any single piece of data in the associated Merkle Tree. Your tree can have billions of items, yet our Merkle root can verify even a single datum spec.&nbsp;</p>
+<p>We call the trick a Merkle proof; rather than transfer the entire dataset, a user can send a single data point AND the hashes that make up the intermediate nodes of the Merkle Tree. Using just the branches and the data point, a verifier can rebuild the Merkle root.&nbsp;</p>
+<p>If we didn't use computer science, (basically) the only way to verify a piece of data is in the dataset is to pass the entire dataset.&nbsp;</p>
+<p>The Merkle Tree is a huge improvement, drastically reducing the amount of data transmission needed to verify the point.&nbsp;</p>
+<h2>The Optimal Merkle Tree</h2>
+<p>Now, you might look at the graphic above and notice something: most of the components of the Merkle proofs are inner nodes (squares).&nbsp;</p>
+<p>What if we could reduce the number of inner nodes by increasing the width (and therefore decreasing the height) of the tree?&nbsp;</p>
+<p>Let's take a look at a wider tree, one with width 4.&nbsp;</p>
+<figure class="image"><img src="/merkle-scaling-4.png"></figure>
+<p>Turns out, the Merkle proof is actually LARGER.&nbsp;</p>
+<p>Yes, there are less levels we need to traverse before we reach the root, but each level requires so much more data. Maybe a width of 4 is especially bad?&nbsp;</p>
+<p>Unfortunately, this is not the case.&nbsp;</p>
+<p>The wider a Merkle Tree gets, the less efficient the Merkle proofs are.&nbsp;</p>
+<figure class="image"><img src="/merkle-scaling-5.jpeg"></figure>
+<p>In fact, a Merkle Tree is optimal when width = 2.&nbsp;</p>
+<p>Take a look at the last one, where width = 16. That's what Ethereum uses.&nbsp;</p>
+<p>Here's the formula for calculating how many components a Merkle proof will need.&nbsp;</p>
+<figure class="image"><img src="/merkle-scaling-6.png"></figure>
+<p>Once again, the end result is that Merkle Trees are optimal when width = 2.&nbsp;</p>
+<h2>Merkle Tree Scaling</h2>
+<p>Merkle trees are incredibly powerful and versatile data structures that will continue to see use long after you and I are gone, but they are not perfect for all applications.&nbsp;</p>
+<p>This is especially true as the tree grows; proof size increases with tree/dataset size.&nbsp;</p>
+<p>And this is ultimately the problem we find ourselves up against.&nbsp;</p>
+<p>Ethereum uses Merkle trees to store the <a href="/home/ethereum/evm/state-machine">state</a> of the <a href="/home/ethereum/evm">EVM</a>. Every account, balance, asset, protocol, etc is stored inside of Merkle tree, updated with every <a href="/home/ethereum/blockchain/block">block</a>, <a href="/home/ethereum/network/consensus/time">every 12 seconds</a>.&nbsp;</p>
+<p>Today, the tree (technically multiple) is MASSIVE, but we are still in Ethereum's infancy.&nbsp;</p>
+<p>Yes, the Merkle tree still is much more efficient that transferring the entire data set, but the Merkle proofs are getting so large we are running up against the same barriers.&nbsp;</p>
+<p>As previously mentioned, today Ethereum uses Merkle trees with a width of 16.&nbsp;</p>
+<p>We can make some (significant) improvements just by transitioning to the optimal Merkle structure.</p>
+<p>But that's just a band-aid for a systemic issue, for the tree will still inexhaustibly grow.</p>
+<p>So, dear reader, here's where I am going to leave you off: with a huge freaking problem.&nbsp;</p>
+<p>The data structure at the core of Ethereum is literally not scalable, it's only going to work as long as Ethereum remains (relatively) unused.</p>
+<p>But don't worry, we'll be back.</p>
+<p>We haven't spent all this time just figuring out what was wrong with Merkle Trees.&nbsp;</p>
+<p><a href="https://www.youtube.com/watch?v=RGJOQHzg3UQ">We've also been working on a replacement!</a></p>
+<h2>Resources</h2>
+<p>Source Material - <a href="https://twitter.com/SalomonCrypto/status/1586391080727064577">Twitter Link</a></p>
+<p>Source Material - <a href="/twitter-pdf-2022-10-29_merkle_tree_scaling.pdf">PDF</a></p>

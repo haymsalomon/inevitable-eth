@@ -1,0 +1,59 @@
+<!--
+title: LMD-GHOST
+description: 
+published: true
+date: 2022-11-30T23:01:39.884Z
+tags: 
+editor: undefined
+dateCreated: 2022-11-30T23:01:35.785Z
+-->
+
+<figure class="image"><img src="/lmd-ghost-1.png"></figure>
+<h1 style="text-align:center;">LMD-GHOST</h1>
+<h2>The World Computer</h2>
+<p>Ethereum exists between a network of 1,000s of computers (<a href="/home/ethereum/network/node">nodes</a>), each running a local version of the <a href="/home/ethereum/evm">Ethereum Virtual Machine</a> (EVM). All copies of the EVM are kept perfectly in sync.&nbsp;</p>
+<p>Any individual EVM is a window into the shared state of the <a href="/home/ethereum/world-computer">World Computer</a>.</p>
+<p>Keeping 1,000s of copies of the EVM in sync is trivial... if we are willing to have them all sync to a centralized server.</p>
+<h2>Decentralized Coordination</h2>
+<p>Unfortunately the easy solution breaks the core principle of Ethereum: <a href="/home/concepts/credible-neutrality">credible neutrality</a> through decentralization.</p>
+<p>Fortunately, we have a solution: decentralized consensus!&nbsp;</p>
+<p>A consensus mechanism is the system a blockchain uses to keep all its nodes in sync.&nbsp;</p>
+<p>Until recently, Ethereum used Proof of Work (PoW); ~2 weeks ago we experienced The Merge and switched to Proof of Stake (PoS).</p>
+<p>Both PoW and PoS are systems that designate a "leader" node and allow them to progress their copy of the EVM forward (using transactions submitted from users like you and me). Once they have done as many transactions as they can (limited by the <a href="/home/concepts/gas">gas</a> limit), they create a block.</p>
+<h2>Ethereum Blocks</h2>
+<p>A <a href="/home/ethereum/blockchain/block">block</a> is a complete record of all the transactions that occurred within the EVM during each node's turn at being leader.&nbsp;</p>
+<p>Any other node can read the block, process the transactions and progress their copy of the EVM to match the leader.</p>
+<h2>Staying in Sync</h2>
+<figure class="image"><img src="/lmd-ghost-2.jpeg"></figure>
+<p>Under PoS, every ~12 seconds (called a slot), a new leader is chosen.&nbsp;</p>
+<p>The leader selects transactions, runs them through their local EVM, builds a block and publishes it to the network. When other nodes receive blocks, they run the enclosed txns locally thereby syncing their local EVM.</p>
+<p>Progressing the state of the EVM is predicated on the state of the EVM at the beginning of the transaction.&nbsp;</p>
+<p>By accepting the next transaction, each node (and therefore the network/World Computer) is confirming every transaction that came before it.</p>
+<p>Here's a quick example to illustrate the principle:&nbsp;</p>
+<figure class="image"><img src="/lmd-ghost-3.png"></figure>
+<p>Transaction #5 is not possible unless transaction #4 happens first (Bob will not have the 11 he intends to send).&nbsp;</p>
+<p>By executing #5, we are confirming that #4 MUST have happened (and those before it as well).</p>
+<h2>A Choice Appears</h2>
+<figure class="image"><img src="/lmd-ghost-4.jpeg"></figure>
+<p>In normal circumstances, the blockchain grows 1 by 1; each leader orderly proposes a new block which is accepted by the network and added to the blockchain.&nbsp;</p>
+<p>However, the network can fall out of sync and nodes can be presented with more than one validly constructed block.</p>
+<figure class="image"><img src="/lmd-ghost-5.jpeg"></figure>
+<p>A choice is called a fork, and a fork can grow. If the network falls out of sync, it might fall out of sync for more than one slot.&nbsp;</p>
+<p>As the issue persists, the forks will branch wider and deeper, presenting more and more choices.</p>
+<h2>Fork Choice Algorithm&nbsp;</h2>
+<p>Choices are an existential danger to systems trying to stay in sync. If a node operator has discretion, he might make a choice different from another node operator.&nbsp;</p>
+<p>Instead of a choice, the node operator gets a fork-choice algorithm.&nbsp;</p>
+<p>A fork-choice algorithm (also called a fork-choice rule) is a function that takes in all the possible branches and outputs the one single "canonical chain."&nbsp;</p>
+<p>All node operators share the fork-choice rule. Therefore all nodes act in unison when faced with a choice.</p>
+<figure class="image"><img src="/lmd-ghost-6.jpeg"></figure>
+<p>Greedy Heaviest Observed SubTree (GHOST) is a fork-choice rule that selects the fork with the greatest accumulated weight (number of confirmations).&nbsp;</p>
+<p>In this example, GHOST would confirm block A even though B has a longer chain.</p>
+<h2>LMD-GHOST</h2>
+<p>Ethereum has implemented a modified version of GHOST called Latest Message-Driven GHOST (LMD-GHOST).&nbsp;</p>
+<p>This describes the decisions made if multiple messages are received from a node. LMD-GHOST will only consider the latest one, discarding the rest.</p>
+<p>LMD-GHOST is a critical part of keeping Ethereum in sync.&nbsp;</p>
+<p>Without a fork-choice algorithm, normal network congestion could push the network into a chaotic spiral, accelerating further and further out of sync.&nbsp;</p>
+<p>LMD-GHOST provides clarity when a node gets confused.</p>
+<h2>Resources</h2>
+<p>Source Material - <a href="https://twitter.com/SalomonCrypto/status/1576016595452731394">Twitter Link</a></p>
+<p>Source Material - <a href="/twitter-pdf-2022-09-30_lmd-ghost.pdf">PDF</a></p>

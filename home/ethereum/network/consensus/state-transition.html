@@ -1,0 +1,72 @@
+<!--
+title: State Transition Function
+description: 
+published: true
+date: 2022-12-01T00:50:49.979Z
+tags: 
+editor: undefined
+dateCreated: 2022-12-01T00:50:44.766Z
+-->
+
+<figure class="image"><img src="/state-transition-1.jpeg"></figure>
+<h1 style="text-align:center;">Ethereum State Transition Function</h1>
+<h2>Prerequisites</h2>
+<h3>Ethereum State Machine</h3>
+<p>Ethereum is a distributed <a href="/home/ethereum/evm/state-machine">state machine</a>. A state machine is a mathematical model of computation with two major components:&nbsp;</p>
+<ul>
+  <li>the state, the configuration of the system at a moment in time</li>
+  <li>a transaction, the set of instructions to change the state</li>
+</ul>
+<h2>State Transition Function</h2>
+<p>A state is a static snapshot in time, the transactions are the instructions to change the state and the state transition function is the mechanism that applies the transactions to the state.&nbsp;</p>
+<ul>
+  <li>Inputs: current state, new block&nbsp;</li>
+  <li>Output: new state</li>
+</ul>
+<h3>Ethereum Specification</h3>
+<figure class="image"><img src="/state-transition-3.jpeg"></figure>
+<p>First, process all the empty slots that do not have a block (process_slots).&nbsp;</p>
+<p>Check the signature of the block (verify_block_signature) and if it's valid, process the block by executing the underlying transactions (process_block).</p>
+<h2>Process Slots</h2>
+<figure class="image"><img src="/state-transition-4.jpeg"></figure>
+<p>Sometimes a slot passes without a block being proposed; maybe the proposer was offline or the network dropped the block. The state transition function moves through empty slots and triggers a change of epoch, if needed.&nbsp;</p>
+<ul>
+  <li>Inputs: current state, slot&nbsp;</li>
+  <li>No output</li>
+</ul>
+<h3>Ethereum Specification</h3>
+<figure class="image"><img src="/state-transition-5.jpeg"></figure>
+<p>While the current slot is less than the intended slot, progress forward (process_slot).&nbsp;</p>
+<p>If the next slot is going to be a new epoch, execute the processes associated with consensus and prepare for the next epoch (process_epoch).</p>
+<h2>Process Epochs</h2>
+<figure class="image"><img src="/state-transition-6.jpeg"></figure>
+<p>An epoch is 32 slots/blocks. When process_slots moves through this boundary, the validator must attend to many consensus-based and housekeeping duties.&nbsp;</p>
+<ul>
+  <li>Input: current state&nbsp;</li>
+  <li>No output</li>
+</ul>
+<h3>Ethereum Specification</h3>
+<figure class="image"><img src="/state-transition-7.jpeg"></figure>
+<p>This is the consensus spec, as you can see it's very dense. Here's a summary of each step.</p>
+<figure class="image"><img src="/state-transition-8.png"></figure>
+<h2>Process Block</h2>
+<figure class="image"><img src="/state-transition-9.jpeg"></figure>
+<p>Finally, we get to the good part; it's time to process the block!&nbsp;</p>
+<p>Checking the header one more time, the validator will feed the block (and the transactions it carries) into the EVM. It ends with some consensus housekeeping.&nbsp;</p>
+<ul>
+  <li>Inputs: current state, block&nbsp;</li>
+  <li>No output</li>
+</ul>
+<h3>Ethereum Specification</h3>
+<figure class="image"><img src="/state-transition-10.jpeg"></figure>
+<p>At the core, the validator performs final checks (process_block_header) and feeds the block into the EVM (process_execution_payload).</p>
+<figure class="image"><img src="/state-transition-11.jpeg"></figure>
+<p>The first chunk of this function is just more checks. The moment the validator passes the transactions to the EVM is execution_engine.notify_new_payload(payload).</p>
+<p>Finally, the validator returns to its consensus duties (found in process_block). Here is a summary</p>
+<figure class="image"><img src="/state-transition-12.png"></figure>
+<p>&nbsp;</p>
+<h2>Resources</h2>
+<p><a href="https://github.com/ethereum/consensus-specs">Ethereum Specifications</a></p>
+<p><a href="https://eth2book.info/bellatrix/part3/transition/">The Best Semi-Technical Manual on Ethereum</a></p>
+<p>Source Material - <a href="https://twitter.com/SalomonCrypto/status/1577751304696274944">Twitter Link</a></p>
+<p>Source Material - <a href="/twitter-pdf-2022-10-05_state_transition.pdf">PDF</a></p>

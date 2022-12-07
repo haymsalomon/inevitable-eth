@@ -1,0 +1,69 @@
+<!--
+title: Data Availability Sampling
+description: 
+published: true
+date: 2022-12-03T17:01:11.325Z
+tags: 
+editor: undefined
+dateCreated: 2022-12-03T16:55:20.779Z
+-->
+
+<figure class="image"><img src="/data-availability-sampling-1.jpeg"></figure>
+<h1 style="text-align:center;">Data Availability Sampling</h1>
+<h2>The World Computer</h2>
+<p>Ethereum exists between a network of 1,000s of computers (<a href="https://inevitableeth.com/home/ethereum/network/node">nodes</a>), each running a local version of the <a href="https://inevitableeth.com/home/ethereum/evm">Ethereum Virtual Machine</a> (EVM). All copies of the EVM are kept perfectly in sync.&nbsp;</p>
+<p>Any individual EVM is a window into the shared state of the <a href="https://inevitableeth.com/home/ethereum/world-computer">World Computer</a>.</p>
+<p>Ethereum has been charting a course towards a rollup-centric future for <a href="https://ethereum-magicians.org/t/a-rollup-centric-ethereum-roadmap/4698">~2 years now</a>.&nbsp;</p>
+<p>Tl;dr Ethereum will scale by <a href="https://inevitableeth.com/home/ethereum/upgrades/scaling/execution">offloading execution to performance-optimized blockchains</a>, while <a href="https://inevitableeth.com/home/concepts/settlement">settlement</a> and economic security will remain with mainnet.</p>
+<h2>Data Availability</h2>
+<figure class="image"><img src="/data-availability-sampling-2.jpeg"></figure>
+<p><a href="/home/ethereum/upgrades/scaling/data/data-availability-bottleneck">Deep Dive: Data Availability Scaling</a></p>
+<p>The rollup-centric paradigm is based around quickly and cheaply executing transactions in a more centralized environment, and then posting a (compressed) record back to Ethereum.</p>
+<p>In the rollup-centric future, it becomes critical to ensure that data is available.</p>
+<p>Now look, I am an Ethereum zealot, a true believer in the inevitable dominance of the World Computer. I believe that billions and billions of transactions will happen on rollups every single day.</p>
+<p>And that is A LOT of data circulate through the Ethereum network.</p>
+<p>Before we continue we need to be clear on what kind of data we are talking about.</p>
+<h2>Dealing with Rollup Data</h2>
+<figure class="image"><img src="/data-availability-sampling-3.jpeg"></figure>
+<p>Any data within the EVM needs to be communicated across the entire network.&nbsp;</p>
+<p>ALL nodes needs a copy of EVERY EVM <a href="/home/ethereum/evm/state-machine">state change</a>.</p>
+<p>Rollups exists OUTSIDE of the EVM; they are independent blockchains. Yes, they post a copy of the transaction to Ethereum but that's just to ensure immutability.</p>
+<p>We only care that a copy is posted to the World Computer, not that each node gets a copy.</p>
+<p>The most simple and obvious way to ensure that the data is posted to the World Computer is just to have every node in the network download it. Yes, the nodes don't NEED it, but at least we KNOW it's there.&nbsp;</p>
+<p>But, as we've already discussed, this just isn't scalable.</p>
+<p>Our goal is to guarantee that the entire blob was published to the network and is available for download... but there's no reason every node has to check the entire blob.&nbsp;</p>
+<p>What if each node checked just some small random sample of the blob?</p>
+<h2>Divide and Conquer</h2>
+<figure class="image"><img src="/data-availability-sampling-4.jpeg"></figure>
+<p>Yes, no single node will download the entire block, but if we are careful about how we break up our blob and ensure our sampling is random enough, we can be confident the entire block is available.</p>
+<p>A good goal is for every node to verify that at least half of the blob's data is available. If less than half the data is available, then we can be confident that one of these samples will fail and the node will reject the blob.&nbsp;</p>
+<h2>Importance of 100% Coverage</h2>
+<p>But what if only ONE sample is missing?</p>
+<p>Let's say a blob is split into 100 samples, with each node randomly selecting 50. In this scenario, it is likely that a single invalid or unavailable sample might slip through.</p>
+<p>We can't allow even a single transaction to skip verification; what if it mints 100 trillion USDC?</p>
+<h2>Polynomial Erasure Codes</h2>
+<p><a href="/home/concepts/polynomial-encoding/erasure-code">Deep Dive: Polynomial Erasure Codes</a></p>
+<p>Fortunately, we have a simple solution: we are going to repackage our data. Instead of publishing the raw blob, we are going to apply a technology called erasure coding.&nbsp;</p>
+<p>If a blob has been erasure encoded, the entire blob can be recovered with just 50% of the data.</p>
+<p><a href="https://hackmd.io/@vbuterin/sharding_proposal">Vitalik authored one of the better metaphors I've read for erasure coding</a>, I'll just leave it here.&nbsp;</p>
+<figure class="image"><img src="/data-availability-sampling-5.jpeg"></figure>
+<p>Bottom line: erasure code takes a message of length n and doubles it to 2n. But this added data comes with extra functionality: the ability to recover ALL 2n points.</p>
+<h2>The Power of Erasure Coding</h2>
+<p>At first glance, this might not make too much sense. We are working with bandwidth issues and we just doubled the size of our blob...&nbsp;</p>
+<p>But remember, we didn't just double it, we increased the size with these special new erasure codes.&nbsp;</p>
+<p>Let's think this through.</p>
+<p>First, the erasure codes change the game for an attacker; instead of hiding a single sample, an attacker would have to hide at least 50% of the blob. Otherwise, the network could just reconstruct the rest of the blob using the erasure codes.</p>
+<p>Now, let's think about random sampling. Each choice is going to be completely random, there is no way for anyone (malicious or otherwise) to precompute which samples are going to be requested. So an attacker needs to hide &gt;50% of the data, randomly selected.</p>
+<p>Now combine these two concepts:&nbsp;</p>
+<ul>
+  <li>an unavailable block needs to hide &gt;50% of the data&nbsp;</li>
+  <li>no entity can know which samples are going to be requested&nbsp;</li>
+</ul>
+<p>Random sampling + erasure coding becomes incredibly (and efficiently) secure.</p>
+<p>The example that Dankrad always gives is that if we query 30 random samples from an Ethereum block and all are available, the probability that less than 50% are available is 2<sup>-30</sup> or .000000093%.</p>
+<p>Our bandwidth problem looks WAY different at 30 samples than a full blob.</p>
+<p>As Ethereum continues to build towards a rollup-centric future, it becomes critical to design for increased data requirements of a robust rollup ecosystem.</p>
+<p>Data availability sampling is a huge step forward in ensuring data is available without crushing the network.</p>
+<h2>Resources</h2>
+<p>Source Material - Twitter Link</p>
+<p>Source Material - PDF</p>

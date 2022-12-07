@@ -1,0 +1,54 @@
+<!--
+title: State Channels
+description: 
+published: true
+date: 2022-12-02T19:31:52.372Z
+tags: 
+editor: undefined
+dateCreated: 2022-12-02T19:20:00.994Z
+-->
+
+<figure class="image"><img src="/state-channels-1.jpeg"></figure>
+<h1 style="text-align:center;">State Channels</h1>
+<h2>Decentralized Means Slow</h2>
+<p>In 2008, Satoshi Nakamoto created blockchain technology, changing the world forever.&nbsp;</p>
+<p>The purpose: to create a shared, untrusted computing platform. A public utility, usable by all... at any time... for any reason.</p>
+<p>The foundation of Blockchain computers is decentralization: more centralization requires more trust assumptions.&nbsp;</p>
+<p>In order to maintain decentralization, we must ensure that a wide spectrum of machines are capable of participating.</p>
+<p>Therefore a blockchain that cares about decentralization must keep its core protocol requirements relatively light; if it requires a data center the network will centralize VERY quickly.&nbsp;</p>
+<p>To put it simply, (good) blockchain computers are trustless... but they are SLOW.</p>
+<p>And so, the obvious question follows: how can we scale a blockchain computer while maintaining low node requirements (and therefore decentralization)?&nbsp;</p>
+<p>Today, we have many solutions. But let's start with the OG: state channels.</p>
+<h2>State Channels</h2>
+<p>State channels allow participants to securely transact off-chain will keeping interaction with the main (slow and expensive) chain to a minimum.&nbsp;</p>
+<p>The system allows peers to conduct an arbitrary number of (off-chain) transactions while only submitting two on-chain transactions.</p>
+<h3>Opening a Channel</h3>
+<figure class="image"><img src="/state-channels-2.jpeg"></figure>
+<p>Users open a state channel by depositing funds into a smart contract on the main blockchain, escrowing the capital.&nbsp;</p>
+<p>This capital cannot be touched until the state channel is closed.</p>
+<h3>Transactions In-Channel</h3>
+<figure class="image"><img src="/state-channels-3.jpeg"></figure>
+<p>Within the state channel, participants can send each other funds for little to no cost. To make a payment, a user signs a ticket (off-chain message) and delivers it to the recipient. This can continue for as many payments as needed.</p>
+<h3>Closing and Settling</h3>
+<figure class="image"><img src="/state-channels-4.jpeg"></figure>
+<p>When the participants are done transacting, they can sign and publish the highest-value ticket back to the main blockchain.&nbsp;</p>
+<p>The smart contract will verify the signatures and settle the state channel (paying the receiver and sending the rest to the original owner)</p>
+<p>If one party is unwilling to close the channel (malice, tech failure, etc), the other participant(s) can initiate a withdrawal period.&nbsp;</p>
+<p>If the unwilling party does not provide a ticket within the withdrawal time, the withdrawing participant gets all his/her money back.</p>
+<h2>Example</h2>
+<p>Alice is offering fuel for $1.3/L, Bob needs fuel.&nbsp;</p>
+<p>Bob sends $20 to a smart contract and begins pumping fuel.&nbsp;</p>
+<p>After every liter, Bob signs a new ticket, incrementing by $1.30. When he reaches 10 liters, he's done.</p>
+<p>Now, Alice takes the highest value ticket ($13), signs it and posts it to the smart contract in order to close the state channel.&nbsp;</p>
+<p>The smart contract validates the ticket, and then settles the channel.&nbsp;</p>
+<p>$13 are sent to Alice and the remaining $7 are sent to Bob.</p>
+<h2>Limitations</h2>
+<p>While this technique is powerful, there are limits to what state channels can do:</p>
+<p>- cannot send funds off-chain to people who are not yet participants</p>
+<p>- cannot represent objects without an explicit owner (eg Uniswap)</p>
+<p>- requires large amount of value to be locked</p>
+<p>Researchers have been working to address these issues, however we have found better solutions... first plasma chains and then rollups.&nbsp;</p>
+<p>Today, state channels are only used for niche apps and chains that cannot support modern scaling solutions.</p>
+<h2>Resources</h2>
+<p>Source Material - <a href="https://twitter.com/SalomonCrypto/status/1568621672152039426">Twitter Link</a></p>
+<p>Source Material - &nbsp;<a href="/twitter-pdf-2022-09-10_state_channels.pdf">PDF</a></p>

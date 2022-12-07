@@ -1,0 +1,109 @@
+<!--
+title: mev-boost
+description: 
+published: true
+date: 2022-12-04T23:46:41.003Z
+tags: 
+editor: undefined
+dateCreated: 2022-12-04T23:46:36.920Z
+-->
+
+<figure class="image"><img src="/mev-boost-1.jpeg"></figure>
+<h1 style="text-align:center;">mev-boost</h1>
+<h2>Prerequisites</h2>
+<h3>Prereq 1</h3>
+<p>Lorem ipsum</p>
+<h2>The World Computer</h2>
+<p>Ethereum is the <a href="/home/ethereum/world-computer">World Computer</a>, a network of 1,000s of computers (nodes) coordinating using Proof of Stake (PoS) to keep the <a href="/home/ethereum/evm">Ethereum Virtual Machine</a> (EVM) in sync.</p>
+<p>The EVM is the shared computing platform, the blockchain its history and ETH its lifeblood.</p>
+<p>This "network of nodes" is the foundation upon which Ethereum ultimately derives its value. The more decentralized, the more value.</p>
+<p>From decentralization comes <a href="/home/concepts/credible-neutrality">credible neutrality</a>.&nbsp;</p>
+<p>Without credible neutrality, we might as well be using FB-dollaroos in Farmville-DeFi.</p>
+<h2>Proof of Stake&nbsp;</h2>
+<figure class="image"><img src="/mev-boost-2.jpeg"></figure>
+<p><a href="/home/ethereum/network/consensus/pos">Deep Dive: Proof of Stake</a></p>
+<p>PoS is a huge topic, here's what you need to know for this thread:&nbsp;</p>
+<ul>
+  <li>a block is a bundle of transactions, which are executed in the EVM&nbsp;</li>
+  <li>users send pending transactions to the mempool&nbsp;</li>
+  <li>once per slot, a validator is randomly selected to be a block proposer</li>
+</ul>
+<p>The way it works at the protocol level is simple: the proposer builds its own block.&nbsp;</p>
+<p>The vast majority of proposers will simply go down the pending transaction list until their block fills up…&nbsp;</p>
+<p>...but some are making better decisions, thereby making huge profits.</p>
+<h2>Maximum Extractable Value</h2>
+<figure class="image"><img src="/mev-1.jpeg"></figure>
+<p><a href="/home/concepts/mev">Deep Dive: MEV</a></p>
+<p>MEV stands for Maximum Extractable Value, and represents the general principle that there is monetary value that can be extracted from the having special information, access or privileges in a system.</p>
+<p>In Ethereum, the block builder controls the vast majority of MEV.</p>
+<p>Here's a simple example. Let's say Alice wants to sell 100,000 ETH and Bob wants to buy 1 ETH. Alice's order is so large that it will move the price of ETH.</p>
+<p>If the builder puts in Bob's order before Alice's, Bob will get significantly less ETH than if it goes after.</p>
+<p>A sophisticated block builder can do many things to profit from this scenario:</p>
+<ul>
+  <li>take a higher tip from Bob to execute his transaction first</li>
+  <li>create and process a transaction to sell some of its own ETH before Alice</li>
+  <li>create and process a transaction to buy more ETH back at a lower price</li>
+</ul>
+<p>There is a big incentive to become good at block building.&nbsp;</p>
+<p>The better you understand the mempool (and the better access to private order flow), the more you will earn from your staked $ETH.</p>
+<p>And herein lies the problem: left unchecked, MEV will centralize Ethereum.</p>
+<h2>The Centralization Power of MEV&nbsp;</h2>
+<figure class="image"><img src="/mev-boost-3.jpeg"></figure>
+<p>The problem is that over time, the impact becomes bigger and bigger.&nbsp;</p>
+<p>This is the nature of compound interest, the eighth wonder of the world.</p>
+<p>Left unchecked, the best block builders will capture more and more ETH, and eventually Ethereum.</p>
+<p>From decentralization flows credible neutrality.&nbsp;</p>
+<p>From credible neutrality flows the value of ETH.</p>
+<h2>Flashbots</h2>
+<p>In November 2020, <a href="https://twitter.com/thegostep">Stephane Gosselin</a> posted "<a href="https://ethresear.ch/t/flashbots-frontrunning-the-mev-crisis/8251">Flashbots: Frontrunning the MEV crisis</a>" and introduced the community to Maximum Extractable Value (MEV).</p>
+<p>Even before the Merge was complete and Ethereum finally switched to PoS, we already had a temporary solution up and running (and a full solution in the works).</p>
+<h2>Ethereum Nodes</h2>
+<figure class="image"><img src="/node-banner.jpeg"></figure>
+<p><a href="/home/ethereum/network/node">Deep Dive: Ethereum Nodes</a></p>
+<p>A node is a computer that runs two pieces of software, an execution client (managing the EVM) and a consensus client (managing PoS).</p>
+<h2>MEV-Boost</h2>
+<figure class="image"><img src="/mev-boost-4.jpeg"></figure>
+<p>MEV-Boost is an extra piece of node software that gives it the ability to source blocks from a block relay.&nbsp;</p>
+<p>The node will always be able to build blocks itself, but it can look at headers and take blocks from specialized block builders...&nbsp;</p>
+<p>...builders who will pay to be picked.</p>
+<p>Think about our example. Say a block builder knows Alice is going to move the market and can calculate that by selling before and buying back after, he can lock in an extra 50 ETH.</p>
+<p>He might be willing to bid up 49 ETH to be picked, as he will still lock in a profit.</p>
+<p>The purpose of this system is to disassociate the difficult, knowledge/capital/experience-heavy work of building blocks with the financial rewards for proposing them.&nbsp;</p>
+<p>Every proposer can share in the returns offered by MEV simply by picking the best bid during their slot.</p>
+<h2>Remaining Trust Assumptions</h2>
+<figure class="image"><img src="/mev-boost-5.jpeg"></figure>
+<p>MEV-Boost is an incredible product and a huge step in decentralizing Ethereum, but MEV-Boost is not perfect.</p>
+<p>In order to understand why, we need to dig a little deeper into how MEV-Boost actually works (not too deep).</p>
+<p>First, we must introduce ourselves to the three players:</p>
+<ul>
+  <li>Builders, responsible for crafting the most profitable blocks possible for each slot.</li>
+  <li>Relays, responsible for acting as the intermediary.</li>
+  <li>Proposers, which are the Ethereum validators proposing the block.</li>
+</ul>
+<p>The problem with MEV-Boost is the relay, an entity that has to be trusted not only by the builder but also by the proposer.&nbsp;</p>
+<p>The builder must trust that the relay will keep his block secret until after the proposer has paid the builder's fee.</p>
+<p>The proposer has to trust that the relayer has confirmed the block and the bid are valid, without being allowed to see the underlying transactions.&nbsp;</p>
+<p>The former is particularly important, as an invalid block will result in slashing.</p>
+<h2>Trustless Solutions</h2>
+<p>Fortunately, we have solutions; we'll briefly discuss two.</p>
+<p>But I want to take a moment to recognize that while MEV-Boost isn't perfect, it's a HUGE leap forward.&nbsp;</p>
+<p>With MEV-Boost, ALREADY plug-and-play node operators (like myself using Rocket Pool) are <a href="https://twitter.com/RocketscanIO/status/1583759534748639232">experiencing MEV yields</a>.</p>
+<h3>Protocol Enshrined Proposer-Builder Separation</h3>
+<figure class="image"><img src="/pbs-1.jpeg"></figure>
+<p><a href="/home/ethereum/upgrades/pbs">Deep Dive: Protocol Enshrined Proposer-Builder Separation</a></p>
+<p>The first solution is to add the concept of MEV-Boost and into the core Ethereum protocol.&nbsp;</p>
+<p>This would remove the need for relays and allow us to cryptographically verify everything without leaking blocks early.</p>
+<p>We call this idea Enshrined Proposer-Builder Separation.</p>
+<h3>EigenLayer</h3>
+<figure class="image"><img src="/eigenlayer-1.jpeg"></figure>
+<p><a href="/home/ethereum/upgrades/middleware/eigenlayer">Deep Dive: EigenLayer</a></p>
+<p>A second idea, proposed by Sreeram Kannan, leverages new ideas about the nature of $ETH to transform the trusted components of MEV-Boost into untrusted systems secured by Ethereum.</p>
+<h3>crList</h3>
+<p>Both of these solutions require some modifications of the MEV-Boost model.&nbsp;</p>
+<p>Most importantly, MEV-Boost risks a market of block builders that censor transactions (for whatever reasons).&nbsp;</p>
+<p><a href="https://notes.ethereum.org/s3JToeApTx6CKLJt8AbhFQ#Hybrid-PBS-can-we-use-proposers-only-for-inclusion-of-last-resort">Fortunately, there are lots of good ideas for solutions</a>.&nbsp;</p>
+<p>But let's not get too far ahead of ourselves; we are barely post Merge.&nbsp;</p>
+<p>There is a lot more to build before we move on from MEV-Boost.</p>
+<h2>Resources</h2>
+<p>Source Material - <a href="https://twitter.com/SalomonCrypto/status/1592762567952257024">Twitter Link</a></p>
+<p>Source Material - <a href="/twitter-pdf-2022-11-15_mev-boost.pdf">PDF</a></p>

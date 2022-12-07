@@ -1,0 +1,86 @@
+<!--
+title: Consensus
+description: 
+published: true
+date: 2022-12-01T01:40:51.012Z
+tags: 
+editor: undefined
+dateCreated: 2022-11-30T15:36:03.925Z
+-->
+
+<figure class="image"><img src="/consensus-banner.png"></figure>
+<p style="text-align:center;"><i>This is a high-level discussion of consensus system, including PoW and PoS. </i><a href="/home/ethereum/network/consensus/pos"><i>You can find a deep dive of Ethereum's implementation of PoS here</i></a><i>.&nbsp;</i></p>
+<h1 style="text-align:center;">Consensus Systems</h1>
+<h2>The World Computer</h2>
+<p>Ethereum exists between a network of 1,000s of computers (<a href="https://inevitableeth.com/home/ethereum/network/node">nodes</a>), each running a local version of the <a href="https://inevitableeth.com/home/ethereum/evm">Ethereum Virtual Machine</a> (EVM). All copies of the EVM are kept perfectly in sync.&nbsp;</p>
+<p>Any individual EVM is a window into the shared state of the <a href="https://inevitableeth.com/home/ethereum/world-computer">World Computer</a>.</p>
+<h2>Staying in Sync</h2>
+<p>The World Computer progresses in units known as <a href="/home/ethereum/blockchain/block">blocks</a> (containing <a href="/home/ethereum/blockchain/transaction">transactions</a>, or actions, within the EVM).&nbsp;</p>
+<p>A block producer will create a block and send it to the network. As nodes receive new blocks they feed them into their copy of the EVM, syncing it to the leader.</p>
+<p>The system by which proposers are chosen and blocks are decided on is called consensus.&nbsp;</p>
+<p>For the first 7 years of its life, Ethereum used Proof of Work (PoW) as a consensus mechanism.&nbsp;</p>
+<p>But as of mid Sept 2022, the World Computer has transitioned to Proof of Stake (PoS).</p>
+<h2>Proof of Work</h2>
+<p><a href="https://bitcoin.org/bitcoin.pdf">PoW was invented for Bitcoin by Satoshi Nakamoto in 2008</a>.&nbsp;</p>
+<p>PoW is based around incredibly difficult mathematical puzzles; every node creates a new block and races to finish one of these puzzles.&nbsp;</p>
+<p>The first to solve the puzzle proposes their block (with the solution). The rest of the nodes verify the block and puzzle. If both are valid, they discard their block and add the new one to their local EVM. Then they begin working on a new block.&nbsp;</p>
+<p>Each new block confirms the ones before it acceptance is an implicit vote on the canonical chain</p>
+<p>These "incredibly difficult mathematical puzzles" are the cornerstone of PoW. The only way to solve them is by running many powerful machines (and spending huge amounts of electricity).&nbsp;</p>
+<p>This work provides the gravity that makes each implicit vote have so much weight.</p>
+<h2>Proof of Stake</h2>
+<p>PoS replaces these puzzles with a much more straightforward system: block proposers simply take turns.&nbsp;</p>
+<ul>
+  <li>A validator is randomly chosen to become a block proposer&nbsp;</li>
+  <li>The block proposer broadcasts a block to the network&nbsp;</li>
+  <li>The network verifies the block</li>
+</ul>
+<p>This system alone is not secure; it replaces PoW's foundation of real world work/electricity with trust.&nbsp;</p>
+<ul>
+  <li>trust each proposer will propose valid blocks</li>
+  <li>trust the network will honestly verify</li>
+  <li>trust in optimal network conditions</li>
+</ul>
+<p>..so much trust!</p>
+<p>Thus, we introduce stake: a capital contribution by each validator that acts of a bond for engaged, honest participation.</p>
+<p>In order to become an Ethereum validator, an operator must first lock 32 ETH in the deposit contract, making it eligible for slashing.</p>
+<h3>Slashing</h3>
+<p><a href="https://www.blocknative.com/blog/an-ethereum-stakers-guide-to-slashing-other-penalties">Slashing</a> is a two part process:</p>
+<p>1) Impose economic penalties for bad behavior by draining the validators stake (up to the entire 32 ETH in the worst cases)</p>
+<p>2) Forcibly ejecting the offender from the network/validator set</p>
+<p>Slashing is a very rare occurrence and only happens when malicious nodes attack the network (or EXTREME operator error).&nbsp;</p>
+<p>Nevertheless, slashing is the primary enforcement mechanism and source of security of PoS.</p>
+<h3>Voting</h3>
+<p>Slashing alone is not enough to secure our simple PoS system.&nbsp;</p>
+<p>A core dynamic of PoW and the incredible difficulty of its puzzles was the implicit vote on the canonical chain.&nbsp;</p>
+<p>Creating one new block is very hard; creating two (let alone many more) is new impossible.Attacking the chain requires overcoming a real-world constraint.&nbsp;</p>
+<p>The vote is implicit because it doesn't actually exist, it's just a metaphor we use to describe blockchain from the perspective of the network.</p>
+<p>In PoS we must replace the implicit votes with explicit ones.&nbsp;</p>
+<p>Just like PoW, every block will receive a copy of each block, but in PoS a subset will also explicit vote on the validity of each block. Each of these validators is personally voting that a block is valid.</p>
+<p>A vote is called an attestation.&nbsp;</p>
+<p>By signing an attestation, the validator is putting their stake at risk: if the block ends up being invalid, they too will be slashed.&nbsp;</p>
+<p>And so, Ethereum becomes secured not only against the proposer's stake but also each attester's.</p>
+<h3>PoS Time</h3>
+<p>Ethereum sees time differently than we do. Units of time are broken into slots, each of which (should) contain a block. 32 slots equals an epoch, which is 6.4 mins.&nbsp;</p>
+<p>Under PoS, every Ethereum validator will vote (attest or propose) once per epoch.</p>
+<p>Thus, once every 6.4 mins, the entire validator set will vote on the canonical blockchain and place its entire stake on the line for slashing.</p>
+<p>Once every epoch, Ethereum is secured with the total value of all staked $ETH.</p>
+<p>Today that's ~$19B.</p>
+<h3>Inactivity Leak</h3>
+<p>There's one final, much more nuanced, modification we need to make to our PoS system before it can replace PoW.&nbsp;</p>
+<p>PoW is never at risk of locking up. As long as a node exists, it will be able to solve puzzles and progress the chain (although solve times will be very long).</p>
+<p>PoS comes from a tradition of mathematics stemming from the <a href="/home/concepts/bft">Byzantine Generals Problem</a>. Tl;dr consensus requires agreement of at least 2/3 between the nodes of the network.&nbsp;</p>
+<p>What happens if &gt;1/3 are offline?</p>
+<p>Ethereum has a two-line defense approach.&nbsp;</p>
+<p>First, validators who fail their duty (eg missing/late/incorrect attestation) receive a mild penalty. This is an encouragement to remain online, but it's felt by everyone during routine maintenance or network volatility.</p>
+<p>If &gt;2/3 of the network is not participating, Ethereum cannot finalize. When this situation becomes dire enough, the network activates its 2nd line of defense: inactivity leak.</p>
+<p>The inactivity leak is a kind of emergency state that follows these rules until 2/3 can be reached:</p>
+<figure class="image"><img src="/consensus-1.jpeg"></figure>
+<p>Both of these defenses are significantly less severe than slashing. Not only are the economic punishments much less, validators are not ejected from the network.&nbsp;</p>
+<p>In general, these penalties can be earned back with roughly the same amount of time it took to accrue them.</p>
+<h2>Pros and Cons</h2>
+<p>Taken all together, we now have a secure PoS system!</p>
+<p>I'll leave this for an overview of the pros and cons (lifted from the Ethereum website).</p>
+<figure class="image"><img src="/consensus-2.png"></figure>
+<h2>Resources</h2>
+<p>Source Material - <a href="https://twitter.com/SalomonCrypto/status/1578471242331365376">Twitter Link</a></p>
+<p>Source Material - <a href="/twitter-pdf-2022-10-08_consensus.pdf">PDF</a></p>

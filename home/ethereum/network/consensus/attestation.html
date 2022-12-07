@@ -1,0 +1,73 @@
+<!--
+title: Attestation
+description: 
+published: true
+date: 2022-12-01T03:26:31.642Z
+tags: 
+editor: undefined
+dateCreated: 2022-12-01T03:26:27.501Z
+-->
+
+<figure class="image"><img src="/attestation-1.jpeg"></figure>
+<h1 style="text-align:center;">Attestations</h1>
+<h2>Prerequisites</h2>
+<h3>Time on Ethereum (Slots &amp; Epochs)</h3>
+<p><a href="/home/ethereum/network/consensus/time">Deep Dive: ETH Time</a></p>
+<p>Epochs are made of 32 slots</p>
+<p>1 slot = 12 secs</p>
+<p>1 epoch = 6 mins 24 secs</p>
+<h2>The World Computer</h2>
+<p>Ethereum exists between a network of 1,000s of computers (<a href="https://inevitableeth.com/home/ethereum/network/node">nodes</a>), each running a local version of the <a href="https://inevitableeth.com/home/ethereum/evm">Ethereum Virtual Machine</a> (EVM). All copies of the EVM are kept perfectly in sync.&nbsp;</p>
+<p>Any individual EVM is a window into the shared state of the <a href="https://inevitableeth.com/home/ethereum/world-computer">World Computer</a>.</p>
+<p>This distributed network of EVMs is held in sync via a <a href="/home/ethereum/network/consensus">consensus mechanism</a>. A consensus mechanism is a system by which a leader (block proposer) updates the state of their EVM and the rest of the network trustlessly follows.</p>
+<p>Ethereum uses <a href="/home/ethereum/network/consensus/pos">Proof of Stake</a> (PoS) as its consensus system.</p>
+<h2>Economic Security</h2>
+<h3>Something at Stake</h3>
+<p>PoS randomly selects a block proposer, who gets to construct the next block.&nbsp;</p>
+<p>The rest of the network validates these blocks, voting them into the blockchain.&nbsp;</p>
+<p>In order to participate, you must put ETH at stake.</p>
+<p>By putting $ETH at stake, network participants (validators) are placing their capital at risk for slashing. Slashing is the punishment the network applies to malfunctioning (intentional or not) validators.</p>
+<p>This is the mechanism by which the ETH stake projects economic security.</p>
+<h3>Voting Methods</h3>
+<p>Deep Dive: Voting Rules (<a href="/home/ethereum/network/consensus/lmd-ghost">LMD-GHOST</a> and <a href="/home/ethereum/network/consensus/casper-ffg">Casper FFG</a>)</p>
+<p>Most obviously, this dynamic applies to the block proposer; if they submit an invalid block, the network will consider them a malicious actor and remove them from the network.</p>
+<p>But this also applies to the next step - the validation of the block by the rest of the network.</p>
+<p>The block producer sends out a block; validators evaluate it and if it is valid, they broadcast an attestation.</p>
+<p>If a validator attests to an invalid block, the network considers them just as hostile as an invalid block proposer… and treats them just as severely.</p>
+<p>Attestations are core to ETH security.</p>
+<h2>Attestation Process</h2>
+<h3>Distributing a Block Proposal</h3>
+<p>It starts with a proposer who builds (or somehow gets) a block, and is ready to broadcast it to the network.</p>
+<p>Sending the block to a few (or even 1,000) validators is no problem, but once you start getting passed 10K, the chatter requirements become so huge that no credibly decentralized network could handle it.</p>
+<p>Currently there are about 440k Ethereum validators.</p>
+<figure class="image"><img src="/attestation-3.jpeg"></figure>
+<p>An Ethereum where every validator validates every block is not realistic. Instead, we have a different goal: every validator will validate every epoch.&nbsp;</p>
+<p>Once every 6.4 minutes every validator will vote on the canonical blockchain.</p>
+<h3>Divide and Conquer</h3>
+<p>At the beginning of every epoch (once every 32 blocks), the entire validator set is randomly shuffled into 64 groups called committees. The block proposer sends every validator a copy of the block, but only its committee members need to attest.</p>
+<p>Zooming in, an attestation is really a BLS signature wrapped in some identifying metadata.&nbsp;</p>
+<p><a href="/home/concepts/bls-signatures">Deep Dive: BLS Signatures</a></p>
+<p>A BLS signature is a type of digital signature that maintains all the properties of a normal digital signature but with a special property: multiple keys/messages can be aggregated.</p>
+<p>The magic of BLS signatures is that at the data level, an aggregate signature is the exact same thing as a single signature.&nbsp;</p>
+<p>Thus, a BLS signature can store (and verify) a HUGE amount of signatures in a very efficient manner.</p>
+<p>If there are 440k validators and 64 committees, there must be ~27k validators/committee.&nbsp;</p>
+<p>27k validators still poses a problem; it's both too much network chatter and too many signatures to aggregate all at once.&nbsp;</p>
+<p>And so, we split one more time. 1 committee = 64 subnets.</p>
+<h3>Aggregators</h3>
+<p>Validators broadcast their attestations to their assigned subnet, which consist of ~250 validators. 16 validators on each committee are designated as aggregators.&nbsp;</p>
+<p>They listen for attestations and begin bundling them into a BLS signature.</p>
+<p>All 16 are attempting to build the same aggregate signature containing all the subnet's validators, but network conditions can cause some aggregators to miss a few attestations. Each validator does their best and publishes the result.</p>
+<h3>Selection</h3>
+<p>At this point, the ball moves back to the block producer's court.&nbsp;</p>
+<p>The validator who proposed the node begins to go subnet by subnet and selects the best aggregate signature. Once the 64 best signatures are gathered, the block proposer aggregates them one last time.</p>
+<p>This final aggregation is then added on to the block, signifying that all 27k validators in that committee saw that block and agreed with it - on threat of slashing.&nbsp;</p>
+<p>Incidentally this process limits the number of validators the Ethereum network can support.</p>
+<h2>Joining the Blockchain</h2>
+<p>At this point we have a valid block, attested to by its entire committee and carefully prepared to allow quick verification. And so, it's time to add it to the blockchain...&nbsp;</p>
+<p>In fact, by virtue of this process, it WAS added to the blockchain!</p>
+<p>Every time a block is proposed, 1/32 of the network places their stake on the line and votes.&nbsp;</p>
+<p>Every 32 blocks, the entire network participates.&nbsp;</p>
+<p>And so, once every epoch, Ethereum becomes secured by the entire value of all staked ETH.</p>
+<h2>Resources</h2>
+<p>Source Material - <a href="https://twitter.com/SalomonCrypto/status/1578540111930699778">Twitter Link</a></p>
+<p>Source Material - <a href="/twitter-pdf-2022-10-08_attestation.pdf">PDF</a></p>

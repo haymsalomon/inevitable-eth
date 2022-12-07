@@ -1,0 +1,153 @@
+<!--
+title: Maximum Extractable Value (MEV)
+description: 
+published: true
+date: 2022-11-30T05:34:38.286Z
+tags: 
+editor: undefined
+dateCreated: 2022-11-30T05:34:34.159Z
+-->
+
+<figure class="image"><img src="/mev-banner.jpeg">
+  <figcaption><a href="https://cryptoticker.io/en/4-crypto-companies-entered-crypto-2021-who-2022/"><i>source</i></a></figcaption>
+</figure>
+<h2>Note</h2>
+<p>This article aims to give you a theoretical understanding of MEV in relation to the real-world activities that look a lot like MEV. If you are looking for a more practical walkthrough of MEV, <a href="/home/concepts/mev/example">check out this example.</a></p>
+<h1 style="text-align:center;">Maximum Extractable Value (MEV)</h1>
+<h2>Prerequisites</h2>
+<h3>Arbitrage</h3>
+<p><a href="/home/concepts/arbitrage">Arbitrage</a> is the opportunity to secure a guaranteed profit by identifying and exploiting an information discrepancy.&nbsp;</p>
+<h3>Gas</h3>
+<p><a href="/home/concepts/gas">Gas</a> is the unit of computation on Ethereum, paid for by the person/entity who generated the transaction.</p>
+<h3>Payment for Order Flow (PFOF)&nbsp;</h3>
+<p><a href="https://en.wikipedia.org/wiki/Payment_for_order_flow">Payment for order flow (PFOF)</a> is a form of compensation that a brokerage firm receives for directing orders for trade execution to a particular market maker or exchange.</p>
+<p>PFOF has become heavily politicized in the last 18 months; I will use an alternate phrase.&nbsp;</p>
+<p>Wholesaler Rebate = PFOF</p>
+<h2>Trad-Fi vs De-Fi</h2>
+<p>If you'll indulge me, let's walk through an incredibly over-simplified, barely correct history of MEV.&nbsp;</p>
+<h3>Let There Be Trades</h3>
+<figure class="table">
+  <table>
+    <tbody>
+      <tr>
+        <td style="vertical-align:top;">
+          <p style="text-align:center;"><span class="text-big"><strong>Trad-Fi</strong></span></p>
+          <p style="text-align:center;">Ape trades sharp stick for warm cloak</p>
+        </td>
+        <td style="vertical-align:top;">
+          <p style="text-align:center;"><span class="text-big"><strong>De-Fi</strong></span></p>
+          <p style="text-align:center;">In May 2010, <a href="https://www.coindesk.com/markets/2020/05/22/10-years-after-laszlo-hanyecz-bought-pizza-with-10k-bitcoin-he-has-no-regrets/">Hanyecz bought 2 pizzas for 10,000 BTC</a></p>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
+<h3>Build a Marketplace, They Will Come</h3>
+<figure class="table" style="text-align:center;">
+  <table>
+    <tbody>
+      <tr>
+        <td style="vertical-align:top;">
+          <p style="text-align:center;"><span class="text-big"><strong>Trad-Fi</strong></span></p>
+          <p style="text-align:center;">Some Dutch guys needed a venue to exchange "shares" of a "company" they had just created</p>
+        </td>
+        <td style="vertical-align:top;">
+          <p style="text-align:center;"><span class="text-big"><strong>De-Fi</strong></span></p>
+          <p>In November 2018, Hayden Adams deployed &nbsp;the first decentralized exchange: Uniswap.&nbsp;</p>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
+<h3>The Dark Forest</h3>
+<figure class="table">
+  <table>
+    <tbody>
+      <tr>
+        <td style="vertical-align:top;">
+          <p style="text-align:center;"><span class="text-big"><strong>Trad-Fi</strong></span></p>
+          <p style="text-align:center;">As more activities move on centralized locations, insiders realize they have more info than those trading. They start extracting.</p>
+        </td>
+        <td style="vertical-align:top;">
+          <p style="text-align:center;"><span class="text-big"><strong>De-Fi</strong></span></p>
+          <p style="text-align:center;">Those who live on-chain notice they can see transactions before they happen. They start extracting.</p>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
+<h3>Volume Soars, Technology Crawls</h3>
+<figure class="table">
+  <table>
+    <tbody>
+      <tr>
+        <td style="vertical-align:top;">
+          <p style="text-align:center;"><span class="text-big"><strong>Trad-Fi</strong></span></p>
+          <p style="text-align:center;">In NYC &amp; Chicago, the world pivots around trading pits. Frantic men scream &amp; make hand signals, all while extracting.</p>
+        </td>
+        <td style="vertical-align:top;">
+          <p style="text-align:center;"><span class="text-big"><strong>De-Fi</strong></span></p>
+          <p style="text-align:center;">Uniswap exchanges &gt;$1 B per day, the bot swarm becomes so thick that it's rare to see a clean transaction.</p>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
+<h3>MEV Captured, Empires Grow</h3>
+<figure class="table">
+  <table>
+    <tbody>
+      <tr>
+        <td style="vertical-align:top;">
+          <p style="text-align:center;"><span class="text-big"><strong>Trad-Fi</strong></span></p>
+          <p style="text-align:center;">Automated Market Making firms are founded to capture MEV; they grow into behemoths like Citadel and Virtu.</p>
+        </td>
+        <td style="vertical-align:top;">
+          <p style="text-align:center;"><span class="text-big"><strong>De-Fi</strong></span></p>
+          <p style="text-align:center;">November 2020, Stephane Gosselin submits a post to Ethresear.ch and changes the game. Flashbots is born.</p>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
+<p>The above comparison deserves elaboration.</p>
+<p>Both RW Market Making firms and Flashbots capture MEV. However, Flashbots products (generally) pass the captured MEV along to validators. RW firms are profit maximizing corporations.</p>
+<p>There is no moral judgment here.</p>
+<h3>The Grand Bargain</h3>
+<figure class="table">
+  <table>
+    <tbody>
+      <tr>
+        <td style="vertical-align:top;">
+          <p style="text-align:center;"><span class="text-big"><strong>Trad-Fi</strong></span></p>
+          <p style="text-align:center;">Market participants (brokers, banks, etc) begin to demand profit sharing. Automated Market Makers (called Wholesalers) begin offering rebates, paid for out of their profit.&nbsp;</p>
+        </td>
+        <td style="vertical-align:top;">
+          <p style="text-align:center;"><span class="text-big"><strong>De-Fi</strong></span></p>
+          <p style="text-align:center;">KeeperDAO is born. Today it is called Rook Protocol.</p>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
+<h2>Price Improvements</h2>
+<p>US financial asset trading happens between ~200 transaction aggregators (eg Fidelity or TD Ameritrade) on ~15 exchanges (eg NASDAQ) and many dark pools.</p>
+<p>Automated Market Makers (no joke, Dougie Large - CEO of Virtu - uses this term) have built technology that scans all the exchanges, develops price and quotes it back to a transaction aggregator.</p>
+<p>Transaction aggregators make their decision based on 1 metric: price improvement.</p>
+<h2>Wholesaler Rebates</h2>
+<p><a href="https://en.wikipedia.org/wiki/Citadel_LLC">Citadel</a>, <a href="https://en.wikipedia.org/wiki/Virtu_Financial">Virtu</a> and the 4-5 others make A LOT of money.&nbsp;</p>
+<p>So much that eventually their clients started demanding a cut.</p>
+<p><a href="https://www.nerdwallet.com/best/investing/free-stock-trading">Some brokers (like Robinhood)</a> use they payments to offer free trades.&nbsp;</p>
+<p>Some offer better spreads.&nbsp;</p>
+<p>Others book it as profit.</p>
+<p>As the market matured, so did its expectations of where MEV accrues.&nbsp;</p>
+<p>When it was wild and undeveloped, MEV was available to those willing to seize it. Over time, the market institutionalized MEV and began exerting pressure on those institutions to distribute it.</p>
+<p>The same paradigm is playing out in crypto.&nbsp;</p>
+<p>We are early in the story, but things move much faster.&nbsp;</p>
+<h2>Flashbots</h2>
+<p><a href="https://github.com/flashbots/pm">Flashbots</a> should be understood one of the first institutionalizations of MEV. But true to the De-Fi and crypto ethos, it's immediately distributing MEV fairly.</p>
+<p>Flashbots believes MEV rightfully belongs to the <a href="/home/ethereum/network">Network Layer</a>, and has built a system that reflects that.&nbsp;</p>
+<h2>Resources</h2>
+<p><a href="/home/concepts/mev/example">MEV Example</a></p>
+<p>Source Material - <a href="https://twitter.com/SalomonCrypto/status/1537908651112878085">Twitter Link</a></p>
+<p>Source Material - <a href="/twitter-pdf-2022-06-17_mev_history.pdf">PDF</a></p>

@@ -1,0 +1,90 @@
+<!--
+title: Dopex Programmable Options
+description: 
+published: true
+date: 2022-12-05T06:07:27.828Z
+tags: 
+editor: undefined
+dateCreated: 2022-12-05T06:05:13.710Z
+-->
+
+<figure class="image"><img src="/dopex-1.jpeg"></figure>
+<h1 style="text-align:center;">Dopex Programmable Options</h1>
+<h2>Options 101</h2>
+<figure class="image"><img src="/dopex-2.png"></figure>
+<p><a href="/home/concepts/option">Deep Dive: Options</a></p>
+<p>Options are a contract between two parties to buy/sell an asset (in the future) using a fixed price and date.&nbsp;</p>
+<p>At that future date, the option buyer has the choice whether to continue with the buy/sale; the seller does not.&nbsp;</p>
+<p>Options are (usually) either Call or Put options.</p>
+<h3>Call Options</h3>
+<p>Call Option: the right, but not the obligation, to buy an asset in the future.</p>
+<ul>
+  <li>Eg ETH costs $1500 and you can purchase a call option on ETH at $1750. If the price of ETH is higher than $1750, you can exercise the option and buy ETH below market price.</li>
+</ul>
+<h3>Put Options</h3>
+<p>Put Option: the right, but not the obligation, to sell an asset in the future.</p>
+<ul>
+  <li>Eg $ETH costs 1500 and you can purchase a put option on $ETH at $1250. If the price of ETH is lower than 1250, you can exercise the option and sell ETH above market price.</li>
+</ul>
+<h3>Option Premium</h3>
+<p>The economic pin that this all revolves around is the premium. This is the fee paid by the buyer of the option to the seller of the option.&nbsp;</p>
+<p>The buyer will always pay and the seller will always receive the premium, regardless how the option settles.</p>
+<h3>Option Styles</h3>
+<p>Trad-Fi has two major styles of options: American and European.&nbsp;</p>
+<p>Both styles are similar, the key difference is the window in which the buyer may exercise the option.&nbsp;</p>
+<ul>
+  <li>American options: exercise AT ANY TIME before expiry.</li>
+  <li>European options: exercise ONLY AT expiry.</li>
+</ul>
+<p>But this is De-Fi; we aren't constrained by the old ways of thinking.&nbsp;</p>
+<p>We have <a href="/home/ethereum/world-computer/de-fi/programmable-money">programmable money</a>!</p>
+<h2>Dopex Option Styles</h2>
+<figure class="image"><img src="/dopex-3.jpeg"></figure>
+<p>At first glance, a Dopex option seems very similar to a European option; both can only be exercised at expiry.</p>
+<p>Under the hood, Dopex adds state of the art De-Fi paradigms and technology to build a much more compelling product.</p>
+<p>Out of the box, Dopex options gain many of the benefits of De-Fi:</p>
+<ul>
+  <li>Composability - options are an ERC-20 token that can be used in other protocols, leveraged, OTC, etc</li>
+  <li>Incentivized - DPX emissions and veDPX bribes boost investment profile</li>
+  <li>Transparent - all on-chain</li>
+</ul>
+<p>The real innovation, however, is with the collateral.</p>
+<p>In an Trad-Fi option, the collateral used to write the options is held in trust at a <a href="/home/concepts/settlement">centralized location</a>.</p>
+<p>In a Dopex option, the collateral can be used for... almost anything!</p>
+<h2>Programmable Collateral</h2>
+<figure class="image"><img src="/dopex-4.jpeg"></figure>
+<p>Dopex's 's first and best known product are Single Staking Option Vault (SSOV).&nbsp;</p>
+<p>They should be understood as the combination of two products:&nbsp;</p>
+<ul>
+  <li>An option contract with European-style settlement terms.&nbsp;</li>
+  <li>A single sided yield farm</li>
+</ul>
+<p>The option only requires access to the collateral at settlement and, because it has European-style settlement terms, Dopex knows exactly when that moment is going to be.</p>
+<p>Until then, Dopex can deploy the collateral into risk-free farms to boost yield.</p>
+<p>It is critically important that Dopex deposits the collateral into risk-free yield farms; the collateral WILL be needed in a relatively short amount of time.</p>
+<p>Single asset staking the perfect candidate for SSOVs: boosted yield without an IL risk.</p>
+<p>This presents a compelling opportunity for other protocols; Dopex can build a SSOV around a whitelisted single asset farms.</p>
+<p>Now, instead of simply diluting token holders, these emissions will directly incentivize options liquidity.</p>
+<p>At this point you might be asking yourself "if Dopex can deposit collateral into a single asset farm... can Dopex use the collateral anywhere else?"</p>
+<p>The answer: of course, the options are as wide as the Atlantic!</p>
+<h2>Atlantic Options</h2>
+<figure class="image"><img src="/dopex-5.jpeg"></figure>
+<p><a href="https://blog.dopex.io/articles/dopex-papers/Dopex-Papers:-Atlantic-Options">Dopex Atlantic Options</a> are smart contracts that pair a Dopex-style option with another (white labeled, custom integrated) De-Fi product.</p>
+<p>Each Atlantic product has to be careful constructed to ensure that at settlement the collateral is 100% guaranteed to be there.&nbsp;</p>
+<p>But once that's taken care of, the results are MAGIC:&nbsp;</p>
+<ul>
+  <li>One-click straddles&nbsp;</li>
+  <li>No-liquidation perps&nbsp;</li>
+  <li>Unliquidatable loans&nbsp;</li>
+</ul>
+<p>and so much more!</p>
+<p>As of today, Dopex has one Atlantic option product: <a href="https://blog.dopex.io/articles/dopex-papers/atlantic-strategies-atlantic-straddles">Atlantic Straddles</a>.</p>
+<p><a href="https://www.investopedia.com/articles/optioninvestor/08/straddle-strategy.asp">Straddles are a common option strategy</a> which bets on an asset's price moving quickly (either up or down); Dopex has simplified this into a one-click process.</p>
+<p>The results: <a href="https://twitter.com/tztokchad/status/1561793547078193152">jaw-dropping</a>.</p>
+<h2>A Revolution</h2>
+<p>To those with a passing interest in finance and crypto, Dopex might just seem like another meme DAO with a (sometimes) hot token.</p>
+<p>Those of us deep in the rabbit hole see something else.</p>
+<p>We see a revolution.</p>
+<h2>Resources</h2>
+<p>Source Material - <a href="https://twitter.com/SalomonCrypto/status/1563597989188235264">Twitter Link</a></p>
+<p>Source Material - <a href="/twitter-pdf-2022-08-27_dopex.pdf">PDF</a></p>

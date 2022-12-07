@@ -1,0 +1,104 @@
+<!--
+title: Statelessness
+description: 
+published: true
+date: 2022-12-04T18:33:25.040Z
+tags: 
+editor: undefined
+dateCreated: 2022-12-04T16:49:23.676Z
+-->
+
+<figure class="image"><img src="/statelessness.webp">
+  <figcaption><a href="https://www.coinspeaker.com/london-hard-fork-success-ethereum/"><i>source</i></a></figcaption>
+</figure>
+<h1 style="text-align:center;">Statelessness</h1>
+<h2>Prerequisites</h2>
+<h3>Ethereum State Machine</h3>
+<p>A <a href="https://inevitableeth.com/home/ethereum/evm/state-machine">state machine</a> is a mathematical model of computation with two major components:&nbsp;</p>
+<ul>
+  <li>the state, the configuration of the system at a moment in time</li>
+  <li>a transaction, the set of instructions to change the state</li>
+</ul>
+<p>The state transition machine model provides a simple framework for breaking down computation into a step-by-step process.</p>
+<h3>Merkle Trees, Merkle Proofs and Merkle Proof Scaling</h3>
+<p>A <a href="https://inevitableeth.com/home/concepts/merkle-tree">Merkle&nbsp;tree</a> is a (tree) data structure in which each leaf node is labeled with the cryptographic hash of a data block, and each non-leaf node is labeled with the cryptographic hash of its child nodes' labels.</p>
+<p>A Merkle proof can be used to efficiently prove that a single piece of data exists in a dataset without transferring the entire dataset.&nbsp;</p>
+<h2>The World Computer</h2>
+<p>Ethereum is the <a href="/home/ethereum/world-computer">World Computer</a>, a single, globally shared computing platform that exists in the space between a network of 1,000s of computers (<a href="/home/ethereum/network/node">nodes</a>).&nbsp;</p>
+<p>The nodes provide the hardware, the <a href="/home/ethereum/evm">Ethereum Virtual Machine</a> (EVM) provides the virtual computer and the blockchain records Ethereum's history.</p>
+<p>The EVM sits at the center of Ethereum, providing a decentralized computing platform to the world.</p>
+<p>Everything else is all designed to construct this <a href="/home/concepts/virtual-machine">virtual machine</a> and expose it to the world, so that anyone who is interested can permissionlessly interact with it.</p>
+<h2>Storing the Ethereum State</h2>
+<p>The internal state of the EVM is stored in a data structure known as a Merkle tree.&nbsp;</p>
+<p>Merkle trees are very powerful, but they are not perfect.</p>
+<p>Specifically, they don't scale efficiently enough for the World Computer.</p>
+<p>Today, the World Computer stores the entire state of the EVM; every account, every entry, all the way back to genesis. For now, that amount of data is acceptable, but without intervention the state's size will grow to infinity.&nbsp;</p>
+<p>Forget decentralization, goodbye Ethereum.</p>
+<h2>State Size Management Theory</h2>
+<figure class="image"><img src="/state-size-1.jpeg"></figure>
+<p><a href="/home/ethereum/upgrades/statelessness/theory">Deep Dive: State Management Theory</a></p>
+<p>Fortunately, the gigabrains of Ethereum have been thinking about this problem for a while now. Before we talk solutions, it's helpful to think about the theory.</p>
+<p>Tl;dr statelessness is a spectrum.</p>
+<p>Strong statelessness is the idea that no entity, including block builders, need to store the state.&nbsp;</p>
+<p>While this idea is attractive for idealistic reasons, in practice going all the way to full statelessness isn't worth the effort.&nbsp;</p>
+<p>Instead, we focus on the weaker version.</p>
+<p>The idea behind weak statelessness is that most nodes do not need to store the EVM state, as they are able to verify blocks statelessly (via proofs).&nbsp;</p>
+<p>However, in order to generate these proofs, we still require block builders to hold the EVM's state.</p>
+<h2>Proposer-Builder Separation</h2>
+<figure class="image"><img src="/pbs-1.jpeg"></figure>
+<p><a href="/home/ethereum/upgrades/pbs">Deep Dive: Proposer-Builder Separation</a></p>
+<p>Today, verifying nodes ARE block producers, so weak statelessness doesn't give us much. Fortunately, we have Proposer-Builder Separation (PBS) in the pipeline.&nbsp;</p>
+<p>Block builders become a specialized entity, who provide prebuilt blocks to proposing nodes/validators.</p>
+<p>PBS was born from MEV research, but the paradigm has become important for many of the upgrades to Ethereum.</p>
+<p>With PBS, we can implement weak statelessness without giving up decentralization, by constraining the requirement to (possibly centralized) block builders.</p>
+<p>The combination of weak statelessness + PBS gives us the advantages of statelessness without sacrificing decentralization, and so it is good enough.</p>
+<p>And besides, if you look into implementing strong statelessness, you begin to realize it's all just trade-offs.</p>
+<h2>Trade-Offs</h2>
+<figure class="image"><img src="/merkle-scaling-1.jpeg"></figure>
+<p><a href="/home/concepts/merkle-tree/scaling">Deep Dive: Merkle Proof Scaling</a></p>
+<p>Which brings us to the fundamental trade-off of any form of statelessness.&nbsp;</p>
+<p>State-free verification frees up a lots of node resources, but this is offset but the amount of proofs that need to flow through the system.&nbsp;</p>
+<p>More statelessness = more bandwidth requirements.</p>
+<p>But here's the thing... both versions of statelessness just aren't possible with Merkle trees. The proof sizes are way too big to implement statelessness.</p>
+<p>Now fortunately, we already have a replacement for Merkle trees - Verkle Trees.&nbsp;</p>
+<h2>Verkle Trees</h2>
+<figure class="image"><img src="/verkle-tree-1.png"></figure>
+<p><a href="/home/concepts/verkle-tree">Deep Dive: Verkle Trees</a></p>
+<p>Looking at a picture, a Verkle tree is much wider and shorter than a Merkle tree. Using advanced cryptography, it exploits this structure to create proofs of constant size.</p>
+<p>As a Merkle tree grows, its proof size grows. Verkle proofs will always stay the same size, regardless of how large the tree gets.&nbsp;</p>
+<p>Statelessness still increases bandwidth requirements, but Verkle trees more than offset this increase AND don't grow over time.</p>
+<h2>A Complicated Transition</h2>
+<p>We know Verkle trees are the future of Ethereum, but replacing Merkle trees turns out to be incredibly complicated.</p>
+<p><a href="https://eips.ethereum.org/EIPS/eip-2584">Here's one proposal</a>. Just click on it and scan through, you'll see it's a freaking nightmare.</p>
+<p>While Verkle trees appear to be very difficult to swap in to Ethereum mainnet, it becomes MUCH simpler if we combine it with another upgrade.</p>
+<p>Interestingly, this is another upgrade that seemed almost impossible on its own, but totally doable in parallel.</p>
+<h2>State Expiry</h2>
+<figure class="image"><img src="/state-expiry-1.png"></figure>
+<p><a href="/home/ethereum/upgrades/statelessness/state-expiry">Deep Dive: Ethereum State Expiry</a></p>
+<p>The upgrade: state expiry!&nbsp;</p>
+<p>The idea that each individual piece of the EVM state naturally expires over time, and much be actively refreshed or else be deactivated.&nbsp;</p>
+<p>Of course, deactivated parts of the state can always be revived later.</p>
+<p>State expiry implicitly draws on many of the ideas (and issues) of statelessness. In order to revive inactive parts of the state, nodes must provide proofs.&nbsp;</p>
+<p>As we've discussed, explicit reliance on Merkle proofs is going to create bandwidth bottlenecks (eventually).</p>
+<h2>Two is Easier than One</h2>
+<p>Verkle trees can solve this issue, what's interesting is how (most) state expiry schemes make Verkle tree implementation MUCH easier.&nbsp;</p>
+<p>State expiry involves starting a new tree every period (~year), allowing Verkle trees to be phased in rather than swapped in.</p>
+<p>Here's how a roadmap might look:&nbsp;</p>
+<ul>
+  <li>Initialization - implement a hard fork that delineates between period 0 (before) and period 1 (after).&nbsp;<ul>
+      <li>After this fork, there will be two state trees: the old Merkle tree (no longer editable) and the new Verkle tree.</li>
+    </ul>
+  </li>
+  <li>Administration - a few things need to be done before the next period. The most important are:&nbsp;<ul>
+      <li>changes to the address scheme to include period information (along with other modifications and a security expansion)&nbsp;</li>
+      <li>recalculation of the Merkle tree as a Verkle tree</li>
+    </ul>
+  </li>
+  <li>Finalization - implement a hard fork that begins period 2 and sets all future period lengths. Nodes are allowed to drop the Merkle tree (per the state expiry scheme), and the Merkle root is replaced with the Verkle root generated during the administration phase.</li>
+</ul>
+<p>At this point, our state expiry scheme is fully implemented and Ethereum is solely using Verkle trees and roots to store the EVM state.</p>
+<p>And so not only has the EVM state size problem been solved, but the World Computer is ready for a stateless future.</p>
+<h2>Resources</h2>
+<p>Source Material - <a href="https://twitter.com/SalomonCrypto/status/1588752629118554112">Twitter Link</a></p>
+<p>Source Material - <a href="/twitter-pdf-2022-11-04_stateless_ethereum.pdf">PDF</a></p>
+<p>&nbsp;</p>

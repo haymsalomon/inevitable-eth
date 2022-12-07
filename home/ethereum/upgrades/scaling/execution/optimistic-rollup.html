@@ -1,0 +1,99 @@
+<!--
+title: Optimistic Rollups
+description: 
+published: true
+date: 2022-12-02T22:11:22.774Z
+tags: 
+editor: undefined
+dateCreated: 2022-12-02T21:36:24.444Z
+-->
+
+<figure class="image"><img src="/optimistic-rollup-1.jpeg"></figure>
+<h1 style="text-align:center;">Optimistic Rollups</h1>
+<h2>Prerequisites</h2>
+<h3>Merkle Tree</h3>
+<p>A <a href="https://inevitableeth.com/home/concepts/merkle-tree">Merkle Tree</a> is a data structure used to organize and encrypt huge data sets.&nbsp;</p>
+<p>Merkle Proofs can be used to efficiently verify that data exists in a dataset (confirmation a piece of data exists without transferring the whole dataset).</p>
+<h3>Settlement</h3>
+<p><a href="/home/concepts/settlement">Settlement</a> is the "final step in the transfer of ownership, involving the physical exchange of securities or payment".&nbsp;</p>
+<p>After settlement, the obligations of all the parties have been discharged and the transaction is considered complete.&nbsp;</p>
+<h2>The World Computer</h2>
+<p>In 2008, modern finance failed.</p>
+<p>As Satoshi Nakamoto watched the world burn around him, he had a vision: Bitcoin.</p>
+<p>7 years later, Vitalik Buterin delivered on the promise that Satoshi first gave us.</p>
+<p>Ethereum was born.</p>
+<p>Ethereum is the <a href="/home/ethereum/world-computer">World Computer</a>, a decentralized, globally shared utility. Unfortunately, the World Computer is slow...&nbsp;</p>
+<p>...or at least it was born slow. Fortunately, we have scaling solutions!</p>
+<h2>Early Scaling</h2>
+<h3>State Channels</h3>
+<p><a href="/home/ethereum/upgrades/scaling/execution/state-channel">Deep Dive: State Channels</a></p>
+<p>The first group of scaling solutions are state channels.&nbsp;</p>
+<p>To open a channel, the users fund a smart contract where the funds are held in on-chain-escrow. The participants can transact off-chain as much as they want.&nbsp;</p>
+<p>When finished, the smart contract settles the channel.</p>
+<p>State channels are powerful, but they have some serious limitations:&nbsp;</p>
+<ul>
+  <li>participants must opt-in, cannot send funds to people who are not in channel</li>
+  <li>requires large amount of capital to be locked</li>
+  <li>cannot represent objects without a clear owner (eg Uniswap)</li>
+</ul>
+<h3>Plasma</h3>
+<p><a href="/home/ethereum/upgrades/scaling/execution/plasma">Deep Dive: Plasma</a></p>
+<p>The next scaling solution was created to deal with (some of) these weaknesses.</p>
+<p>Plasma (aka plasma chains) are independent blockchains that are anchored to Ethereum mainnet.</p>
+<p>Just like Ethereum, a plasma chain has its own <a href="/home/concepts/virtual-machine">virtual machine</a> <a href="/home/ethereum/evm/state-machine">state</a> - the status/balance of every user &amp; smart contract</p>
+<p>This state can be represented as a Merkle tree - a data structure that allows a huge amount of data to be compressed into a single line (Merkle root).</p>
+<p>Once every [interval] the plasma chain will build the state Merkle tree and post the Merkle root to mainnet. Thus, a (compressed) record of the entire plasma chain exists on mainnet.&nbsp;</p>
+<p>In order to withdraw assets, a user submits the Merkle proof for that asset.</p>
+<p>While plasma delivers improvement on state channels, they share a (huge) weakness: both require engaged ownership.&nbsp;</p>
+<p>If an owner does not care about an asset, then an "invalid" outcome involving that asset may result. Good luck implementing a DEX... or really any dApp.</p>
+<p>But there is an even bigger issue: data availability.&nbsp;</p>
+<p>A plasma chain only posts the state Merkle root to mainnet; it does not post any of the transaction or block data needed to generate fraud proofs.&nbsp;</p>
+<h2>Rollups</h2>
+<p>Rollups are the answer: post everything to mainnet.</p>
+<h3>Deposit</h3>
+<figure class="image"><img src="/optimistic-rollup-2.jpeg"></figure>
+<p>Users interact with an optimistic rollup by depositing assets into a smart contract on Ethereum. The rollup operator then mints an equivalent amount of assets on the rollup chain and gives it to the depositor.</p>
+<p>On mainnet, the assets remain in escrow.</p>
+<h3>Execute</h3>
+<figure class="image"><img src="/optimistic-rollup-3.jpeg"></figure>
+<p>Because rollups rely on Ethereum for decentralized property rights and settlement, the rollup operator(s) can be much more centralized.</p>
+<p>From a user perspective, execution times and gas costs are SIGNIFICANTLY cheaper than using mainnet.</p>
+<p>Through here, rollups and plasma are basically the same thing. Both are high performance, centralized blockchains anchored to Ethereum via escrow smart contracts.</p>
+<p>Plasma post the Merkle root to mainnet once every [interval], writing an unimpeachable record to mainnet. But plasma chains stop here; the only post the Merkle root to mainnet.&nbsp;</p>
+<p>The Merkle root is a single line that can be used to prove a transaction.&nbsp;</p>
+<p>You can only prove a transaction was in a Merkle tree, you cannot search the transactions in a Merkle tree just from its root.</p>
+<p>During normal operation, this isn't an issue. Every time the plasma operator posts a new Merkle root, they also send every asset owner the necessary Merkle branches. Users must rely on the operator to provide block data if they need to create fraud proofs.</p>
+<p>But what if one day they just... stopped.&nbsp;</p>
+<p>A malicious operator could easily make an invalid transaction and hide the data necessary for creating the fraud-proof.&nbsp;</p>
+<p>This wouldn't be possible if the operator was required to make transaction data available on mainnet.</p>
+<h3>Publish</h3>
+<figure class="image"><img src="/optimistic-rollup-4.jpeg"></figure>
+<p>Rollups are the solution to plasma's data availability problems.&nbsp;</p>
+<p>Putting ALL data on-chain allows anyone to locally process all the operations in the rollup if they wish to, allowing them to detect fraud, initiate withdrawals, or personally start producing transaction batches.</p>
+<p>Operators publish a batch of transactions (including the previous and new state root) to the contract. The contract checks the submitted previous state root matches its copy of the current state root and, if so, switches the contract state root to the supplied state root.</p>
+<p>Rollups scale Ethereum in 2 ways:</p>
+<ul>
+  <li>First, by moving computation to a high-performance chain, gas costs related to execution are drastically reduced</li>
+  <li>Second, they are able to post transactions in a highly compressed form, greatly reducing the gas costs of posting data to mainnet</li>
+</ul>
+<figure class="image"><img src="/optimistic-rollup-5.png"></figure>
+<h3>Optimism</h3>
+<p>But there is one glaring issue: how does the smart contract know that the new state roots are correct?&nbsp;</p>
+<p>An OPTIMISTIC rollup assumes all batches are valid... BUT it leaves open a challenge window.</p>
+<p>Anyone who was keeping up with the chain and detects fraud can publish a fraud proof, proving the batch is invalid and should be reverted.&nbsp;</p>
+<p>Thus, the rollup assumes good behavior, but relies on the economic incentives of untrusted actors to maintain its integrity.</p>
+<h3>Withdraw</h3>
+<figure class="image"><img src="/optimistic-rollup-6.jpeg"></figure>
+<p>To withdraw, a user sends the contract a message and initiates a withdrawal transaction.&nbsp;</p>
+<p>This changes the state of the rollup; a new batch/state root is posted on-chain. After the challenge window passes, the tranasction is finalized and the user can withdraw their assets.</p>
+<h2>Summary</h2>
+<p>Both plasma and rollups are built on the same principle: offload execution while anchoring settlement to Ethereum.&nbsp;</p>
+<p>But rollups make a huge leap forward by solving data availability.</p>
+<p>The most important result: assets no longer needs owners.</p>
+<p>Rollups can run an EVM.</p>
+<p>A EVM-compatible/equivalent rollup is the dream: all the properties of Ethereum, just cheaper and faster.</p>
+<p>...but we can do better, can't we? What if instead of being "optimistic" we wanted to settle things instantly?</p>
+<p>Is verification possible with Zero-Knowledge?</p>
+<h2>Resources</h2>
+<p>Source Material - <a href="https://twitter.com/SalomonCrypto/status/1569023606029697024">Twitter Link</a></p>
+<p>Source Material - <a href="/twitter-pdf-2022-10-11_optimisitc_rollups.pdf">PDF</a></p>

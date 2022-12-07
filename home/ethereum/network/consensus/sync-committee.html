@@ -1,0 +1,97 @@
+<!--
+title: Sync Committee
+description: 
+published: true
+date: 2022-12-01T05:24:53.970Z
+tags: 
+editor: undefined
+dateCreated: 2022-12-01T05:24:49.882Z
+-->
+
+<figure class="image"><img src="/sync-committee-banner.jpeg"></figure>
+<h1 style="text-align:center;">Sync Committees</h1>
+<h2>Prerequisites</h2>
+<h3>BLS Digital Signatures</h3>
+<p><a href="/home/concepts/bls-signatures">BLS Digital Signatures</a> - A method of generating <a href="/home/concepts/digital-signatures">digital signatures</a>; digital signatures appear as random data (there is no way to discover anything about the signer with just the signature.</p>
+<h3>RANDAO</h3>
+<p>Credible randomness is critical to PoS's security design, particularly in regards to validator assignments (including block proposer).&nbsp;</p>
+<p>Ethereum uses a process called <a href="https://inevitableeth.com/home/ethereum/network/consensus/randao">RANDAO</a> to generate "good-enough" randomness.</p>
+<h3>Time on Ethereum (Slots &amp; Epochs)</h3>
+<p><a href="https://inevitableeth.com/home/ethereum/network/consensus/time">Deep Dive: ETH Time</a></p>
+<p>A block goes into a slot. Epochs are made of 32 slots.&nbsp;</p>
+<p>1 slot = 12 secs</p>
+<p>1 epoch = 6 mins 24 secs</p>
+<h2>The World Computer</h2>
+<p>Ethereum exists between a network of 1,000s of computers (<a href="https://inevitableeth.com/home/ethereum/network/node">nodes</a>), each running a local version of the <a href="https://inevitableeth.com/home/ethereum/evm">Ethereum Virtual Machine</a> (EVM). All copies of the EVM are kept perfectly in sync.&nbsp;</p>
+<p>Any individual EVM is a window into the shared state of the <a href="https://inevitableeth.com/home/ethereum/world-computer">World Computer</a>.</p>
+<p>This distributed network of EVMs is held in sync via a <a href="https://inevitableeth.com/home/ethereum/network/consensus">consensus mechanism</a>. A consensus mechanism is a system by which a leader (block proposer) updates the state of their EVM and the rest of the network trustlessly follows.</p>
+<p>Ethereum uses <a href="https://inevitableeth.com/home/ethereum/network/consensus/pos">Proof of Stake</a> (PoS) as its consensus system.</p>
+<h2>(Pre-Altair) Proof of Stake</h2>
+<p>Every epoch, Ethereum shuffles the validator set into 32 committees (one per slot) and each committee into 64 subnets.</p>
+<p>The process known as RANDAO provides credible randomness for this shuffling, critical to the protocol's security.</p>
+<h3>Block Proposal</h3>
+<p><a href="https://inevitableeth.com/home/ethereum/network/consensus/block-proposal">Deep Dive: Proposal</a></p>
+<p>The first member of each committee is designated the block proposer.&nbsp;</p>
+<p>The proposer is responsible for building (or otherwise sourcing) a <a href="/home/ethereum/blockchain/block">block</a> and broadcasting it to the network.&nbsp;</p>
+<p>Each block progresses the state of the EVM and adds to the blockchain.</p>
+<h3>Attestation</h3>
+<p><a href="https://inevitableeth.com/home/ethereum/network/consensus/attestation">Deep Dive: Attestation</a></p>
+<p>Each validator in the committee is responsible for verifying the block. Assuming the block is valid, each committee member creates and publishes a cryptographic signature.&nbsp;</p>
+<p>These signatures are aggregated and added to the (next) block header, completing the process.</p>
+<h3>Economic Security</h3>
+<p>Every epoch, the validator set is split into 32 committees, each responsible for attesting to one block.&nbsp;</p>
+<p>Thus, every epoch every validator submits a signature that represents their personal guarantee the block is valid and part of the blockchain.</p>
+<p>PoS is predicated on these cryptographic signatures; economic security is derived from the fact that each attesting validator can be slashed.&nbsp;</p>
+<p>Without the signatures (and the ability to verify them), the whole system just becomes "trust the data in the block."</p>
+<h2>Growing Network</h2>
+<figure class="image"><img src="/sync-committee-1.jpeg"></figure>
+<p>Right now there are ~442k validators, each submitting an attestation (digital signature) once every 6.4 minutes.&nbsp;</p>
+<p>~442k signatures is a lot of signatures.</p>
+<p>The most apparent problems in dealing with half a million signatures is the time needed to process that many and/or the space required to store that many. Fortunately, both of these problems are gracefully solved by BLS signatures, which allow signatures to be aggregated.</p>
+<p>But in order to create the (public) key needed to verify the message, you need access to the underlying individual public keys.</p>
+<p>When a block proposer is preparing the block, they add the aggregate signature to the block header, but they do not add the aggregate key.&nbsp;</p>
+<p>The whole point is to build the aggregate key independently. Else, what's the point of verification?</p>
+<h2>Minimum Requirements</h2>
+<figure class="image"><img src="/sync-committee-2.jpeg"></figure>
+<p>For an Ethereum node, this is no problem. Part of the responsibilities of running a node (and therefore running validators) is to hold the validator set in accessible memory and quickly compute aggregate signatures.</p>
+<p>One of the core design philosophies is that a full Ethereum node has (relatively) low requirements. This is the cornerstone of the World Computer's decentralization and credible neutrality.</p>
+<p>And, generally speaking, Ethereum has knocked it out of the park!</p>
+<p>Today, a relatively modest current (dedicated) computer will do the job. As time passes, the cost for a minimum-spec Ethereum node will drop further and further.&nbsp;</p>
+<figure class="table">
+  <table>
+    <tbody>
+      <tr>
+        <td>
+          <figure class="image"><img src="/sync-committee-3.jpeg"></figure>
+        </td>
+        <td>
+          <figure class="image"><img src="/sync-committee-4.jpeg"></figure>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
+<p>And yet, there are certain types of computers that will never be suitable...&nbsp;</p>
+<p>…very useful types of computers.</p>
+<p>What about a computer with ridiculously low specs, maybe in a developing economy?&nbsp;</p>
+<p>What about a smartphone, with more than enough processing power but unreliable connectivity?&nbsp;</p>
+<p>What about within an application, like an in-browser wallet (imagine if MM didn't need Infura)?</p>
+<p>Ethereum is the World Computer; all (well, most) blockchains are decentralized computers... What about running a node within a smart contract on another blockchain?</p>
+<p>While running a full node might never be realistic in the examples above, running a light client very well might be. And so, in October 2021 the beacon chain received its first upgrade in preparation for light client support: <a href="https://decrypt.co/84176/ethereum-altair-upgrade-next-week-heres-whats-in-it">Altair</a>.</p>
+<p>Among other things, the Altair upgrade added Sync Committees to the Ethereum PoS specification.&nbsp;</p>
+<h2>Sync Committee</h2>
+<p>A sync committee is a group of 512 validators, chosen every 256 epochs (~27 hours), who continually signs block headers for every slot in the beacon chain.</p>
+<p>Every time a block is produced, each member of the sync committee will verify and, if valid, sign it. These signatures are broadcast back out to the network.&nbsp;</p>
+<p>Then, the next slot begins and a new proposer is selected. This new proposer listens for these signatures.</p>
+<p>The block producer collects all the signatures that match their view of their chain and aggregates them into a final sync committee signature.&nbsp;</p>
+<p>Then the producer adds the signature AND the sync committee's public keys (quickly verifiable) directly into the block header.</p>
+<h2>Light Clients</h2>
+<p>Sync committees only contain 512 validators; a tiny amount both in terms of data storage and aggregate key generation. This allows a light client to build (from scratch) the aggregate public key it needs to trustlessly verify the signature and therefore whole blockchain.</p>
+<p>Today, we don't have fully functioning light clients. Altair upgraded Ethereum at the protocol level and created the necessary surface area needed to support light clients, but we still need to fill in the rest of the pieces</p>
+<p>Most important: Merkle proof production.</p>
+<p>What we DO have today is an Ethereum ready to support light clients; we just need to build the tech.</p>
+<p>When that day comes, we'll have an Ethereum that welcomes all computers as potential nodes - even other blockchain computers.</p>
+<p>A truly decentralized World Computer.</p>
+<h2>Resources</h2>
+<p>Source Material - <a href="https://twitter.com/SalomonCrypto/status/1579283196708941824">Twitter Link</a></p>
+<p>Source Material - <a href="/twitter-pdf-2022-10-10_sync_committee.pdf">PDF</a></p>

@@ -1,0 +1,73 @@
+<!--
+title: Perpetual Futures
+description: 
+published: true
+date: 2022-12-06T13:52:41.112Z
+tags: 
+editor: undefined
+dateCreated: 2022-12-06T13:52:35.139Z
+-->
+
+<figure class="image"><img src="/perps-banner.jpeg">
+  <figcaption><a href="https://lh5.googleusercontent.com/ZYRLGOAvU87oNDMzaJi3QACK22TVBUsUIX02ig-wTAvbkp0LOAGYfKeju0I40GEioVWNUvBBXmeQEcwp74DMevgcCpzig9p3yiPsRMDreYtToHWITnjzxShhwMeVldBK4LbCDnG9GwcqNJYDvUWOzC0"><i>source</i></a></figcaption>
+</figure>
+<h1 style="text-align:center;">Perpetual Futures</h1>
+<h2>Perps</h2>
+<p><a href="https://en.wikipedia.org/wiki/Perpetual_futures">Perpetual Futures</a> (perps) were a concept developed in the 90s but not really tried until <a href="https://www.bitmex.com/">BitMEX</a> released crypto perps in 2016.</p>
+<p>After less than a decade, they are MASSIVE.</p>
+<p>"<a href="https://www.livemint.com/market/cryptocurrency/crypto-exchange-crosstower-introduces-perpetual-futures-trading-11649936286414.html">Bitcoin perpetual futures... hit record open interest in 2021, with avg volumes of ~$62B per day</a>"</p>
+<p>Ever wonder why <a href="https://gmx.io/#/">GMX</a> or <a href="https://dydx.exchange/">dYdX</a> are worth so much? Or where <a href="https://www.binance.com/en">Binance's</a> or <a href="https://www.kucoin.com/">Kucoin's</a> revenue growth is coming from?</p>
+<p>$62B per day in 2021!!!</p>
+<h2>Definitions</h2>
+<p>Definitions:&nbsp;</p>
+<ul>
+  <li>Futures Contract - agreement to buy/sell an asset for a fixed price at a known future date&nbsp;</li>
+  <li>Perpetual Future - futures contract without an expiry date&nbsp;</li>
+  <li>In human: a contract that tracks price of an asset without control of it</li>
+</ul>
+<h2>Why Perps?</h2>
+<p>Before we go any deeper into mechanics, let's talk about the purpose of perps.&nbsp;</p>
+<p>I mean, if want to bet on the price of an asset, why don't you just buy it?&nbsp;</p>
+<p>Especially in crypto where assets don't take up space. We aren't talking about oil or wheat.</p>
+<p>The most important reason for perps is to give traders exposure to asset prices but with the properties inherent in futures contracts.&nbsp;</p>
+<p>Futures are a capital efficient way to speculate on assets.</p>
+<p>It's much easier to see this in the real world.&nbsp;</p>
+<ul>
+  <li>Natural gas&nbsp;</li>
+  <li>2 traders&nbsp;</li>
+  <li>6 months&nbsp;</li>
+  <li>1 trade/week/trader&nbsp;</li>
+</ul>
+<p>Normal trading: natural gas needs to actually move around the world 54 times&nbsp;</p>
+<p>Futures: natural gas stays in 1 place, moved once in 6 months</p>
+<p>Futures don't require the time/effort/cost of moving the gas each trade.&nbsp;</p>
+<p>Also think about the implication of the time value of money. Whatever buying gas today costs, it will cost considerably less to buy the promise of it in 6 months (assuming neutral market/price).</p>
+<p>Same in crypto, but since it's all digital it's hard to conceptualize.&nbsp;</p>
+<p>For now, futures are capitally efficient because they allow the economic activity to happen before a single, final settlement.&nbsp;</p>
+<p>Perps remove the need for final settlement.</p>
+<h2>Keeping Things in Balance</h2>
+<p>The issue with perps is that because they never settle, they've lost their tether to the underlying asset.&nbsp;</p>
+<ul>
+  <li>Perp: future with no end date&nbsp;</li>
+  <li>Future: promise to deliver an asset at an end date&nbsp;</li>
+</ul>
+<p>Ummm...</p>
+<p>Enter the <a href="https://medium.com/derivadex/what-is-the-funding-rate-for-perpetual-swaps-a0335c4228a9">Funding Rate</a> (FR) The FR is a flow of payments between long and short traders.&nbsp;</p>
+<p>When the price of the perp is above the price of the real assets, funding rate is positive and long traders pay short traders (and vice versa).</p>
+<p>As perp price deviates from real asset price, the magnitude of the FR increases. This creates opposing pressure on the price of the perp; people sending FR will close, people receiving FR will open.&nbsp;</p>
+<p>The FR acts as an automatic stabilizer and keeps perp price accurate.</p>
+<p>How it works:&nbsp;</p>
+<ul>
+  <li>1) Deposit initial collateral&nbsp;</li>
+  <li>2) Select leverage multiplier&nbsp;</li>
+  <li>3) Open position at current market price&nbsp;</li>
+  <li>4) Value is added or taken from collateral account as market moves&nbsp;</li>
+  <li>5a) Close position&nbsp;</li>
+  <li>5b) Get liquidated</li>
+</ul>
+<p>A liquidation happens when your liability exceeds your collateral.&nbsp;</p>
+<p>A perp trader needs to manage (at least) two things in order to avoid liquidation: spot price and FR impact.&nbsp;</p>
+<p>Spot price will effect the size of your liability. FR will effect the size of your collateral</p>
+<h2>Resources</h2>
+<p>Source Material - <a href="https://twitter.com/SalomonCrypto/status/1526275021718577152">Twitter Link</a></p>
+<p>Source Material - <a href="/twitter-pdf-2022-05-16_perps.pdf">PDF</a><br>&nbsp;</p>

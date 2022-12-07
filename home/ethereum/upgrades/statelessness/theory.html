@@ -1,0 +1,80 @@
+<!--
+title: State Size Management Theory
+description: 
+published: true
+date: 2022-12-04T16:52:10.254Z
+tags: 
+editor: undefined
+dateCreated: 2022-12-04T16:47:35.211Z
+-->
+
+<figure class="image"><img src="/state-size-1.jpeg"></figure>
+<h1 style="text-align:center;">Ethereum State Size Management</h1>
+<h2>Prerequisites</h2>
+<h3>Ethereum State Machine</h3>
+<p>A <a href="/home/ethereum/evm/state-machine">state machine</a> is a mathematical model of computation with two major components:&nbsp;</p>
+<ul>
+  <li>the state, the configuration of the system at a moment in time</li>
+  <li>a transaction, the set of instructions to change the state</li>
+</ul>
+<p>The state transition machine model provides a simple framework for breaking down computation into a step-by-step process.</p>
+<h2>The World Computer</h2>
+<p>Ethereum exists between a network of 1,000s of computers (<a href="https://inevitableeth.com/home/ethereum/network/node">nodes</a>), each running a local version of the <a href="https://inevitableeth.com/home/ethereum/evm">Ethereum Virtual Machine</a> (EVM). All copies of the EVM are kept perfectly in sync.&nbsp;</p>
+<p>Any individual EVM is a window into the shared state of the <a href="https://inevitableeth.com/home/ethereum/world-computer">World Computer</a>.</p>
+<p>The EVM sits at the center of Ethereum, providing a decentralized computing platform to the world.</p>
+<p>Everything else is all designed to construct this <a href="/home/concepts/virtual-machine">virtual machine</a> and expose it to the world, so that anyone who is interested can permissionlessly interact with it.</p>
+<h2>A Growing Machine</h2>
+<figure class="image"><img src="/state-size-2.png"></figure>
+<p>The World Computer is still in its infancy; it was only born ~7 years ago. And yet, even in that short time it's already attracted a huge amount of use...</p>
+<p>...a worrying amount of use. For you see, Ethereum must keep track of every new user, smart contract, NFT, etc.</p>
+<p>Every new entry increases the size of its internal state (and therefore the space needed to store it).&nbsp;</p>
+<p>Over time, the state grows and grows, placing heavier and heavier burdens on the real computers (nodes) running the EVM.</p>
+<p>Again, Ethereum (which I believe will be the dominant global settlement platform for generations) was only born 7 years ago; it has already generated so much data that <a href="https://etherscan.io/chartsync/chaindefault">each node requires ~1 TB just to get caught up</a>.</p>
+<p>Not sustainable.</p>
+<p>This problem is a bigger issue than the storage/bandwidth requirements, it creates a vulnerability in the crypto-economics of Ethereum.</p>
+<p>A user only has to pay once to increase the state size, but the increased size will create a perpetual burden (cost) on the network.</p>
+<p>And so, unless we find a solution, the World Computer is doomed before it even starts.</p>
+<p>Which brings us, dear reader, to the subject of this thread: <a href="https://hackmd.io/@vbuterin/state_size_management">Vitalik Buterin's Theory of Ethereum State Size Management</a>.</p>
+<h2>Unbounded Growth</h2>
+<figure class="image"><img src="/state-size-4.jpeg"></figure>
+<p>Today, the EVM state operates in a mode of unbounded growth.&nbsp;</p>
+<p>Not only is this the most resource intensive way of managing the EVM state, it continues to grow over time.&nbsp;</p>
+<p>This type of state management races against <a href="https://en.wikipedia.org/wiki/Moore%27s_law">Moore's law</a>, and works against decentralization.</p>
+<h2>State Expiry</h2>
+<figure class="image"><img src="/state-size-5.jpeg"></figure>
+<p>Instead of allowing the state of the EVM to grow into infinity, we could look at schemes that move inactive parts of the state into retirement.&nbsp;</p>
+<p>State Expiry schemes do not look to delete data out of the EVM state; any inactive nodes can be cryptographically resurrected.</p>
+<p>The first question when considering a state expiry scheme is how to renew state.&nbsp;</p>
+<p>While there are many ideas, the community is moving towards a model based on "touching" the data. In general, the idea is all data is set to expire by default and must be explicitly renewed.</p>
+<p>Data that expires can be revived.&nbsp;</p>
+<p>A resurrection would require a proof that shows the data is currently part of the inactive state.&nbsp;</p>
+<p>Proof generation would require being able to access the inactive state, locally or otherwise (think Etherscan or Alchemy).</p>
+<p>From here, state expiry gets much more configurable (and complicated). Some of the more important toggles:&nbsp;</p>
+<ul>
+  <li>Expiry at the account or storage-slot level&nbsp;</li>
+  <li>Creating an inactive state tree or just marking nodes as inactive&nbsp;</li>
+  <li>Managing resurrection conflicts</li>
+</ul>
+<h2>Weak Statelessness</h2>
+<figure class="image"><img src="/state-size-6.jpeg"></figure>
+<p>From here, we cross the line into statelessness. Instead of holding the entire state, nodes can trustlessly operate the EVM using only proofs.&nbsp;</p>
+<p>Weak Statelessness allows all verifying nodes to be completely stateless. Nodes (or other entities) that build Ethereum blocks still need to hold the full state, specifically to generate the proof components.</p>
+<p>Today, verifying nodes ARE block producers, so we aren't gaining much... for now.&nbsp;</p>
+<p>But that's just for now. we already have mev-boost, a prototype of <a href="/home/ethereum/upgrades/pbs">Proposer-Builder Separation</a> (PBS).&nbsp;</p>
+<p>The idea: block builders become a specialized entity, who provide prebuilt blocks to proposing nodes/validators.</p>
+<p>PBS was born from MEV research, but the paradigm has become important for many of the upgrades to Ethereum (eg <a href="/home/ethereum/upgrades/scaling/data">Danksharding</a>).</p>
+<p>With PBS, we can implement weak statelessness without sacrificing decentralization by constraining the requirement to (possibly centralized) block builders.</p>
+<h2>Strong Statelessness</h2>
+<figure class="image"><img src="/state-size-7.jpeg"></figure>
+<p>At the end of the spectrum is Strong Statelessness, the idea that no node (or block producer) needs to hold the state.&nbsp;</p>
+<p>Every participant can be 100% stateless.</p>
+<p>Instead of using a local copy of the EVM state to validate transactions, transaction senders would provide proofs that guarantee the validity of their transactions.&nbsp;</p>
+<p>Transaction senders (or, realistically, 3rd parties) would be responsible for storing enough of the state tree to generate proofs.</p>
+<p>This dynamic highlights a core property of state size management: there are many options creating complicated trade-offs.&nbsp;</p>
+<p>For example, strong statelessness moving so much burden from the network to those using it.</p>
+<p>Taking a step back, any move towards statelessness increases the amount of data that moves through the network (bandwidth requirements).&nbsp;</p>
+<p>Proofs are lightweight, but every transaction must be accompanied by 1+ proofs (components).</p>
+<p>And so, in conclusion, the solutions to Ethereum state size management are a spectrum. There is no "right" solution, there are only decisions to be made.</p>
+<h2>Resources</h2>
+<p>Source Material - <a href="https://twitter.com/SalomonCrypto/status/1587983584471633921">Twitter Link</a></p>
+<p>Source Material - <a href="/twitter-pdf-2022-11-03_state_size.pdf">PDF</a></p>

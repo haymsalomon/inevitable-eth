@@ -1,0 +1,100 @@
+<!--
+title: Elliptic Curve Pairings
+description: 
+published: true
+date: 2022-12-02T05:32:39.174Z
+tags: 
+editor: undefined
+dateCreated: 2022-12-02T05:32:32.619Z
+-->
+
+<figure class="image"><img src="/elliptic-curve-pairings-1.jpeg"></figure>
+<p style="text-align:center;"><i>This is part of a series on elliptic curve cryptography and its applications for Ethereum. This is simplified to a MINIMAL level, aiming at ~high-school math.</i></p>
+<h1 style="text-align:center;">Elliptic Curve Pairings</h1>
+<h2>Prerequisites</h2>
+<h3>Modular Arithmetic&nbsp;</h3>
+<p>The <a href="https://en.wikipedia.org/wiki/Modular_arithmetic">modulo operator</a> (written as "mod") is the operation that finds the remainder.&nbsp;</p>
+<ul>
+  <li>10 / 3 = 3 with a remainder of 1 = 10 mod 3 = 1</li>
+  <li>14 / 6 = 2 with a remainder of 2 = 14 mod 6 = 2</li>
+  <li>3 / 10 = 0 with a remainder of 3 = 3 mod 10 = 3</li>
+</ul>
+<p>Imagine a clock being mod 12.</p>
+<h3>Elliptic Curve Cryptography</h3>
+<p><a href="https://inevitableeth.com/home/concepts/elliptic-curve-cryptography">Deep Dive: Elliptic Curve Cryptography</a></p>
+<p>It is very difficult to solve the elliptic curve discrete logarithm problem (that is, if you add two points over and over again using modular arithmetic, it takes A LOT of work to find out how many times you did it).</p>
+<p>If a clock is mod 12, then consider the following question: "Alice left at 4 and arrived at 6. How many hours did she spend traveling?" 2 hours? 14 hours? 26 hours? The only way to figure it out is to start guessing.&nbsp;</p>
+<p>This is the discrete logarithm problem.</p>
+<h2>Vitalik's Commentary</h2>
+<p>If you've gotten this far, you know how ridiculously difficult the math has already been. I would call it pretty far beyond advanced, right?&nbsp;</p>
+<p>I literally laughed out loud when I got to this part in Vitalik's blog, how did you react?</p>
+<figure class="image"><img src="/elliptic-curve-pairings-2.png"></figure>
+<p>Ok we'll start small: functions.</p>
+<h2>&nbsp;Functions</h2>
+<figure class="image"><img src="/elliptic-curve-pairings-3.jpeg"></figure>
+<p>A function is a process that takes an input from a set of elements X and deterministically assigns exactly one (no more, no less) element from the set Y.&nbsp;</p>
+<p>We write a function as f(x) = y; the function f, when applied to x, produces y.</p>
+<h2>Sets</h2>
+<p>Functions might be familiar, the term "set" might be new. A set is simply a collection of different things:&nbsp;</p>
+<ul>
+  <li>Set of all integers (infinite): {..., 0, 1, 2, 3... }&nbsp;</li>
+  <li>Set of even integers (infinite): {..., 2, 4, 6, 8... }&nbsp;</li>
+  <li>Set of Haym's favorite numbers (finite): {4, 13}</li>
+</ul>
+<p>Mathematical sets and set theory is an incredibly important area of math; but we aren't really here to discuss sets.&nbsp;</p>
+<p>For our purposes we just need to understand that functions can move from an input set to a different output set.</p>
+<h2>One-Way Functions</h2>
+<p>If an output set/group is different from an input set/group, we gain a very specific property: the output of this kind of function cannot be used as an input.&nbsp;</p>
+<p>Put another way, you can only execute these kinds of functions one time; you cannot execute them repeatedly.</p>
+<p>This property is incredibly important for cryptology; it breaks most efficient methods of cracking crypto schemes and forces an attacker to use the slow difficult method: guess and check.&nbsp;</p>
+<p>So, let's build an elliptic curve pairing!</p>
+<h2>Elliptic Curve Pairings</h2>
+<figure class="image"><img src="/elliptic-curve-pairings-4.jpeg"></figure>
+<p>An elliptic curve pairing is a function that takes in two points on an elliptic curve and outputs a point in a finite field (think finite field = a predetermined set of points).&nbsp;</p>
+<p>Think of a pairing as the elliptic curve equivalent of multiplication.</p>
+<p>Not all elliptic curves have pairings, and not all pairings are secure. But once found, a single pairing can be shared by everyone.&nbsp;</p>
+<p>Here's the plan: we are going to take two (different) elliptic curves, both of which are hiding a secret number S within their structured reference string (eg step 1 of a KZG commitment).&nbsp;</p>
+<p>Once we have our two points, we will apply the pairing to get one final value.</p>
+<p>While advanced math is difficult to visualize, the image below should help clarify.&nbsp;</p>
+<figure class="image"><img src="/elliptic-curve-pairings-5.jpeg"></figure>
+<p>The pairing (denoted as e(p,q)) takes a point from each elliptic curve and outputs t. t is NOT a point on either curve, and therefore the pairing cannot be used more than once.</p>
+<p>If all you care about is how we are going to use pairings, you can stop here.&nbsp;</p>
+<p>We are simply going to use them like multiplication: combine two points to make a third. We will use the pairing two times with different values and compare the results, looking for equality.</p>
+<h2>Properties of Pairings</h2>
+<p>The rest of this article will BRIEFLY touch on the HIGHEST levels of pairings.&nbsp;</p>
+<p>Honestly, this probably wont mean anything to you unless you already know relatively advanced algebra/number theory, but it's worth including just for completeness.</p>
+<h3>Bilinear</h3>
+<figure class="image"><img src="/elliptic-curve-pairings-6.png"></figure>
+<p>First, the most important property of pairings is that pairings are bilinear.&nbsp;</p>
+<p>Bilinear is one of those arcane, hard-to-unpack terms.&nbsp;</p>
+<p>Suffice to say that it is a specific algebraic property that allows us to expand/contract an expression.</p>
+<h3>Diffie-Hellman</h3>
+<p><a href="/home/concepts/diffie-hellman">Deep Dive: Diffie-Hellman</a></p>
+<p>Pairings do not break 2 of the 3 properties of Diffie-Hellman:&nbsp;</p>
+<ul>
+  <li>Still incredibly difficult:&nbsp;<ul>
+      <li>Discrete log problem (given g<sup>x</sup>, solve for x)&nbsp;</li>
+      <li>Computational Diffie-Hellman (given g<sup>x</sup> and g<sup>y</sup>, find g<sup>xy</sup>)&nbsp;</li>
+    </ul>
+  </li>
+  <li>However, decision Diffie-Hellman becomes very easy.</li>
+</ul>
+<p>Decision Diffie-Hellman is the property that says given g<sup>x</sup>, g<sup>y</sup>, and g<sup>z</sup>, it should be hard to to see if xy = z.&nbsp;</p>
+<p>The bilinear property of elliptic pairing break this assumptions, it is trivial to test if e(g<sup>x</sup>, g<sup>y</sup>) = e(g<sup>z</sup>).</p>
+<p>Fortunately, pairings are cyclic, meaning that as the input values grow, the output values eventually wrap back around.&nbsp;</p>
+<p>And, just like all the modular arithmetic problems we work in, undoing the operation is realistically impossible.</p>
+<p>And so, if we modify the decision Diffie-Hellman problem to a bilinear Decision Diffie-Hellman problem, pairings hold all the same properties and assumptions required to implement Diffie-Hellman and most other public cryptography schemes.</p>
+<h3>Decision Linear Assumption</h3>
+<p>There is one more property of pairings that is particularly useful: the decision linear assumption (DLIN).&nbsp;</p>
+<p>DLIN is incredibly abstract (it has to do with being able to distinguish the linear combination of the exponents of a generator vs a random exponent).</p>
+<p>DLIN is a property about comparing the results of applying two matrices to the exponent (take you number n and you matrix A and create a new matrix where each matrix element is n<sup>[matrix element]</sup>).&nbsp;</p>
+<p>If the rank of matrix A is less than matrix B, B will appear random vs A.</p>
+<p>Rough idea: the target group is has more elements than either of the input groups (the target group has higher order or rank), therefore feeding inputs produces outputs that appear to be random (even if you feed them in sequential order).</p>
+<figure class="image"><img src="/elliptic-curve-pairings-7.jpeg"></figure>
+<h2>Summary</h2>
+<p>Bottom line: elliptic curve pairings are HARD.&nbsp;</p>
+<p>This is the bleeding edge of math research... welcome to the workshop, where they make magic out of algebra!&nbsp;</p>
+<p>Here is the main take away: A pairing an irreversible, one time elliptic curve point multiplication.</p>
+<h2>Resources</h2>
+<p>Source Material - <a href="https://twitter.com/SalomonCrypto/status/1583168818381172736">Twitter Link</a></p>
+<p>Source Material - <a href="/twitter-pdf-2022-10-20_elliptic_curve_pairings.pdf">PDF</a></p>

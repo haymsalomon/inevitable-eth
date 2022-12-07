@@ -1,0 +1,91 @@
+<!--
+title: Danksharding Consensus Changes
+description: 
+published: true
+date: 2022-12-03T23:58:02.294Z
+tags: 
+editor: undefined
+dateCreated: 2022-12-03T23:57:58.254Z
+-->
+
+<figure class="image"><img src="/consensus-changes-banner.jpeg"></figure>
+<h1 style="text-align:center;">Danksharding Consensus Changes</h1>
+<h2>Prerequisites</h2>
+<h3>Settlement</h3>
+<p><a href="https://inevitableeth.com/home/concepts/settlement">Settlement</a> is the "final step in the transfer of ownership, involving the physical exchange of securities or payment".&nbsp;</p>
+<p>After settlement, the obligations of all the parties have been discharged and the transaction is considered complete.&nbsp;</p>
+<h2>The World Computer</h2>
+<p>Ethereum exists between a network of 1,000s of computers (<a href="https://inevitableeth.com/home/ethereum/network/node">nodes</a>), each running a local version of the <a href="https://inevitableeth.com/home/ethereum/evm">Ethereum Virtual Machine</a> (EVM). All copies of the EVM are kept perfectly in sync.&nbsp;</p>
+<p>Any individual EVM is a window into the shared state of the <a href="https://inevitableeth.com/home/ethereum/world-computer">World Computer</a>.</p>
+<p>As of mid-September 2022, Ethereum has switched its <a href="/home/ethereum/network/consensus">consensus mechanism</a> to <a href="/home/ethereum/network/consensus/pos">Proof of Stake</a> (PoS).</p>
+<p>Tl;dr node operators stake ETH in order to gain the role of validator, earn rewards and secure Ethereum. This stake can be deducted from in cases of malicious behavior.</p>
+<p>Today, the World Computer is SLOW. The EVM is not a high performance environment, both execution and storage is expensive, and we already push up against the limits of Ethereum.</p>
+<p>And so, we must look for (<a href="/home/concepts/credible-neutrality">credibly neutral</a>) ways to scale.</p>
+<h2>Scaling Execution via Rollups</h2>
+<p><a href="/home/ethereum/upgrades/scaling/execution">Deep Dive: Scaling Execution</a></p>
+<p>After years of research and development, the Ethereum community has found the best path forward: rollups.</p>
+<p>Rollups are independent, high performance blockchains that settle to Ethereum. Rollups can be fast (and centralized) and STILL benefit from Ethereum security.</p>
+<p>But rollups are only part of the solution; while they provide an incredible performance environment, they do not scale the storage capabilities of Ethereum.</p>
+<p>In fact, because they are so fast (generating so much data) rollups make the problem worse.</p>
+<h2>Scaling Data Availability</h2>
+<p>As of today, we have a plan: Danksharding. But we are still so far away from implementation and a lot of details need to be filled in. So, let's begin with the big picture idea.&nbsp;</p>
+<h3>Blobs</h3>
+<p>We'll begin with blobs.</p>
+<p>Imagine the blockchain like a database that contains all the <a href="/home/ethereum/blockchain/transaction">transactions</a> that have ever happened on the World Computer.&nbsp;</p>
+<p>It is critical that this information is always directly available to any node; this is the <a href="/home/ethereum/evm/state-machine">internal state</a> of Ethereum.</p>
+<p>Rollups, on the other hand, are completely outside of Ethereum. Yes, they settle (post a reconstructable copy of all transactions) on the World Computer, but that's just a copy.</p>
+<p>It's NOT important that nodes can directly access this data.</p>
+<p>What IS important is that we can guarantee that this data was posted to Ethereum, is completely public and request-able by anyone and is 100% available for download.</p>
+<p>So this is our design space: data blobs that exist outside of the EVM.</p>
+<h3>Distributed Data</h3>
+<p><a href="/home/ethereum/upgrades/scaling/data/p2p-network">Deep Dive: Danksharding P2P Network</a></p>
+<p>Today, tomorrow and forever it will be 100% necessary for every node to download every block.&nbsp;</p>
+<p>But our new scheme will not force every node (or even any single node) to download all the data, just to ensure that the data is available in aggregate across the entire network.</p>
+<p>We can achieve this effect with some clever peer-to-peer (P2P) networking design.&nbsp;</p>
+<p>Tl;dr in P2P networks nodes communicate directly with each other (instead of a centralized node). We can organize a network to store huge amounts of data without crushing any single node.</p>
+<p>Good news and bad news:</p>
+<ul>
+  <li>Bad news: this is going to require some big changes to Ethereum... especially in the consensus mechanism.</li>
+  <li>Good news: a huge amount of the work is coming early in EIP-4844 (Proto-Danksharding).</li>
+</ul>
+<h2>EIP-4844: Proto-Danksharding</h2>
+<p><a href="/home/ethereum/upgrades/scaling/data/proto-danksharding">Deep Dive: EIP-4844 Proto-Danksharding</a></p>
+<p>EIP-4844 will deliver the following changes to Ethereum consensus:&nbsp;</p>
+<ul>
+  <li>data blobs with an independent gas market&nbsp;</li>
+  <li>changes needed at the intersection between execution and consensus&nbsp;</li>
+  <li>separation between block verification and blob data availability verification</li>
+</ul>
+<p>EIP-4844 is a huge step forward, creating the blob market and making all the changes needed to the execution layer of Ethereum.</p>
+<p>But there is still a lot of work that needs to be done, and a lot of designs that need to be finalized.</p>
+<h2>Implementing the Math</h2>
+<p>The biggest obstacle we still need to overcome is the actual implementation of the <a href="/home/concepts/polynomial-encoding/erasure-code">erasure coding</a> and the <a href="/home/ethereum/upgrades/scaling/data/p2p-network/data-availability-sampling">data availability sampling</a> that is foundational to our P2P network design.&nbsp;</p>
+<p>It doesn't matter how complete the architecture without the actual process of sampling.</p>
+<p>We also still need to formalize the implementation of the <a href="/home/concepts/kzg-commitment">KZG commitment scheme</a> (the theory/math is well understood).&nbsp;</p>
+<h2>Protocol-Enshrined PBS</h2>
+<p><a href="/home/ethereum/upgrades/pbs">Deep Dive: Protocol-Enshrined PBS</a></p>
+<p>Full Danksharding is dependent on another, independent Ethereum upgrade: enshrined-PBS.</p>
+<p>Although PBS was originally conceived in the context of <a href="/home/concepts/mev">MEV</a>, it will become incredibly important for Danksharding.</p>
+<p>It turns out that a lot of the work that will go into constructing a blob is pretty computationally intense and will (probably) be unrealistic for a minimal Ethereum node.</p>
+<p>PBS will allow blob builders to centralize and specialize without compromising on security.</p>
+<p>A future with both PBS and Danksharding might look like this:&nbsp;</p>
+<ol>
+  <li>validator selected as a block proposer&nbsp;</li>
+  <li>proposer selects highest value block from block market&nbsp;</li>
+  <li>proposer selects highest value blobs from the blob market&nbsp;</li>
+  <li>proposer proposes the block/blobs combo</li>
+</ol>
+<p>This workflow assumes a robust block and blob market, with at least 2 honest competitors bidding for proposer selections.&nbsp;</p>
+<p>But, in the worst case, the validator can just build their own. It's just both the blocks will be suboptimal and the blobs will not be filled.</p>
+<h2>Fork-Choice Rule</h2>
+<p><a href="/home/ethereum/network/consensus/lmd-ghost">Deep Dive: LMD-GHOST</a><br>Another important aspect of Ethereum PoS that needs to change is the fork-choice rule.</p>
+<p>Today, LMD-GHOST only looks at blocks. Under Danksharding, the protocol will also need to consider blobs (although some/all of this logic may be released with EIP-4844).</p>
+<p>The new rule introduces the concept of "tight coupling" which states that a block is only eligible if all blobs in that block have passed a data availability check.&nbsp;</p>
+<p>With tight coupling, if the chain contains even a single invalid blob, the entire chain is invalid.</p>
+<h2>Odds and Ends</h2>
+<p>The rest of the changes needed are less interesting and more about implementation. Things like "which fields need to be added to blocks" and "how to distribute validators when validator count is unreasonably low."&nbsp;</p>
+<p>But if you've made it this far, you get the big picture.</p>
+<h2>Resources</h2>
+<p>Source Material - <a href="https://twitter.com/SalomonCrypto/status/1585298274478542848">Twitter Link</a></p>
+<p>Source Material - <a href="/twitter-pdf-2022-10-26_danksharding_consensus_updates.pdf">PDF</a></p>
+<p>&nbsp;</p>

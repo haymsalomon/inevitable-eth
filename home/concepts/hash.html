@@ -1,0 +1,30 @@
+<!--
+title: Hash Functions
+description: 
+published: true
+date: 2022-11-28T22:25:24.088Z
+tags: 
+editor: undefined
+dateCreated: 2022-11-28T22:25:20.408Z
+-->
+
+<figure class="image"><img src="/hash-banner.jpeg">
+  <figcaption><i>original</i></figcaption>
+</figure>
+<h1 style="text-align:center;">Hash Functions</h1>
+<p>The purpose of a hash function is to transform any amount of data into a compact, uniform value. The input can be of arbitrary length but the output is always the same length.&nbsp;</p>
+<p>The length is decided by the hash function; it can be as small or large as desired.&nbsp;</p>
+<p>Hash functions have many different uses, but all uses rely on the same fundamental properties:&nbsp;</p>
+<ul>
+  <li>quick and efficient to compute&nbsp;</li>
+  <li>outputs should be randomly distributed between all possible outputs&nbsp;</li>
+  <li>difficult (if not impossible) to reverse engineer an input from an output.&nbsp;</li>
+</ul>
+<p>If your hashing function has an output with 3 characters and you feed it 1MM pieces of data, much of it will result in the same output. However, if the output is long enough, a good hash function will have no collisions (two inputs resulting in the same output).&nbsp;</p>
+<p>With a strong hashing function, we have the ability to take any data and compress it into a verifiable signature.&nbsp;</p>
+<p>If the data is public, then anyone can recreate the signature and verify that the data matches its label. If the data is private, it can form the basis of identity.&nbsp;</p>
+<p>Any private information fed into a (good) hash function will instantly become lost but form the basis of a unique, un-replicable signature.&nbsp;</p>
+<h2>Resources</h2>
+<p><a href="https://www.tutorialspoint.com/cryptography/cryptography_hash_functions.htm">Further Reading</a></p>
+<p>Source Material - <a href="https://twitter.com/SalomonCrypto/status/1567541750151151616">Twitter Link</a></p>
+<p>Source Material - <a href="/twitter-pdf-2022-09-07_hash_function.pdf">PDF</a></p>

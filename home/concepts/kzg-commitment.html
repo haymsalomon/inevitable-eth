@@ -1,0 +1,93 @@
+<!--
+title: KZG Commitments
+description: 
+published: true
+date: 2022-12-03T05:32:36.373Z
+tags: 
+editor: undefined
+dateCreated: 2022-12-03T01:32:47.429Z
+-->
+
+<figure class="image"><img src="/kzg-commitment-summary-1.jpeg"></figure>
+<h1 style="text-align:center;">KZG Commitments</h1>
+<h2>Prerequisites</h2>
+<h3>Elliptic Curve Cryptography</h3>
+<p>Elliptic curve cryptography looks unapproachable, but it's totally understandable with a decent amount of high school algebra.&nbsp;</p>
+<p>Check out this <a href="https://inevitableeth.com/home/concepts/elliptic-curve-cryptography">Into to Elliptic Curve Cryptography</a> and you'll have the math you need to get through this article.</p>
+<h3>Interactive Proof System</h3>
+<p>Interactive Proof System: a method by which one party (prover) can prove to another (verifier) that a statement is true.&nbsp;</p>
+<h2>Polynomial Commitment Schemes</h2>
+<figure class="image"><img src="/polynomial-commitments-1.jpeg"></figure>
+<p><a href="/home/concepts/polynomial-commitment">Deep Dive: Polynomial Commitment Schemes</a></p>
+<p>Before we get to KZG, let's first cover the basics: polynomial commitments.&nbsp;</p>
+<p>First, take your dataset and break it into discrete chunks.&nbsp;</p>
+<p>Then, plot them on a graph and draw a line through those point.&nbsp;</p>
+<p>Now derive the formula for that line.</p>
+<p>This formula is a polynomial, a special type of equation that has some very powerful mathematical properties. This polynomial holds the same information as the raw data, but we can also use it to generate new points... maybe a point in between two "real" points.</p>
+<p>In fact, one of these "non-real" points will serve as our commitment: it confirms a party has complete knowledge of the dataset (else they would not be able to generate the polynomial) but it does not leak any of the underlying data.&nbsp;</p>
+<p>Now, which "non-real" point to use...</p>
+<h2>PCS Trusted Setup</h2>
+<figure class="image"><img src="/pcs-trusted-setup-1.jpeg"></figure>
+<p><a href="/home/concepts/pcs-trusted-setup">Deep Dive: PCS Trusted Setup</a></p>
+<p>Ideally we'd like to use a completely random point, one that no malicious party could know beforehand. Then the prover couldn't precompute some points that look valid, but don't actually check out.&nbsp;</p>
+<p>Finding the random number isn't particularly difficult, it's keeping it secret that's a problem. We're going to have to use an elliptic curve!</p>
+<p>(Modular) elliptic curves have many incredibly useful properties that we will be relying on. In particular, we care that:&nbsp;</p>
+<ul>
+  <li>elliptic curve points can be added together&nbsp;</li>
+  <li>when added repeatedly, it is INCREDIBLY difficult to figure how many times a point has been added</li>
+</ul>
+<p>Using these properties, we can hide a secret (random) number inside an elliptic curve.&nbsp;</p>
+<p>After we go through the trusted process and the secret number is permanently destroyed, the only knowledge of that value will be permanently hidden in the folds of the elliptic curve.</p>
+<p>The result of the trusted setup is a Structured Reference String (SRS). The SRS conveys enough information that the random number is accessible for our polynomial (and therefore our polynomial commitment scheme) while still keeping the value entirely secret.</p>
+<p>Note: one SRS can be used by an arbitrary number of people; only one trusted setup (or one trusted setup per application) are needed for ALL KZG commitments.</p>
+<h2>KZG Commitments</h2>
+<p>Kate-Zaverucha-Goldberg Commitments, also called <a href="https://www.cs.purdue.edu/homes/akate/howtopronounce.html">Kate Commitments</a>, polynomial commitment scheme.&nbsp;</p>
+<p>Once we have our SRS and we've generated the polynomial from our data, we are ready to begin.&nbsp;</p>
+<h3>Step 1: Commit</h3>
+<figure class="image"><img src="/kzg-commitment-summary-2.png"></figure>
+<p>The prover is going to begin by applying the SRS to the data polynomial, generating a point on the elliptic curve.&nbsp;</p>
+<p>We call this point a commitment.</p>
+<p>The commitment will serve as an anchor, tying the prover to the original dataset. Any changes to the underlying data will result in a new polynomial and therefore a new commitment.&nbsp;</p>
+<p>Changes to the data = previous commitments will generate invalid proofs.</p>
+<h3>Step 2: Open</h3>
+<figure class="image"><img src="/kzg-commitment-summary-3.jpeg"></figure>
+<p>Now it's time for the verifier to test the prover.&nbsp;</p>
+<p>The verifier will select a position and request a proof based around that specific chunk of data. The prover will divide the data polynomial to create a new quotient polynomial.</p>
+<p>This division is the crux of the KZG commitment scheme. Polynomial division is a (relatively) easy procedure; as long as an honest prover has full access to the data (and therefore the data polynomial), he can create and evaluate this new quotient polynomial.</p>
+<h3>Step 3: Verify</h3>
+<figure class="image"><img src="/kzg-commitment-summary-4.jpeg"></figure>
+<p>The prover replies back with two items: the evaluation of quotient polynomial using the elliptic curve and the result of the polynomial evaluated at that position. The former is an elliptic curve point, the later the data polynomial evaluation.</p>
+<p>Before we move on, let's consider the polynomial evaluation. Remember, the polynomial is an expression that describes how our data looks when plotted on a graph. The evaluation of that function is simply just the data at that position!</p>
+<p>To finish our proof cycle, the verifier (who does not have access to the full dataset and therefore cannot generate the data or quotient polynomial) is going to ensure the provers response reconciles with the commitment.&nbsp;</p>
+<p>But first, we are going to need one more tool.</p>
+<h4>Elliptic Curve Pairings</h4>
+<p><a href="/home/concepts/elliptic-curve-pairings">Deep Dive: Elliptic Curve Pairings</a></p>
+<p>In order to combine the pieces sent by the prover, the verifier is going to need to multiply elliptic curve points.&nbsp;</p>
+<p>Unfortunately, this just isn't possible; that's not how elliptic curves work.&nbsp;</p>
+<p>Fortunately, we have a substitute: elliptic curve pairings.</p>
+<p>And now, finally, we are ready to verify our proof.&nbsp;</p>
+<p>The verifier constructs two expressions and checks them for equivalence. If they are equivalent, the verifier can be certain that the prover did the (polynomial) division and therefore still has the original data.</p>
+<h2>Summary</h2>
+<p>The commitment acts as an anchor, a proof entails quick polynomial division and verification is a simple check.&nbsp;</p>
+<p>The verifier can know with mathematical certainty that the prover is honoring their commitment; whatever data is there is the same that created the commitment.</p>
+<p>So, in summary, a KZG commitment is a polynomial commitment scheme used to bind a prover to a specific set of data.&nbsp;</p>
+<p>KZG commitments also have a very useful feature: they can be opened (audited) at any position without revealing any unrelated data.</p>
+<h2>Resources</h2>
+<p>Further Reading:</p>
+<ul>
+  <li><a href="https://dankradfeist.de/ethereum/2020/06/16/kate-polynomial-commitments.html">KZG polynomial commitments - Dankrad</a></li>
+  <li><a href="https://hackmd.io/@tompocock/Hk2A7BD6U">Kate Commitments: A Primer - Walpo</a></li>
+  <li><a href="https://hackmd.io/@hww/workshop_feb_2021#2110-2240-Part-1-The-Sharding-Design-and-the-Cryptographic-Primitives">KZG Commitment Workshop - Dankrad</a></li>
+  <li><a href="https://www.youtube.com/watch?v=8WDOpzxpnTE">Introduction to Elliptic Curve Pairings - Dan Boneh</a></li>
+  <li>What is PLONK?<ul>
+      <li><a href="https://www.youtube.com/watch?v=W1E2CI_u6d0">Polynomial Commitment Scheme (PCS) - David Wong</a></li>
+      <li><a href="https://www.youtube.com/watch?v=iwOovhLU8U4">The Kate Polynomial Commitment Scheme - David Wong</a></li>
+    </ul>
+  </li>
+  <li><a href="https://vitalik.ca/general/2017/01/14/exploring_ecp.html">Exploring Elliptic Curve Pairings - Vitalik</a></li>
+  <li><a href="https://vitalik.ca/general/2022/03/14/trustedsetup.html">How do trusted setups work? - Vitalik</a></li>
+  <li><a href="https://crypto.stanford.edu/pbc/notes/crypto/factoring.html">Factoring - Ben Lynn</a></li>
+  <li><a href="https://www.iacr.org/archive/asiacrypt2010/6477178/6477178.pdf">Original KZG Paper</a></li>
+</ul>
+<p>Source Material - <a href="https://twitter.com/SalomonCrypto/status/1583705993300492288">Twitter Link</a></p>
+<p>Source Material - <a href="/twitter-pdf-2022-10-22_kzg_commitment.pdf">PDF</a></p>

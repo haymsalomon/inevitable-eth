@@ -1,0 +1,110 @@
+<!--
+title: Abstraction
+description: 
+published: true
+date: 2022-11-27T19:30:30.036Z
+tags: 
+editor: undefined
+dateCreated: 2022-11-27T19:30:26.261Z
+-->
+
+<figure class="image"><img src="/abstraction-banner.png">
+  <figcaption><a href="https://algodaily.com/lessons/object-oriented-programming-class-principles/abstraction">source</a></figcaption>
+</figure>
+<h1 style="text-align:center;">Abstraction</h1>
+<h2>Software Complexity&nbsp;</h2>
+<p>Let's say you're a developer working for an e-commerce retailer who sells fruit.&nbsp;</p>
+<p>Your company receives many different fruits from farmers every day; your website needs to inventory, price, list/sell, process payment and route shipping.&nbsp;</p>
+<figure class="table">
+  <table>
+    <tbody>
+      <tr>
+        <td style="vertical-align:top;">
+          <p style="text-align:center;"><span class="text-huge"><strong>Option 1</strong></span></p>
+          <ul>
+            <li>Scan fruit.<ul>
+                <li>If fruit is an apple:<ul>
+                    <li>For apples, check its quality and weight, calculate a price.</li>
+                    <li>If it's red, increase price 5%.</li>
+                    <li>Add to the apple warehouse, list on website.</li>
+                    <li>When sold, process payment for apple.</li>
+                    <li>Ship apple</li>
+                  </ul>
+                </li>
+                <li>If fruit is not an apple:<ul>
+                    <li>Check instructions for other fruits</li>
+                  </ul>
+                </li>
+              </ul>
+            </li>
+          </ul>
+        </td>
+        <td style="vertical-align:top;">
+          <p style="text-align:center;"><span class="text-huge"><strong>Option 2</strong></span></p>
+          <ul>
+            <li>Scan fruit, note type.</li>
+            <li>Check quality and weight.</li>
+            <li>Check for individual characteristics.</li>
+            <li>Feed this data into a price bot to receive price.</li>
+            <li>Inventory all fruits together, and list on website.</li>
+            <li>When sold, process one payment for all fruits and ship together.</li>
+          </ul>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
+<p>Option 2 is much more compelling for a lot of reasons:&nbsp;</p>
+<ul>
+  <li>process is streamlined across all fruits&nbsp;</li>
+  <li>adding new fruits is easier, complexity grows much slower&nbsp;</li>
+  <li>pricing is separated from fruit handling; price bot can optimize on pricing, handlers can focus on logistics.&nbsp;</li>
+</ul>
+<h2>Definition</h2>
+<p>The idea is to separate a specific object with the generalized concept. In computer science, we call this principle abstraction.&nbsp;</p>
+<p>An object might be this specific apple: 🍎, but the abstraction might be all apples or even all fruits.&nbsp;</p>
+<p>Another way to look at abstraction is from the perspective of the user.&nbsp;</p>
+<p>Let's think about price bot from above. Price bot will take in the basic information about the fruit (type, quality, weight, etc) and return a price.&nbsp;</p>
+<p>From the user's perspective its simple: give inputs, get output.&nbsp;</p>
+<p>Take a look behind the scenes and you'll realize price bot is incredibly sophisticated. Regression models, price scraping, Monte Carlo forecasting, etc.&nbsp;</p>
+<p>Yet the user never has to worry about any of it.&nbsp;</p>
+<p>Abstraction is the concept that developers should simplify how they interface with their users as much as possible. Developers building on top of your work can access your functionality without becoming a master in your code.&nbsp;</p>
+<h2>A Solution to Complexity</h2>
+<p>At the end of the day, abstraction is the yin to complexity's yang.&nbsp;</p>
+<p>Complexity is dangerous for many reasons:&nbsp;</p>
+<ul>
+  <li>development becomes more difficult&nbsp;</li>
+  <li>mistakes are harder to catch&nbsp;</li>
+  <li>unintended phenomena begin occurring&nbsp;</li>
+  <li>applications becomes less secure.&nbsp;</li>
+</ul>
+<h2>A Solution for Collaboration</h2>
+<p>Another benefit? You can update your code without disrupting the application/other developer's work.&nbsp;</p>
+<p>Imagine adding weather data to price bot. The code will get more complex but no one using price bot will even notice; they'll just continue to send inputs and get outputs.&nbsp;</p>
+<p>Computer science gets incredibly complex very quickly; as you begin coding, you'll find abstraction useful immediately.&nbsp;</p>
+<p>But its real power is that it enables teams of developers to collaborate. Abstraction allows deep specialization while preserving easy coordination.&nbsp;</p>
+<p>This coordination can be within a team:&nbsp;</p>
+<ul>
+  <li>I'll work on price bot, Alice will work on inventory and you can work on shipping&nbsp;</li>
+</ul>
+<p>across organizations:&nbsp;</p>
+<ul>
+  <li>instead of processing payments ourselves, let's use Stripe.&nbsp;</li>
+</ul>
+<p>or, to cut to the chase, across protocols.</p>
+<h2>Abstraction and Ethereum</h2>
+<p>Ethereum is The World Computer; it is a single platform shared across all mankind.</p>
+<p>A platform where everyone, whether Vitalik Buterin, Chevron or grandma, have the same opportunities and play by the same rules.</p>
+<p>A platform with one message: "build on me."</p>
+<p>Abstraction is the concept that allows us to understand Ethereum as The World Computer.</p>
+<p>It allows us to build applications of infinite complexity that also simply and quickly integrate with each other.</p>
+<p>It allows us to build across borders, timezones and geopolitics.</p>
+<p>Abstraction is the concept that underlies the most important capability of The World Computer. The reason that De-Fi is simply a better way... Composability; the ability to take two independent things and make something more than the sum of its parts.</p>
+<p>The killer feature of Ethereum: composability.</p>
+<p>The reason why we have composability: abstraction.</p>
+<p>The purpose of abstraction: to manage complexity.</p>
+<p>The point of managing complexity?</p>
+<p>To change the world.</p>
+<h2>Resources</h2>
+<p>Source Material - <a href="https://twitter.com/SalomonCrypto/status/1553756628234579968">Twitter Link</a></p>
+<p>Source Material - <a href="/twitter-pdf-2022-07-31_abstraction.pdf">PDF</a></p>

@@ -1,0 +1,94 @@
+<!--
+title: ZK-Rollup Taxonomy
+description: 
+published: true
+date: 2022-12-05T04:46:37.830Z
+tags: 
+editor: undefined
+dateCreated: 2022-12-05T04:42:24.036Z
+-->
+
+<figure class="image"><img src="/zk-evm-taxonomy-banner.jpeg"></figure>
+<p style="text-align:center;"><i>This Article is a summary of Vitalik's blog post, </i><a href="https://vitalik.ca/general/2022/08/04/zkevm.html"><i>available here</i></a><i>.</i></p>
+<h1 style="text-align:center;"><strong>ZK-EVM Taxonomy</strong></h1>
+<h2>Prerequisites</h2>
+<h3>Zero-Knowledge Proofs</h3>
+<p><a href="/home/concepts/zk-proof">ZK-Proofs</a> are a tool that mathematically prove the validity of a statement without sharing any information about it.&nbsp;</p>
+<p>ZK-proofs allows one party (prover) to prove to another party (verifier) that a statement is true while also ensuring that the prover does not give the verifier any info that the verifier didn't already have.&nbsp;</p>
+<p>All with cryptographic, mathematical certainty.</p>
+<h2>The World Computer</h2>
+<p>Ethereum is the <a href="https://inevitableeth.com/home/ethereum/world-computer">World Computer</a>, a single, globally shared computing platform that exists in the space between a network of 1,000s of computers (<a href="https://inevitableeth.com/home/ethereum/network/node">nodes</a>).&nbsp;</p>
+<p>The nodes provide the hardware, the <a href="https://inevitableeth.com/home/ethereum/evm">Ethereum Virtual Machine</a> (EVM) provides the <a href="https://inevitableeth.com/home/concepts/virtual-machine">virtual computer</a> and the <a href="https://inevitableeth.com/home/ethereum/blockchain">blockchain</a> records Ethereum's history.</p>
+<h2>Ethereum Scaling</h2>
+<p><a href="/home/ethereum/upgrades/scaling/execution">Deep Dive: Ethereum Scaling</a></p>
+<p>In order to scale without sacrificing decentralization, Ethereum is developing based on a rollup-centric roadmap.</p>
+<p>Tl;dr <a href="/home/ethereum/blockchain/transaction">transactions</a> will be moved off-chain to high performance (likely centralized) rollups, while <a href="/home/concepts/settlement">settlement</a> will remain on Ethereum mainnet.</p>
+<p>One of the more exciting applications of ZK-proofs are <a href="/home/ethereum/upgrades/scaling/execution/zk-rollup">ZK-rollups</a>, enabling layers on top of the World Computer that inherit the benefits Ethereum but are much more scalable.</p>
+<p>This technology, with <a href="/home/ethereum/upgrades/scaling/data">additional mainnet upgrades</a>, will scale Ethereum to 100k+ txns/sec.</p>
+<p>A ZK-rollup will bundle up all the transactions that occurred on the rollup chain and created a ZK-proof.&nbsp;</p>
+<p>Although this proof is difficult to generate, it is very easy to verify.&nbsp;</p>
+<p>Once generated, the new <a href="/home/ethereum/evm/state-machine">state</a>, transactions and the ZK-proof are posted to a smart contract.</p>
+<h2>ZK-EVM</h2>
+<p>ZK-rollups are not the only application of ZK-proofs, but the core functionality is shared across all ZK-proof projects: build cryptographic proofs of the execution of Ethereum(-like) transactions.</p>
+<p>The first protocols were application specific (eg send payments).</p>
+<p>But Ethereum is the World Computer; it is capable of so much more than sending payments.&nbsp;</p>
+<p>Its computational capabilities are defined by the <a href="/home/ethereum/evm">Ethereum Virtual Machine</a> (EVM)…</p>
+<p>…and the EVM is <a href="/home/concepts/turing-complete">Turing-complete</a>.</p>
+<p>Projects that can process all possible EVM transactions are call ZK-EVMs.</p>
+<p>Already there are multiple ZK-EVM projects gathering a lot of attention:</p>
+<ul>
+  <li><a href="https://docs.hermez.io/zkEVM/Overview/Overview/">Polygon's ZK-EVM</a></li>
+  <li><a href="https://blog.matter-labs.io/zksync-2-0-hello-ethereum-ca48588de179">ZK-Sync 2.0</a></li>
+  <li><a href="https://scroll.io/">Scroll</a></li>
+  <li><a href="https://starkware.co/">Starkware</a></li>
+</ul>
+<p>It's becoming more important than ever to understand the ZK-EVM landscape.</p>
+<h2>The EVM Landscape</h2>
+<figure class="image"><img src="/zk-evm-taxonomy-1.png"></figure>
+<p>There are 4(ish) categories of ZK-EVM:</p>
+<ol>
+  <li>Fully Ethereum-equivalent</li>
+  <li>Fully EVM-equivalent<ul>
+      <li>2.5) EVM-equivalent, except for gas costs</li>
+    </ul>
+  </li>
+  <li>Almost EVM-equivalent</li>
+  <li>High-level-language equivalent</li>
+</ol>
+<h2>Type 1: Fully Ethereum-Equivalent</h2>
+<p>Fully and uncompromisingly Ethereum equivalent, regardless of ZK-proof implications, both within the context of the EVM and within the context of Ethereum as a whole.</p>
+<p>The goal of type 1 ZK-EVMs is to be able prove (execution-layer) <a href="/home/ethereum/blockchain/block">blocks</a> in full, as they exist on the <a href="/home/ethereum/blockchain">blockchain</a>.</p>
+<p>Ultimately, type 1 ZK-EVMs are required to create trustless scaling of the World Computer.&nbsp;</p>
+<p>But, at least today, they have drawbacks.</p>
+<p>Ethereum was not originally designed around ZK-friendliness, so there are many parts of the Ethereum protocol that take a large amount of computation to ZK-prove.&nbsp;</p>
+<p>At present, it takes at type 1 ZK-EVM many hours to produce and prove a block.</p>
+<p>One of the particularly challenging data structures to create a ZK-proof for is a <a href="/home/concepts/merkle-tree">Merkle Tree</a>, a data structure Ethereum used to store a lot of the system critical information, including the <a href="/home/ethereum/evm/state-machine">EVM state</a>.</p>
+<p>From within the EVM, applications don't see (most) Merkle Trees.</p>
+<h2>Type 2: Fully EVM-Equivalent</h2>
+<p>Whereas type 1 ZK-EVMs aim to be equivalent within the entire context of Ethereum, type 2 ZK-EVMs aim to be equivalent only within the context of the EVM.</p>
+<p>The goal of type 2 ZK-EVMs is to be fully compatible with existing World Computer applications, but they make modifications in block structure, state (Merkle) tree and other data structures.</p>
+<p>All modifications are done in areas outside the awareness of applications, and so any application that works on Ethereum will work in a type-2 ZK-EVMs as well.</p>
+<p>Most developer tooling will also work out of the box.</p>
+<p>Unfortunately, while type-2 ZK-EVMs make major improvements over type-1s, they are still slow.</p>
+<p>The ZK-unfriendly design choices were not just in how the network operates the EVM, its within the EVM itself. Type-2s run up against the same unoptimized EVM that Type-1s had.</p>
+<h2>Type 2.5: EVM-Equivalent, Except for Gas Costs</h2>
+<p>Type 2.5 ZK-EVMs alter the <a href="/home/concepts/gas">gas costs</a> of Ethereum transactions in order to disincentive the use of operations that are very difficult to ZK-prove.</p>
+<p>Type 2.5s represent a significant optimization without major changes to the EVM. This can have implications on developer tooling and break some applications on the margin, but they are minimal and manageable.&nbsp;</p>
+<p>Nevertheless, type 2.5s are a clear step away from the EVM.</p>
+<h2>Type 3: Almost EVM-Equivalent</h2>
+<p>Type 2 ZK-EVMs make changes to the data structures outside the EVM, type 3 ZK-EVMs take it a step further and begin making changes within the ZK-EVM itself.</p>
+<p>The main change is (usually) removing special functions called precompiles, but type 3s can also make changes to how code works.&nbsp;</p>
+<p>While type 3 ZK-EVMs gain even further performance improvements, they begin to make big enough changes that they might break certain projects.</p>
+<h2>Type 4: High-Level-Language Equivalent</h2>
+<p>Type 4 ZK-EVMs take regular EVM code and transforms (compiles) it to a different language that is much easier to ZK-prove.</p>
+<p>There are huge benefits to this approach; the ZK tech can specialize and optimize, delivering incredible performance and a great platform for devs.</p>
+<p>However, the point of a ZK-EVM is to process Ethereum transactions without a lot of work, and type 4s require a lot of work.</p>
+<p>First and foremost, type 4 ZK-EVMs requires the development and maintenance of a whole new piece of software: the compiler.&nbsp;</p>
+<p>Furthermore, type 4s begin to require real changes to smart contract code and break a lot of developer tooling.</p>
+<figure class="image"><img src="/zk-evm-taxonomy-2.jpeg"></figure>
+<h2>Conclusion</h2>
+<p>Types are not better or worse than each other; they simply have different trade-offs.&nbsp;</p>
+<p>Furthermore, a ZK-EVM can move up or down in classification over time - it just depends what features they add and how Ethereum mainnet evolves over time.</p>
+<h2>Resources</h2>
+<p>Source Material - <a href="https://twitter.com/SalomonCrypto/status/1570984357774655489">Twitter Link</a></p>
+<p>Source Material - <a href="/twitter-pdf-2022-09-16_zk_evm_taxonomy.pdf">PDF</a></p>

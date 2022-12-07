@@ -1,0 +1,117 @@
+<!--
+title: Accessing Ethereum
+description: 
+published: true
+date: 2022-12-02T01:07:44.027Z
+tags: 
+editor: undefined
+dateCreated: 2022-12-02T01:07:40.036Z
+-->
+
+<figure class="image"><img src="/access-ethereum-1.jpeg"></figure>
+<p><i>This article will walk you through the resource requirements of an Ethereum node in November 2022.</i></p>
+<p><i>All the screenshots you see are real data pulls from the node I operate, so keep that in mind (for better or worse).</i></p>
+<h1 style="text-align:center;">Accessing Ethereum</h1>
+<h2>The World Computer</h2>
+<p>Ethereum exists between a network of 1,000s of computers (<a href="https://inevitableeth.com/home/ethereum/network/node">nodes</a>), each running a local version of the <a href="https://inevitableeth.com/home/ethereum/evm">Ethereum Virtual Machine</a> (EVM). All copies of the EVM are kept perfectly in sync.&nbsp;</p>
+<p>Any individual EVM is a window into the shared state of the <a href="https://inevitableeth.com/home/ethereum/world-computer">World Computer</a>.</p>
+<p>This distributed network of EVMs is held in sync via a <a href="https://inevitableeth.com/home/ethereum/network/consensus">consensus mechanism</a>. A consensus mechanism is a system by which a leader (block proposer) updates the state of their EVM and the rest of the network trustlessly follows.</p>
+<h2>Ethereum Nodes</h2>
+<p><a href="/home/ethereum/network/node">Deep Dive: Nodes</a></p>
+<p>You can think of a node in two ways: a real-world computer or the group of software needed to access, validate and otherwise run the World Computer. Under the hood, a node is actually two independent pieces of software: a consensus client and an execution client.</p>
+<p>Think like this:</p>
+<p>Consensus client: responsible for Proof of Stake (PoS), securing Ethereum with the value of $ETH</p>
+<p>Execution client: responsible for operating the computing platform of the World Computer (the EVM).</p>
+<p>These clients are HEAVY DUTY pieces of software.</p>
+<h3>Execution Client</h3>
+<figure class="image"><img src="/access-ethereum-2.png"></figure>
+<p>First, let's look at the execution client (pictured here: <a href="https://geth.ethereum.org/">GETH</a>).</p>
+<p>This is hard to digest, but the details aren't super important. The summary is ~425 GB to hold the <a href="/home/ethereum/evm">EVM</a> state and ~400 GB for historical data (although we can reduce this).</p>
+<h4>Historical Data</h4>
+<p>If you were to start a new node from scratch, your node would not have ~400 GBs of historical data; yours would be (effectively) 0 GBs.&nbsp;</p>
+<p>Once online, your node begins communicating with the network and updating the EVM. The old data is moved into a historical database. (Most) historical databases grows by ~15GB/week; this will quickly grow out of control and overwhelm any non-data center node.&nbsp;</p>
+<p>Fortunately, (most) execution clients can "prune" this database, discarding all historical records before the most recent snapshot.</p>
+<h3>Consensus Client</h3>
+<figure class="image"><img src="/access-ethereum-3.png"></figure>
+<p>Now let's take a look at the consensus client (pictured here: <a href="https://lighthouse.sigmaprime.io/">Lighthouse</a>).&nbsp;</p>
+<p>Here things are a little simpler; you can see that (my specific instance of Lighthouse at this specific moment) is taking up 172 GB.</p>
+<p>There is a lot more we can do to bring this number down. For starters, Lighthouse's database can be stored in as little as 15 GB (at the cost of performance).</p>
+<p>Or you can switch to <a href="https://nimbus.guide/">Nimbus</a> which has been designed from first principles to be as lightweight as possible.</p>
+<h3>Overall Node Size</h3>
+<p>Bottom line is there are a lot of configurations you can alter to change the storage size of your node, but no matter what it's going to be BIG (&gt;500 GBs). Here's what the <a href="https://rocketpool.net/">Rocket Pool</a> docs say:</p>
+<figure class="image"><img src="/access-ethereum-4.jpeg"></figure>
+<h3>Processing Requirements</h3>
+<p>You will also notice the CPU requirements.&nbsp;</p>
+<p>If "Quad core CPU (or dual-core hyperthreaded)" doesn't mean anything to you, you can just think "high end CPU made in the last 2-3 years."&nbsp;</p>
+<p>Point is, a node requires a serious CPU.</p>
+<h3>Bandwidth Requirements</h3>
+<figure class="table">
+  <table>
+    <tbody>
+      <tr>
+        <td>
+          <figure class="image"><img src="/access-ethereum-5.jpeg"></figure>
+        </td>
+        <td>
+          <figure class="image"><img src="/access-ethereum-6.jpeg"></figure>
+        </td>
+        <td>
+          <figure class="image"><img src="/access-ethereum-7.jpeg"></figure>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
+<p>The hardware is not the only IRL resource required to run a node. You also need bandwidth.&nbsp;</p>
+<p>Lots and lots of bandwidth.&nbsp;</p>
+<p>Right now, you're looking at something on the order of ~1 TB worth of bandwidth every month.&nbsp;</p>
+<p>That's ~13 GB download and ~20 GB upload every single day.</p>
+<h3>Maintenance</h3>
+<p>We also need to consider the maintenance required to run a node.&nbsp;</p>
+<p>First and foremost, if a node is supporting one or more validators it MUST stay online 24/7; offline time is penalized by confiscating it's staked ETH.</p>
+<p>But even if the node is not staking $ETH (merely acting as an access point into Ethereum, not a validator), maintenance is still critical.</p>
+<p>If the node falls out of sync, it has to spend a significant amount of time catching back up (and a sync from scratch? 2+ days)</p>
+<h2>Node-as-a-Service</h2>
+<p>Taken all together, running a node is a big deal. Don't get me wrong, it's totally doable and I highly encourage you all to look into it, but it is serious business.</p>
+<p>Serious enough that many people interested in accessing Ethereum have no desire or ability to run one.</p>
+<p>Just to drive the point home, consider two examples:&nbsp;</p>
+<ul>
+  <li>Let's say Alice want's to access De-Fi, but doesn't have any experience operating software outside a consumer setting.&nbsp;</li>
+  <li>Or let's look at your browser wallet. It definitely doesn't have those hardware specs.</li>
+</ul>
+<p>Today, the way Alice, your wallet and most users access Ethereum is through a centralized Node-as-a-Service provider, like <a href="https://www.alchemy.com/">Alchemy</a> or <a href="https://www.infura.io/">Infura</a>.</p>
+<p>These companies operate full, normal Ethereum nodes, basically the same as if you were running one at home.</p>
+<p>Users can communicate with these nodes over the internet using an <a href="/home/concepts/api">API</a>.</p>
+<p>They send their requests to the Node-as-a-Service provider who then interacts with Ethereum on their behalf (returning any output data through the same API).</p>
+<p>This solution is super scalable; these two companies alone power the VAST majority of Ethereum requests.&nbsp;</p>
+<p>For example, every time MetaMask does basically anything it does it through Infura.</p>
+<p>The problem? We've basically given up decentralization.</p>
+<h2>A Decentralized Future</h2>
+<p>Bottom line is that if we give up decentralization, we give up credible neutrality and Ethereum along with it.</p>
+<p>If the only way nearly everyone can access the World Computer is via Alchemy's servers, we've basically just created a shitty version of AWS.</p>
+<p>Fortunately, that is NOT the endgame that we are all building toward.&nbsp;</p>
+<p>The Ethereum of the future is an Ethereum that supports light clients.</p>
+<h2>Light Clients</h2>
+<p>A light client is able to trustlessly connect with Ethereum without running a full (heavy) node.</p>
+<p>A light client world is a completely different world; a MUCH cooler world.</p>
+<p>We'll start by placing one directly in your browser smart wallet. Then every user can directly, trustlessly interact with Ethereum.</p>
+<p>Then, the only limit is your imagination.</p>
+<p>Light client low hanging fruit: low-spec'ed computers, computers without steady access to that much bandwidth, smartphones, terminals, vending machines...&nbsp;</p>
+<p>Let's just go for it...&nbsp;</p>
+<p>we can put an Ethereum &nbsp;light client in a smart contract on another blockchain!</p>
+<h2>Roadmap</h2>
+<p>Today, we don't have light clients. The software hasn't been built and, besides, Ethereum can't really support them yet anyway.</p>
+<p>But we have gotten started; <a href="/home/ethereum/network/consensus/sync-committee">we've already built some of the more critical plumbing in to Ethereum PoS</a>.</p>
+<p>Implementing state expiry and statelessness will be critical enabling light clients, but it is not enough. Just take a look at our storage breakdown; only ~40% can be attributed to the state. We need to enable a MUCH lighter touch to achieve the light client-vision.</p>
+<p>But, as always with the World Computer, if the problems are understood then someone is probably working on it. This time, <a href="https://www.youtube.com/watch?time_continue=497&amp;v=0stc9jnQLXA&amp;feature=emb_title">Portal Network</a> has us covered.</p>
+<p>In conclusion, today there are two ways to access the World Computer:&nbsp;</p>
+<ul>
+  <li>run your own node&nbsp;</li>
+  <li>ask a centralized actor to do it for you.&nbsp;</li>
+</ul>
+<p>But that's just today, Ethereum is still evolving.&nbsp;</p>
+<p>Don't fall for the trap of believing this is all we get.&nbsp;</p>
+<p>You ain't seen nothing yet.</p>
+<h2>Resources</h2>
+<p>Source Material - <a href="https://twitter.com/SalomonCrypto/status/1590137467524435971">Twitter Link</a></p>
+<p>Source Material - <a href="/twitter-pdf-2022-11-09_accessing_ethereum.pdf">PDF</a></p>

@@ -1,0 +1,72 @@
+<!--
+title: Byzantine Fault Tolerance
+description: 
+published: true
+date: 2022-11-30T22:39:56.848Z
+tags: 
+editor: undefined
+dateCreated: 2022-11-30T22:39:52.907Z
+-->
+
+<figure class="image"><img src="/bft-1.jpeg"></figure>
+<h1 style="text-align:center;">Byzantine Fault Tolerance</h1>
+<p>The Byzantine Generals Problem was introduced by an <a href="https://www.microsoft.com/en-us/research/uploads/prod/2016/12/The-Byzantine-Generals-Problem.pdf">academic paper in 1982</a>. It describes a game theory problem that shows how difficult it can be for dispersed parties to reach an agreement (consensus) without help of a trusted central party.&nbsp;</p>
+<h2>City at War</h2>
+<figure class="image"><img src="/bft-2.jpeg"></figure>
+<p>The Byzantine Generals Problem is a thought experiment: imagine an ancient city at war with Byzantium.&nbsp;</p>
+<p>The city is approached from all sides by 4 division of the Byzantine army. Each division has a general with unitary control over their division.</p>
+<p>The city is well defended; it will require the entire Byzantine army to capture it. If a single division (or a subset) attack, they will surely be defeated.&nbsp;</p>
+<p>After the generals arrive and make camp for the night, they must make a choice: tomorrow, will I fight or retreat?</p>
+<h2>Victory Conditions</h2>
+<figure class="image"><img src="/bft-3.jpeg"></figure>
+<p>Retreat entails an orderly withdrawal of your troops; it DOES NOT mean defeat.&nbsp;</p>
+<p>Defeat is attacking the city and losing the fight. Or letting your fellow general attack (and lose) while you retreat.&nbsp;</p>
+<p>All that matters is the generals act in unison.</p>
+<h2>The Problem with Communication</h2>
+<p>Because this is ancient times, the generals have limited communication capabilities. All they can do is write a message on a piece of paper, give it to a messenger and send them to another general.&nbsp;</p>
+<p>Communication is asynchronous, bidirectional and uncoordinated.</p>
+<p>In a perfect world, we could devise a relatively simple scheme. Maybe one general is elected a leader and sends out orders. Or maybe each general ranks their choices and the choice with the most votes wins...&nbsp;</p>
+<p>...but this isn't a perfect world.</p>
+<p>Remember, the Byzantine army is attacking a city... full of people... people who presumably don't want to Byzantine army to win.&nbsp;</p>
+<p>And so, they can disrupt communications.</p>
+<p>Imagine a world in which the people of the city keep a very close eye out for the messengers moving between generals. What if they are able to capture a messenger and stop the message?&nbsp;</p>
+<p>Or what if they capture the messenger and REPLACE the message?</p>
+<p>Maybe the people of the city have seen this invasion coming for months and have been planning sabotage the entire time. What if they were able to turn one of the Byzantine generals?</p>
+<p>This is the core of the Byzantine Generals Problem: how can members of a network agree on a specific reality when no one can verify the identities of other members?</p>
+<h2>Byzantine Fault Tolerance</h2>
+<p>A Byzantine Fault describes a system with components that may fail but does not provide clear, reliable data on whether the component has failed. A message being replaced by the city defenders or a traitorous general lying are examples of Byzantine faults.</p>
+<p>A system that is Byzantine Fault Tolerant (BFT) is a system that is capable of resisting this class of failures (and attacks).&nbsp;</p>
+<p>The Byzantine Generals’ Problem has more than one possible solution; thus, there are many possible BFT systems.</p>
+<p>BFT systems (generally) try to optimize for two properties:&nbsp;</p>
+<ul>
+  <li>Safety - all honest participants can agree on the sequence of events and therefore have the same information&nbsp;</li>
+  <li>Liveness - the system must be able to eventually come to consensus and progress forward</li>
+</ul>
+<h2>A Practical Solutions</h2>
+<p>A huge breakthrough came in 1999 with the publication of "<a href="https://pmg.csail.mit.edu/papers/osdi99.pdf">Practical Byzantine Fault Tolerance</a>" (pBFT).&nbsp;</p>
+<p>pBFT is "practical" meaning that it works in asynchronous environments (like the thought experiment... or the Internet) and is relatively fast.&nbsp;</p>
+<p>The pBFT algorithm provides safety and liveness assuming at least 2/3 + 1 nodes are honest.&nbsp;</p>
+<p>No BFT system can support networks with more than 1/3 faulty nodes. This is a mathematical property:</p>
+<figure class="image"><img src="/bft-4.png"></figure>
+<h3>pBFT from 30k Feet</h3>
+<p>pBFT is complicated enough that it deserves it own deep dive.</p>
+<p>For now, pBFT works in a series of rounds.&nbsp;</p>
+<p>First a leader is chosen who then broadcasts the action to the group.</p>
+<p>This is the typical diagram you will see; IMO it's pretty inaccessible.&nbsp;</p>
+<figure class="image"><img src="/bft-5.jpeg"></figure>
+<ul>
+  <li>Node 0 is the leader, who broadcasts the action to the rest of the group (pre-prepare).&nbsp;</li>
+  <li>Then each member of the group broadcasts its received message to all other members (prepare).</li>
+  <li>Once each member has received the prepare messages, they then actually do the action.&nbsp;</li>
+  <li>Finally, they broadcast confirmation that they did the action (commit).&nbsp;</li>
+</ul>
+<p>It is this two round system that gives pBFT its Byzantine fault-tolerance.</p>
+<p>The original implementation also accounted for a faulty leader, however the process for detecting/replacing the leader (known as a "view change") was not scalable.</p>
+<p>Nevertheless, its contribution is incalculable. In fact, it still lies at the basis of (most) Proof of Stake</p>
+<h2>Byzantine Solutions</h2>
+<p>Just remember... the Byzantine Generals Problems has many solutions.&nbsp;</p>
+<p>Those that look like pBFT are only one category of BFT systems; others look very different.&nbsp;</p>
+<p>Some might discard voting entirely. For example, <a href="https://bitcoin.org/bitcoin.pdf">maybe use some other type of work</a>...&nbsp;</p>
+<h2>Resources</h2>
+<p>Source Material - <a href="https://twitter.com/SalomonCrypto/status/1576284739392090112">Twitter Link</a></p>
+<p>Source Material - <a href="/twitter-pdf-2022-10-01_bft.pdf">PDF</a></p>

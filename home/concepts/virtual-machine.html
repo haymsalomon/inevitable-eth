@@ -1,0 +1,108 @@
+<!--
+title: Virtual Machines
+description: 
+published: true
+date: 2022-11-30T00:30:25.633Z
+tags: 
+editor: undefined
+dateCreated: 2022-11-29T23:39:59.688Z
+-->
+
+<figure class="image"><img src="/virtual-machine-banner.png">
+  <figcaption><a href="https://yasirurandika.medium.com/virtual-machines-937c99156ca5"><i>source</i></a></figcaption>
+</figure>
+<h1 style="text-align:center;">Virtual Machines (VM)</h1>
+<h2>Prerequisites</h2>
+<h3>Computer</h3>
+<p><a href="https://en.wikipedia.org/wiki/Computer">A digital electronic machine that can be programmed to carry out sequences of arithmetic or logical operations (computation) automatically</a>.&nbsp;</p>
+<p>The way I think of a computer is it's a machine that provides a platform for the (incredibly) quick and efficient calculation of math.&nbsp;</p>
+<p>By translating human-native thoughts and problems into math, computers provide real-world utility.</p>
+<h2>Early Computers</h2>
+<p>A computer is a physical object; it is made up of real materials, it actually moves electricity through circuits, and makes real changes in its physical state as it functions.&nbsp;</p>
+<p>Development on physical computers must account for all of this.</p>
+<h3>Punched-Card Computing</h3>
+<p>If you go back to VERY early computing, you can visibly see this.&nbsp;</p>
+<figure class="table">
+  <table>
+    <tbody>
+      <tr>
+        <td>
+          <figure class="image"><img src="/virtual-machine-punch-card-1.jpeg">
+            <figcaption><a href="https://www.alamy.com/stock-photo/computer-punch-cards.html?sortBy=relevant"><i>source</i></a></figcaption>
+          </figure>
+        </td>
+        <td>
+          <figure class="image"><img src="/virtual-machine-punch-card-2.jpeg">
+            <figcaption><a href="https://www.computerhistory.org/revolution/memory-storage/8/326/924"><i>source</i></a></figcaption>
+          </figure>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
+<p>The first computers used punched cards for input, output and storage. The physical location of a hole on a piece of paper would represent computational data.</p>
+<figure class="image"><img src="/virtual-machine-punch-card-3.jpeg">
+  <figcaption><a href="https://commons.wikimedia.org/wiki/File:Used_Punchcard_(5151286161).jpg"><i>source</i></a></figcaption>
+</figure>
+<ol>
+  <li>First, a developer would phrase a question that could be represented by math (in these early days, often it was just... simple math like addition or multiplication).</li>
+  <li>They would make a hole at the spot that marked the correct number or operation and insert the card into the computer.</li>
+  <li>The computer would be designed with the specific card in mind, and so would know which number/operation that every hole corresponds to.</li>
+  <li>It processed the card, translating the expression punched into paper into machine language and building the model imprinted on the card.</li>
+  <li>Once the model has been constructed, the computer can then evaluate it (much more quickly and precisely than a human could, even back in those times).</li>
+  <li>Finally, the computer communicates the results by punching new holes into the card (or a new card).</li>
+</ol>
+<p>This was the essence of early computing: humans wanted answers that computers had, but they didn't speak the same language.&nbsp;</p>
+<p>Punched cards act as the interface between the two, providing a shared language by which both parties can communicate.</p>
+<h2>Specific Development</h2>
+<p>While groundbreaking for its time, this system has some severe drawbacks. We'll skip passed most of them, we're here for one in particular:&nbsp;</p>
+<p>Programs created for punched card computers were INCREDIBLY specific to the individual machine they were created for.</p>
+<p>Here's an example: Imagine you want to represent the number 22 for a punched card application.&nbsp;</p>
+<figure class="image"><img src="/virtual-machine-punch-card-4.png"></figure>
+<p>If the computer accepts cards in the format X, you will punch:&nbsp;</p>
+<p>--X-------&nbsp;</p>
+<p>--X-------&nbsp;</p>
+<p>If you feed that card into a format Y machine, it will read the same input as 33.</p>
+<h2>Abstraction</h2>
+<p>So let's recap: a developer was not only responsible for translating a real world problem into a mathematical statement, he also had to manage all the peculiarities of each machine he was working with. Any innovation on one machine had to be recreated on another.</p>
+<p>To cut to the punchline, the solution was <a href="/home/concepts/abstraction">abstraction</a>.&nbsp;</p>
+<p>Developers were removed further and further from the concerns of the hardware with the development of high-level languages like BASIC and C++. The target of a high-level language is not a computer, it is a compiler/interpreter, programs that translates one language into another.&nbsp;</p>
+<p>Developers can write code in a language that expresses information in a human-digestible format and interpreters will do the rest.</p>
+<h2>Interpretation</h2>
+<p>Let's say a developer wants to write a program that prints "Hello World."&nbsp;</p>
+<p>In a punched card system, the developer would have worry about specific measurements, machines and holes.&nbsp;</p>
+<p>In an abstracted system, the interpreter takes care of 99% of the work. This is all it takes:</p>
+<figure class="image"><img src="/virtual-machine-punch-card-5.png"></figure>
+<p>But here's the thing... there's an ENORMOUS difference between 99% and 100%. Suffice to say that every dev is thinking about the machine specs and operating systems of their users.&nbsp;</p>
+<p>Fortunately, we don't have to stop at this layer.</p>
+<h2>Virtual Computing</h2>
+<p>High-level code still gives developers exposure to the machine, so we'll abstract it away. We'll create a Virtual Machine (VM).&nbsp;</p>
+<p>A VM is a piece of software that emulates a complete (and enclosed) computer system within another computing environment.</p>
+<h3>Consumer Virtualization&nbsp;</h3>
+<p>The best example is the one you can see; take a look at the Parallels app.&nbsp;</p>
+<figure class="image"><img src="/virtual-machine-punch-card-6.jpeg"></figure>
+<p>Parallels runs on Apple computers in the MacOS environment. Once installed, it allows the user to run a copy of Windows entirely within MacOS/their Apple computer.</p>
+<p>The example above is a little bit of a red herring; when most people see Windows-on-Mac the reaction is "I guess you can play games on Mac."&nbsp;</p>
+<p>The VMs we care about don't look like this, it's just a great illustration.&nbsp;</p>
+<p>The VMs we care about don't look like anything.</p>
+<h3>Java virtual machine (JVM)</h3>
+<p>While not the first, the most famous early VM is Java.&nbsp;</p>
+<p>Java provided a fully capable computing environment that anyone could develop on. Every instance of Java would support the exact same features; it is up to the computer to support Java (well... it's mutual).</p>
+<p>When a developer wants to deploy a feature, he only needs to worry if Java will support it.&nbsp;</p>
+<p>If it does, he can be confident that it will run on every computer that can run the Java VM.</p>
+<p>If anyone's counting, there were 38 billion instances of the JVM...</p>
+<p>...<a href="https://www.oracle.com/java/moved-by-java/timeline/">in 2017</a>.</p>
+<h3>Behind-the-Scenes</h3>
+<p>In practice, VMs are not needed for most apps. Most consumers will barely touch a VM, those that do probably wont notice.&nbsp;</p>
+<p>Their importance becomes much more clear behind the scenes, especially in infrastructure, corporate development and other large-scale projects.</p>
+<h2>Virtual Coordination</h2>
+<p>We began our story in the era of punched cards; back then there were like 500 computers TOTAL and even then the complexity was a nightmare.&nbsp;</p>
+<p>In 2022, things are many orders of magnitude more complex with near endless variations in the machines we call computers.</p>
+<p>Abstraction is so powerful because it frees devs from worrying about the entire system; they can focus on the part that best allows them to express the question they are trying to ask.&nbsp;</p>
+<p>VMs are the conclusion of computational abstraction; a computer within a computer.</p>
+<p>A parting thought:&nbsp;</p>
+<p>A computer within a computer means that we can all exist in the same computing environment, but (usually) just locally. What if we wanted to exist in the same actual environment... like literally 1 VM?&nbsp;</p>
+<p>What if we wanted to do it trustlessly?</p>
+<h2>Resources</h2>
+<p>Source Material - <a href="https://twitter.com/SalomonCrypto/status/1574208089661747200">Twitter Link</a></p>
+<p>Source Material - <a href="/twitter-pdf-2022-09-26_vms.pdf">PDF</a><br>&nbsp;</p>

@@ -1,0 +1,89 @@
+<!--
+title: Time
+description: 
+published: true
+date: 2022-12-01T01:14:48.459Z
+tags: 
+editor: undefined
+dateCreated: 2022-12-01T01:14:44.369Z
+-->
+
+<figure class="image"><img src="/time-banner.jpeg">
+  <figcaption><a href="https://www.vecteezy.com/vector-art/7212589-eye-cyber-circuit-future-technology-concept-background"><i>source</i></a></figcaption>
+</figure>
+<h1 style="text-align:center;">Time, Slots and Epochs&nbsp;</h1>
+<h2>The World Computer</h2>
+<p>Ethereum exists between a network of 1,000s of computers (<a href="https://inevitableeth.com/home/ethereum/network/node">nodes</a>), each running a local version of the <a href="https://inevitableeth.com/home/ethereum/evm">Ethereum Virtual Machine</a> (EVM). All copies of the EVM are kept perfectly in sync.&nbsp;</p>
+<p>Any individual EVM is a window into the shared state of the <a href="https://inevitableeth.com/home/ethereum/world-computer">World Computer</a>.</p>
+<p>For its first 7 years, Ethereum used Proof of Work (PoW) to reach consensus and stay in sync; today it uses Proof of Stake (PoS).</p>
+<h2>Worker's Time</h2>
+<p>Both methods must identify a node who gets the privilege of adding a new block to the blockchain. Under PoW, nodes (miners) compete to earn the right to be the next block proposer.&nbsp;</p>
+<p>The proposer is a powerful position; not only can they pick, choose and order the transactions as they desire, they also earn:&nbsp;</p>
+<ul>
+  <li>Block rewards, paid by the network&nbsp;</li>
+  <li>Tips, paid by the transaction generator</li>
+</ul>
+<p>The competition: an incredibly difficult puzzle which can only be solved by trail and error.&nbsp;</p>
+<p>Miners guess and guess until they solve the puzzle, proving they've done work in the real world (using electricity to power the machines solving these puzzles).</p>
+<p>Under PoW, the block proposer was the miner who was able to solve a cryptographic puzzle the fastest. When finished, it broadcasts its block to every other node in the network.&nbsp;</p>
+<p>Each node then checks to make sure the transaction are valid and the puzzle is complete.</p>
+<h2>Taking Turns&nbsp;</h2>
+<p>PoS is fundamentally different - there is no competition at all.</p>
+<p>Instead of choosing the next block proposer by wasting as much electricity as possible, what if we just... took turns?</p>
+<p>This is the core of PoS; the 32 ETH stake is just a bond to guarantee good behavior.</p>
+<p>One effect of changing from PoW to PoS is that we've switched the fundamental cadence of Ethereum to be based on a unit of time derived from a an unpredictable race to turn-based system.</p>
+<p>By its very nature, we can't control the timing of PoW, but we can with PoS.</p>
+<h2>Slots</h2>
+<p>Today, time on the World Computer is divided into 12 second units called "slots."&nbsp;</p>
+<p>Every slot, a different validator is assigned to propose a new block. If it does its duties, it will propose a valid block (within 4 seconds), otherwise the slot will pass along empty.</p>
+<p>The block proposer will send the block to every node in the network who is then responsible for processing it and updating the state of their EVM.&nbsp;</p>
+<p>This keeps all nodes in sync with the proposer, and turns the environment of the EVM into the collective World Computer.</p>
+<p>Each slot also has a committee assigned to it. A committee is a group of validators who are assigned to verify and attest to the validity of the block broadcasted by the block proposer. After verification, committee members broadcast a cryptographic attestation.</p>
+<h2>Epochs</h2>
+<p>At this moment, there are 440k validators. If every validator was on every committee, the network would freeze under a deluge of attestations.&nbsp;</p>
+<p>So we make a decentralization trade-off. Every validator will not attest to every slot, but they will attest to every epoch.</p>
+<p>Epochs are made of 32 slots. 1 slot = 12 secs, so 1 epoch = 6 mins 24 secs.</p>
+<p>At the beginning of each slot, the entire validator group is randomly split into 32 committees corresponding to the 32 slots of the upcoming epoch.</p>
+<p>This randomness is non-trivial; we need <a href="/home/ethereum/network/consensus/randao">RANDAO</a>.</p>
+<p>Each slot brings a new committee forward. The first member is the block proposer; the rest are attesters. The block proposer has 4 seconds to send a block to the committee.&nbsp;</p>
+<p>Each member verifies the block and creates a BLS signature (if there is no block, they attest to last block).</p>
+<h2>Signatures</h2>
+<p>A <a href="/home/concepts/bls-signatures">BLS signature</a> is a <a href="/home/concepts/digital-signatures">digital signature</a> that provides all the normal guarantees (proof a specific message was signed by a specific person) but has a useful bonus property: it can be aggregated.&nbsp;</p>
+<p>Once aggregated, thousands of signatures can be verified in one operation.</p>
+<h2>Aggregation</h2>
+<p>For those of you not following along at home, 440k validators / 64 committees = 27k validators / committees.&nbsp;</p>
+<p>This is too big a number to aggregate all at once.&nbsp;</p>
+<p>And so, committees are broken up into 128 subnets. ~200 validators / subnet</p>
+<p>In each subnet, 16 validators are designated as aggregators. All subnet-members publish their BLS signatures, but only aggregators listen and do the aggregation. All 16 are trying to build the same ideal aggregate signature, but conditions are often not ideal.</p>
+<p>Next, the block proposer will pick the best BLS aggregate signature, one from each of the 128 subnets The BLS aggregation algorithm is applied one final time, and the 128 subnet signatures are merged into one final committee BLS signature, representing ~27k validators</p>
+<p>As an aside, this whole process is the reason 32 ETH is the minimum amount of ETH required to become a validator. This aggregation process is slow and complex; reducing the minimum stake increases the number of validators, exponentially increasing the problem.</p>
+<h2>Transitioning Between Epochs</h2>
+<p><a href="/home/ethereum/network/consensus/state-transition">Deep Dive: Ethereum State Transition Function</a></p>
+<p><a href="/home/ethereum/network/consensus/casper-ffg">Deep Dive: Casper FFG</a></p>
+<p>After 32 slots, an epoch ends.&nbsp;</p>
+<p>At the end of every epoch, every validator runs process_epoch, a subroutine of the Ethereum State Transition Function. We'll summarize it in 2 sections:&nbsp;</p>
+<ul>
+  <li>Finalization&nbsp;</li>
+  <li>Consensus Housekeeping</li>
+</ul>
+<h3>Finalization</h3>
+<p>Finalization is the application of the Casper FFG protocol. Tl;dr Finalization is a promise by the protocol that an epoch (and therefore the blocks and the transactions within) are irreversible.</p>
+<p>Finalization is the mathematical and economic guarantee that a specific action on the World Computer is part of the canonical blockchain. Undoing a single finalized transaction would necessitate destroying 1/3 of staked ETH - more than $20B, today.</p>
+<p>Epochs mark the boundaries for finalization.</p>
+<ul>
+  <li>If more than 2/3s of the network attest during an epoch, it becomes justified.&nbsp;</li>
+  <li>If a second epoch with a 2/3 majority follows the first, it will finalize that epoch, granting it the security guarantees of Ethereum</li>
+</ul>
+<h3>Consensus Housekeeping</h3>
+<p>The other section of process_epoch is consensus and housekeeping. Basically this is everything needed to uphold the rules of consensus (processing slashing, rewards, etc) and reseting the stage for the next epoch.&nbsp;</p>
+<p>Read up on Casper FFG for more info.</p>
+<h2>Summary</h2>
+<ul>
+  <li>Slot: every 12 secs, the World Computer expects a new block (EVM changes)&nbsp;</li>
+  <li>Epoch: every 32 slots, the entire network votes&nbsp;</li>
+  <li>Finalization: following justification, a second supermajority of validators vote to confirm an epoch&nbsp;</li>
+</ul>
+<p>Finalization = ETH security</p>
+<h2>Resources</h2>
+<p>Source Material - <a href="https://twitter.com/SalomonCrypto/status/1577863907976220672">Twitter Link</a></p>
+<p>Source Material - <a href="/twitter-pdf-2022-10-06_time.pdf">PDF</a></p>

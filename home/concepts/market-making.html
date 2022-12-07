@@ -1,0 +1,81 @@
+<!--
+title: Market Making
+description: 
+published: true
+date: 2022-12-05T14:21:27.291Z
+tags: 
+editor: undefined
+dateCreated: 2022-12-05T14:21:22.834Z
+-->
+
+<figure class="image"><img src="/market-making-banner.avif">
+  <figcaption><a href="https://www.bitpanda.com/academy/en/lessons/what-is-a-market-maker/"><i>source</i></a></figcaption>
+</figure>
+<h1 style="text-align:center;">Market Making and Impermanent Loss</h1>
+<h2>Prerequisites</h2>
+<h3>Liquidity</h3>
+<p><a href="https://inevitableeth.com/home/concepts/liquidity">Liquidity</a> refers to the efficiency or ease with which an asset can be converted into cash without affecting its market price.&nbsp;</p>
+<h2>Krug and Urga</h2>
+<p>Shortly after our ancestors climbed down from the trees, there was Krug and Urga. Krug is the best hunter, while Urga is the best cloak maker.&nbsp;</p>
+<p>It's late fall, and Krug's cloak is ruined.&nbsp;</p>
+<p>Fortunately, Krug has extra meat and Urga has extra cloaks.</p>
+<p>Here's the issue, Urga also knows winter is coming and she gathered a few months worth of meat. Come March or April, she'll be desperate for a steak, but today she'd rather keep the cloak as a backup.&nbsp;</p>
+<p>This pre-historic market has no liquidity.</p>
+<h2>Making a Market</h2>
+<p>Ok let's fast forward to modern times, but pre-crypto.&nbsp;</p>
+<p>Through centuries of human development and progress, we've created the concept of a Market Maker.&nbsp;</p>
+<p>A market maker actively provides liquidity to a market by providing bids and offers, profiting off the spread.</p>
+<p>The market maker is a neutral entity (in theory) that ensures the market is always liquid and available to transact.&nbsp;</p>
+<p>He doesn't care about the seasons, the amount of meat or cloaks, who is skilled at what... he just provides a price and will buy or sell from/to anyone.</p>
+<p>Example: a market maker in XYZ stock. Let's say they provide a quote of $10.00-$10.05, 100x500. This means that they will buy up to 100 shares for $10.00 and also will sell 500 shares at $10.05.&nbsp;</p>
+<p>A market maker takes on XYZ price risk in order to facilitate liquidity.</p>
+<p>Now imagine the price of XYZ moves sharply&nbsp;</p>
+<ul>
+  <li>up to $11. The market maker sells all 500 shares for a total of $5,025. &nbsp;Had he held those shares, they would be worth $5500</li>
+  <li>down to $9: The market maker buys 100 shares for a total of $1,000. However, they are now worth $900</li>
+</ul>
+<p>While XYZ trades within the market maker's range ($10-$10.05), he is generating yield.&nbsp;</p>
+<p>When XYZ trades out of the range, not only does the market maker stop providing liquidity (and therefore stop generating yield), but he has also lost relative to his original position.</p>
+<p>Thus, market makers play a careful game of risk vs reward.</p>
+<h2>Market Making Risk</h2>
+<p>Exchanges need liquidity to facilitate trading. Liquidity is provided by market makers.</p>
+<p><a href="https://uniswap.org/">Uniswap</a>, <a href="https://curve.fi/">Curve</a> and <a href="https://balancer.fi/">Balancer</a> are all exchanges. These protocols source liquidity from De-Fi depositors (via trading fees and token incentives).</p>
+<p>We call these smart contracts Automated Market Makers (AMMs) but in truth, the depositor is the market maker.</p>
+<p>When you LP, you are providing liquidity to facilitate trades between two pairs, just like our market maker provided liquidity between XYZ and dollars.</p>
+<p>Example: you LP ETH / FRAX into an AMM, providing 1 ETH and 1100 FRAX. You are providing liquidity for ETH from the price range of $0 to $∞.</p>
+<ul>
+  <li>ETH up? People will give you FRAX and take your ETH.</li>
+  <li>ETH down? People will give you ETH and take your FRAX.</li>
+</ul>
+<h2>Impermanent Loss</h2>
+<p>By LPing into an AMM, you are taking on the risk of relative price changes between the two assets.&nbsp;</p>
+<p>If one moves more than the other, you will always take the unfavorable position.&nbsp;</p>
+<p>We call this phenomena impermanent loss (IL).</p>
+<p>Every person entering De-Fi will learn about IL two times.&nbsp;</p>
+<p>First when they read about it, and then second when they experience it.&nbsp;</p>
+<h2>De-Fi's Market Making Options</h2>
+<p>Those who have been through the crucible can attest that IL can be extremely painful.&nbsp;</p>
+<p>Let's talk about some options.&nbsp;</p>
+<p>NOT FINANCIAL ADVICE!!</p>
+<h3>Option 1 - Pick Your Battles</h3>
+<p>LPing is risky because volatility is so high.&nbsp;</p>
+<p>However, not all asset pairs have high volatility... particularly pegged assets (eg stablecoins).&nbsp;</p>
+<p>While you need to worry about de-peg risk (catastrophic), you can farm yield with little IL risk in pegged pools</p>
+<h3>Option 2 - Know Your Worth</h3>
+<p>Liquidity is critical to protocols, so much so that they will often dedicate a considerable portion of their tokens towards liquidity incentives.&nbsp;</p>
+<p>Look for LP incentives that compensate for the IL risk (personal choice, for me usually &gt;100% APR)</p>
+<h3>Option 3 - Learn From Veterans</h3>
+<p>While LPing is a new concept unique to De-Fi, market making is not.&nbsp;</p>
+<p>Trad-Fi market makers hedge out a lot of (their version of) IL risk via options and other derivatives. Sudden price moves up/down can be offset with call/put options.</p>
+<h3>Option 4 - Sit This One Out&nbsp;</h3>
+<p>For a lot of people, choosing to abstain from LPing is a good move.&nbsp;</p>
+<p>IL can have some devastating consequences if you don't know what you are doing.&nbsp;</p>
+<p>Even if it seems like everyone else is doing it, consider avoiding market making.</p>
+<p>The Frontier</p>
+<p>If you're on-chain, you're out on the frontier exploring areas no human has ever seen before.&nbsp;</p>
+<p>But it is a mistake to think everything we are encountering is novel; everything that is new is just something familiar that has been repackaged.</p>
+<p>As you continue on your De-Fi journey, make sure you keep an eye and an ear back towards Trad-Fi.&nbsp;</p>
+<p>Innovation is funny... sometimes the map to the future is in the old system you just left!</p>
+<h2>Resources</h2>
+<p>Source Material - <a href="https://twitter.com/SalomonCrypto/status/1546504436490637312">Twitter Link</a></p>
+<p>Source Material - <a href="/twitter-pdf-2022-07-11_market_making.pdf">PDF</a></p>

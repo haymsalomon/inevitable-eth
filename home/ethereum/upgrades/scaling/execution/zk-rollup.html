@@ -1,0 +1,103 @@
+<!--
+title: ZK Rollups
+description: 
+published: true
+date: 2022-12-05T04:46:28.030Z
+tags: 
+editor: undefined
+dateCreated: 2022-12-02T21:51:03.886Z
+-->
+
+<figure class="image"><img src="/zk-rollup-1.jpeg"></figure>
+<h1 style="text-align:center;">Zero-Knowledge Rollups</h1>
+<h2>Prerequisites</h2>
+<h3>Settlement</h3>
+<p><a href="/home/concepts/settlement">Settlement</a> is the "final step in the transfer of ownership, involving the physical exchange of securities or payment".&nbsp;</p>
+<p>After settlement, the obligations of all the parties have been discharged and the transaction is considered complete.&nbsp;</p>
+<h3>Zero-Knowledge Proof</h3>
+<p>A <a href="/home/concepts/zk-proof">Zero-Knowledge Proof</a> (ZK proof) is a way of proving a statement is valid without revealing the statement or leaking any information about it.&nbsp;</p>
+<h2>The World Computer</h2>
+<p>In 2008, we all got a taste when Satoshi Nakamoto released Bitcoin out into the world. But in 2015 Vitalik Buterin served us the whole meal:</p>
+<p>Ethereum, the <a href="/home/ethereum/world-computer">World Computer</a>, was born.</p>
+<p>Unfortunately, the World Computer is SLOW...</p>
+<p>...for now.</p>
+<h2>Early Scaling</h2>
+<h3>State Channels</h3>
+<p><a href="https://inevitableeth.com/home/ethereum/upgrades/scaling/execution/state-channel">Deep Dive: State Channels</a></p>
+<p>First came State Channels, which allow users to lock funds in a smart contract on Ethereum and transact freely off-chain.</p>
+<p>This enabled users to send assets back and forth MUCH cheaper and faster than before while still (ultimately) settling to Ethereum.</p>
+<p>While state channels are powerful they are limited:</p>
+<ul>
+  <li>participants must opt-in, cannot send funds to people who are not already in the channel</li>
+  <li>requires large amount of capital to be locked</li>
+  <li>cannot represent objects without a clear owner (eg Uniswap)</li>
+</ul>
+<h3>Plasma</h3>
+<p><a href="/home/ethereum/upgrades/scaling/execution/plasma">Deep Dive: Plasma</a></p>
+<p>Plasma were created in order to address (some of) these issues.</p>
+<p>Plasma chains are independent blockchains that anchor themselves to Ethereum mainnet.</p>
+<p>Just like Ethereum, a plasma chain has its own <a href="/home/concepts/virtual-machine">virtual machine</a> <a href="/home/ethereum/evm/state-machine">state</a> (the status/balance of every user &amp; smart contract).</p>
+<p>This state can be represented as a <a href="/home/concepts/merkle-tree">Merkle tree</a> - a data structure that allows a huge amount of data to be compressed into a single line (Merkle root).</p>
+<p>Once every [interval] the plasma chain will build the state Merkle tree and post the Merkle root to mainnet.&nbsp;</p>
+<p>Thus, a (compressed) record of the entire plasma chain exists on mainnet.&nbsp;</p>
+<p>In order to withdraw assets, a user submits the Merkle proof for that asset.</p>
+<p>Plasma chains are a huge improvement; they can send assets to users who have not yet opted in and are much more capital efficient than state channels.&nbsp;</p>
+<p>However, plasma chains still have one glaring weakness: data availability.</p>
+<p>Data availability - the guarantee that all transaction data (in the block) will be available for network participants.&nbsp;</p>
+<p>Plasma doesn't post the plasma data to mainnet, it only posts the state root. If the operator decided to stop sending Merkle proofs, users can't withdraw assets.</p>
+<h3>Optimistic Rollups</h3>
+<p><a href="/home/ethereum/upgrades/scaling/execution/optimistic-rollup">Deep Dive: Optimistic Rollups</a></p>
+<p>And so, the solution is to post the transaction data along with the state root.</p>
+<p>The solution is a rollup.</p>
+<p>The first group of rollups are called Optimistic Rollups, which assumes there are no malicious actors (while providing a window to dispute any invalid transactions).</p>
+<p>Optimistic rollups are very powerful, delivering the performance of a centralized system while still settling to Ethereum.</p>
+<p>However, their optimistic nature requires a big trade-off: a HUGE challenge window must pass before settlement is finalized.&nbsp;</p>
+<p>ZK-Rollups solve this.</p>
+<h2>Zero-Knowledge Rollups</h2>
+<h3>Deposit</h3>
+<figure class="image"><img src="/zk-rollup-2.jpeg"></figure>
+<p>Similar to optimistic rollups, first users deposit assets into a smart contract on mainnet. The ZK-rollup operator then mints an equivalent amount of assets on the rollup chain and gives it to the depositor.&nbsp;</p>
+<p>On mainnet, the assets remain in escrow.</p>
+<h3>Execute</h3>
+<figure class="image"><img src="/zk-rollup-3.jpeg"></figure>
+<p>Also like optimistic rollups, ZK-rollups derive settlement from Ethereum. This allows the rollup chain to be much more centralized without sacrificing trustlessness.</p>
+<p>From a user perspective, execution times and <a href="/home/concepts/gas">gas</a> costs are SIGNIFICANTLY cheaper than using mainnet.</p>
+<h3>Commit On-Chain</h3>
+<figure class="image"><img src="/zk-rollup-6.jpeg"></figure>
+<p>From here, both optimistic and zk-rollups bundle groups of transactions together and post a compressed version down to mainnet.&nbsp;</p>
+<p>Optimistic rollups naively accept these bundles, assuming that the transactions within are valid.</p>
+<p>On the rollup chain itself, you might never notice the challenge period... but it becomes a major issue when crossing between on and off-chain.&nbsp;</p>
+<p>Modern optimistic rollups require a 7 day challenge period.&nbsp;</p>
+<p>Even in Trad-Fi, 7 day settlement would be considered unworkable.</p>
+<p>ZK-rollups seek to solve the finality question: how can we finalize the batch the MOMENT it is accepted on-chain?&nbsp;</p>
+<p>The answer: Zero-Knowledge Proofs.</p>
+<p>ZK-proofs are a category of mathematical proofs that allows one party (prover) to prove to another party (verifier) that a statement is true while also ensuring that the prover does not give the verifier any info that the verifier didn't already have.</p>
+<p>ZK-proofs are the cutting edge of cryptographic research, details are for another time (maybe).&nbsp;</p>
+<p>Here's what you need to know: proof generation is long and hard, but proof verification is quick and easy.</p>
+<h3>Withdraw</h3>
+<figure class="image"><img src="/zk-rollup-8.jpeg"></figure>
+<p>Posting a batch requires ZK-proof verification and delivers instant settlement. The rollup can therefore process withdraws instantly (no challenge window required).</p>
+<h3>Space-Saving</h3>
+<figure class="image"><img src="/zk-rollup-7.png"></figure>
+<p>ZK-rollups have all the data compression gains of optimistic rollups, and more.&nbsp;</p>
+<p>The introduction of the ZK-proof brings mathematically certainty that the batch is valid; much of the block data needed to confirm cryptographic integrity of the chain can be left off.</p>
+<h2>ZK-EVM</h2>
+<p><a href="/home/ethereum/upgrades/scaling/execution/zk-rollup/taxonomy">Deep Dive: ZK-EVM Taxonomy</a></p>
+<p>Projects that can process all possible EVM transactions are call ZK-EVMs.</p>
+<p>Already there are multiple ZK-EVM projects gathering a lot of attention, so much that <a href="https://vitalik.ca/general/2022/08/04/zkevm.html">Vitalik Buterin has developed a taxonomy</a> to help understand the landscape and future developments.</p>
+<p>There are 4(ish) categories of ZK-EVM:</p>
+<ol>
+  <li>Fully Ethereum-equivalent</li>
+  <li>Fully EVM-equivalent<ul>
+      <li>2.5) EVM-equivalent, except for gas costs</li>
+    </ul>
+  </li>
+  <li>Almost EVM-equivalent</li>
+  <li>High-level-language equivalent</li>
+</ol>
+<h2>Summary</h2>
+<p>If you take a step back and look at the evolution of Ethereum scaling solutions, you see a theme: offload execution while anchoring settlement to mainnet.</p>
+<p>From state channels (a single use, purpose) to ZK-rollups (persistent state, general purpose, instant settlement).</p>
+<h2>Resources</h2>
+<p>Source Material - <a href="https://twitter.com/SalomonCrypto/status/1569334975614582784">Twitter Link</a></p>
+<p>Source Material - <a href="/twitter-pdf-2022-09-12_zk_rollups.pdf">PDF</a></p>

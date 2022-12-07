@@ -1,0 +1,52 @@
+<!--
+title: Merkle Tree
+description: 
+published: true
+date: 2022-11-28T23:26:25.468Z
+tags: 
+editor: undefined
+dateCreated: 2022-11-28T23:11:56.548Z
+-->
+
+<figure class="image"><img src="/merkle-tree-banner.png">
+  <figcaption><i>original</i></figcaption>
+</figure>
+<h1 style="text-align:center;">Merkle Trees</h1>
+<h2>Prerequisites</h2>
+<h3>Hashing</h3>
+<p>Applying a <a href="/home/concepts/hash">hash function</a> takes data (of arbitrary contents and size) and reduces it to a unique, compact string.&nbsp;</p>
+<p>Every input produces a unique output, even if two inputs are nearly identical.</p>
+<h2>Merkle Tree</h2>
+<figure class="image"><img src="/merkle-tree-merkle-tree.jpeg">
+  <figcaption><i>original</i></figcaption>
+</figure>
+<p>A Merkle Tree uses hashing to build a data structure that allows for quick, efficient, verifiable proof that a transaction was included in a much larger data set. Also called a hash tree, they are named after <a href="https://en.wikipedia.org/wiki/Ralph_Merkle">Ralph Merkle</a> (<a href="http://people.eecs.berkeley.edu/~raluca/cs261-f15/readings/merkle.pdf">who proposed them in 1987</a>).</p>
+<p>A (binary) Merkle tree is a data structure created by first applying a hash function to individual data blocks to create a list of hashes.&nbsp;</p>
+<p>Then two hashes are combined and hashed again, creating a new (smaller) list of hashes.&nbsp;</p>
+<p>The cycle repeats until there is a single hash.</p>
+<h2>Merkle Root</h2>
+<p>The top hash (also called root hash or root node) is a single value that represents the unique structure of the Merkle tree. If any of the data is changed, the hash it creates (and all subsequent hashes) will be different, including the root node.</p>
+<p>The output of a Merkle tree is a unique identifier for that set of data; we can use a hash tree to verify a dataset without transferring the entire dataset.</p>
+<p>The Merkle root can be derived locally and then compared externally. If the roots match, the data sets are the same.</p>
+<p>Because Merkle trees rely on hashing functions, they only operate in one direction: it is very easy to build a tree from raw data, but it is impossible to recover the data from the tree.&nbsp;</p>
+<p>Thus, a Merkle root can be posted publicly without fear of exposing the data.</p>
+<p>However, this has an interesting dilemma: can you confirm if an individual piece of data exists within an Merkle tree? Put another way, can a Merkle tree do anything other than verify an ENTIRE dataset?&nbsp;</p>
+<p>The answer: of course!</p>
+<h2>Merkle Proofs</h2>
+<figure class="image"><img src="/merkle-tree-merkle-proof.jpeg">
+  <figcaption><i>original</i></figcaption>
+</figure>
+<p>A Merkle proof is established by providing the specific data and the intermediate hashes which allow a verifier to recreate the Merkle tree. If the newly computed root node matches root node of the dataset, the verifier can be certain the data is in the dataset.</p>
+<p>The examples above have been for datasets of size 4, in practice Merkle trees are deployed for datasets in the millions, billions and trillions.&nbsp;</p>
+<p>As the dataset get larger, Merkle trees become more and more efficient. Both in coordination and verification.</p>
+<p>Merkle trees provide a single, unique output for an an entire set of data; a multi-GB file can be reduced down to a single line. A well designed network can maintain many resources locally and coordinate by communicating an extremely lightweight root hash.</p>
+<p>This effect could be achieved by simple hashing; a good hash function generates a a unique hash for every dataset. The Merkle proof gives us the ability to verify inclusion incredibly efficiently (for the true nerds, <a href="https://en.wikipedia.org/wiki/Big_O_notation">verification complexity scales O(log n)</a>).</p>
+<h2>Takeaway</h2>
+<p>When you see Merkle trees in the wild, remember this:&nbsp;</p>
+<ul>
+  <li>Merkle Trees compress huge data sets into a single, encrypted line.&nbsp;</li>
+  <li>Merkle Proofs can be used to efficiently verify data exists in a dataset.</li>
+</ul>
+<h2><br>Resources</h2>
+<p>Source Material - <a href="https://twitter.com/SalomonCrypto/status/1567638108937801728">Twitter Link</a></p>
+<p>Source Material - <a href="/twitter-pdf-2022-09-07_merkle_tree.pdf">PDF</a></p>

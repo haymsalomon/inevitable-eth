@@ -1,0 +1,63 @@
+<!--
+title: Randomly Sampled Committees
+description: 
+published: true
+date: 2022-12-03T17:00:38.275Z
+tags: 
+editor: undefined
+dateCreated: 2022-12-03T16:30:13.928Z
+-->
+
+<figure class="image"><img src="/randomly-sampled-committees-1.jpeg"></figure>
+<h1 style="text-align:center;">Randomly Sampled Committees</h1>
+<h2>The World Computer</h2>
+<p>Ethereum exists between a network of 1,000s of computers (<a href="https://inevitableeth.com/home/ethereum/network/node">nodes</a>), each running a local version of the <a href="https://inevitableeth.com/home/ethereum/evm">Ethereum Virtual Machine</a> (EVM). All copies of the EVM are kept perfectly in sync.&nbsp;</p>
+<p>Any individual EVM is a window into the shared state of the <a href="https://inevitableeth.com/home/ethereum/world-computer">World Computer</a>.</p>
+<p>Ethereum has been charting a course towards a rollup-centric future for <a href="https://ethereum-magicians.org/t/a-rollup-centric-ethereum-roadmap/4698">~2 years now</a>.&nbsp;</p>
+<p>Tl;dr Ethereum will scale by <a href="/home/ethereum/upgrades/scaling/execution">offloading execution to performance-optimized blockchains</a>, while <a href="/home/concepts/settlement">settlement</a> and economic security will remain with mainnet.</p>
+<h2>Data Availability</h2>
+<figure class="image"><img src="/randomly-sampled-committees-2.jpeg"></figure>
+<p><a href="/home/ethereum/upgrades/scaling/data/data-availability-bottleneck">Deep Dive: Data Availability Scaling</a></p>
+<p>The rollup-centric paradigm is based around quickly and cheaply executing transactions in a more centralized environment, and then posting a (compressed) record back to Ethereum.</p>
+<p>In the rollup-centric future, it becomes critical to ensure that data is available.</p>
+<p>Now look, I am an Ethereum zealot, a true believer in the inevitable dominance of the World Computer. I believe that billions and billions of transactions will happen on rollups every single day.</p>
+<p>And that is A LOT of data circulate through the Ethereum network.</p>
+<p>Before we continue we need to be clear on what kind of data we are talking about.</p>
+<h2>Dealing with Rollup Data</h2>
+<figure class="image"><img src="/randomly-sampled-committees-3.jpeg"></figure>
+<p>Any data within the EVM needs to be communicated across the entire network.&nbsp;</p>
+<p>ALL nodes needs a copy of EVERY EVM <a href="/home/ethereum/evm/state-machine">state change</a>.</p>
+<p>Rollups exists OUTSIDE of the EVM; they are independent blockchains. Yes, they post a copy of the transaction to Ethereum but that's just to ensure immutability.</p>
+<p>We only care that a copy is posted to the World Computer, not that each node gets a copy.</p>
+<p>The most simple and obvious way to ensure that the data is posted to the World Computer is just to have every node in the network download it. Yes, the nodes don't NEED it, but at least we KNOW it's there. But, as we've already discussed, this just isn't scalable.</p>
+<h2>Divide and Conquer</h2>
+<figure class="image"><img src="/randomly-sampled-committees-4.jpeg"></figure>
+<p>One idea is to split up the work: simply divide the nodes in your network and your data into an equal number of groups.&nbsp;</p>
+<p>The nodes in group one can download and validate the first chunk, the nodes in group two can check the second, etc.</p>
+<p>Each group (committee) is responsible for downloading their assigned chunk of data.&nbsp;</p>
+<ul>
+  <li>If all/most of the committee can download it, the network can consider the chunk available.</li>
+  <li>If all/most of the chunks are available, the network can consider the blob available.</li>
+</ul>
+<h2>Example</h2>
+<figure class="image"><img src="/randomly-sampled-committees-5.jpeg"></figure>
+<p>Go check out <a href="https://beaconcha.in/">Beaconcha.in</a>; you'll see there are currently ~450k Ethereum validators.&nbsp;</p>
+<p>Let's decide that if 500 random validators can successful download a chunk of data, we can call it available. So let's just give ourselves committees of 1000, just in case.</p>
+<p>450k validators / 1000 validators per group = 450 committees.&nbsp;</p>
+<p>450 committees means we can split our data into 450 pieces, and therefore our bandwidth requirements are 450x less!&nbsp;</p>
+<p>Change the parameters all you want, this committee approach will save a lot of bandwidth.</p>
+<h2>Malicious Committees</h2>
+<p>But we have an issue.&nbsp;</p>
+<p>Let's say a malicious node operator saved up his ETH until he had enough to deploy enough validators to control an entire committee.</p>
+<p>With control of a committee, he could easily confirm an invalid or unavailable chunk.</p>
+<p>In our example above, controlling .2% of the validators would give you 100% control over an entire committee. That committee would only have control over one chunk, but one chunk is enough.&nbsp;</p>
+<p>What if it contains a transaction to mint 100,000,000,000 USDC?</p>
+<h2>Shuffled Committees</h2>
+<figure class="image"><img src="/randomly-sampled-committees-6.jpeg"></figure>
+<p>Fortunately, the solution is simple: we shuffle the validator set before we assign the data chunks.&nbsp;</p>
+<p>Using a <a href="/home/ethereum/network/consensus/randao">random seed</a>, we assign each validator to a committee arbitrarily. A malicious node operator has no way to control which committees his validators are assigned to.</p>
+<p>With enough validators, it's totally possible that an attacker might get lucky and gain temporary control over a single control over a committee. However, this situation is only mathematically realistic if they control &gt;1/3 of all validators (compromising Ethereum PoS).</p>
+<p>As Ethereum continues to build towards a rollup-centric future, it becomes critical to design for increased data requirements of a robust rollup ecosystem. Randomly sampled committees are a step forward in ensuring data is available without crushing the network.</p>
+<h2>Resources</h2>
+<p>Source Material - Twitter Link</p>
+<p>Source Material - PDF</p>

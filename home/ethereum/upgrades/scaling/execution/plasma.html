@@ -1,0 +1,77 @@
+<!--
+title: Plasma
+description: 
+published: true
+date: 2022-12-02T22:13:16.976Z
+tags: 
+editor: undefined
+dateCreated: 2022-12-02T19:42:36.254Z
+-->
+
+<figure class="image"><img src="/plasma-1.jpeg"></figure>
+<h1 style="text-align:center;">Plasma</h1>
+<h2>Prerequisites</h2>
+<h3>Merkle Tree</h3>
+<p>A <a href="https://inevitableeth.com/home/concepts/merkle-tree">Merkle Tree</a> is a data structure used to organize and encrypt huge data sets.&nbsp;</p>
+<p>Merkle Proofs can be used to efficiently verify that data exists in a dataset (confirmation a piece of data exists without transferring the whole dataset).</p>
+<h3>Settlement</h3>
+<p><a href="/home/concepts/settlement">Settlement</a> is the "final step in the transfer of ownership, involving the physical exchange of securities or payment".&nbsp;</p>
+<p>After settlement, the obligations of all the parties have been discharged and the transaction is considered complete. &nbsp;</p>
+<h2>Scaling the World Computer</h2>
+<p>In 2008, Satoshi Nakamoto gave us Bitcoin and introduced the dream.</p>
+<p>In 2015, Vitalik Buterin gave us Ethereum and delivered on that dream: <a href="/home/ethereum/world-computer">the World Computer</a> was born.</p>
+<p>In its early years, the World Computer is painfully slow. Fortunately, we have scaling solutions.</p>
+<h2>Early Scaling</h2>
+<h3>State Channels</h3>
+<p><a href="/home/ethereum/upgrades/scaling/execution/state-channel">Deep Dive: State Channels</a>&nbsp;</p>
+<p>The first category: state channels.</p>
+<p>To open a channel, the participating parties fund a smart contract where the funds are held in on-chain-escrow. The participants can transact off-chain as much as they want. When finished, the smart contract settles channel.</p>
+<p>While state channels are powerful; they have limits.</p>
+<p>The next development in blockchain scaling is a technology called Plasma.&nbsp;</p>
+<h2>Plasma</h2>
+<p>A plasma chain is a separate blockchain anchored to Ethereum but that executes transactions off-chain (with its own <a href="/home/ethereum/network/consensus">consensus system</a>).</p>
+<h3>Deposit</h3>
+<figure class="image"><img src="/plasma-2.jpeg"></figure>
+<p>Users interact with a plasma chain by depositing assets into a smart contract on Ethereum mainnet.&nbsp;</p>
+<p>The plasma operator then mints an equivalent amount of assets on the plasma chain and gives it to the depositor.</p>
+<p>The on-chain assets remain in escrow.</p>
+<h3>Execute</h3>
+<figure class="image"><img src="/plasma-3.jpeg"></figure>
+<p>Because the plasma chain ultimately relies on Ethereum for decentralized property rights, the plasma operator can be much more centralized (often a single entity) resulting in cheap and fast execution.</p>
+<p>The plasma chain is its own blockchain with its own <a href="/home/concepts/virtual-machine">virtual machine</a> and <a href="/home/ethereum/evm/state-machine">state</a>.&nbsp;</p>
+<p>A virtual machine state describes everything within the virtual machine (and therefore blockchain/plasma computer) - every account, every smart contract, and every balance.</p>
+<p>Blockchain computers, including plasma chains, store the state in a (modified) Merkle tree. A Merkle tree can be reduced to a single <a href="/home/concepts/hash">hash</a>.&nbsp;</p>
+<p>A Merkle tree allows the efficient confirmation a piece of data exists without transferring the whole dataset.</p>
+<h3>Commit On-Chain</h3>
+<figure class="image"><img src="/plasma-4.jpeg"></figure>
+<p>Once every interval (15 sec, 1 hour,etc), the plasma operator batches all the txns they have received and generate a Merkle tree for the state of the plasma chain.</p>
+<p>First, the operator posts the Merkle root (the single hash representing the full state of the plasma chain) to mainnet.&nbsp;</p>
+<p>Next, the operator sends the Merkle branch to the current owner of each asset.</p>
+<h3>Withdraw</h3>
+<figure class="image"><img src="/plasma-5.jpeg"></figure>
+<p>To withdraw an asset, the user sends the Merkle branch (proving they own the asset) to the smart contract.&nbsp;</p>
+<p>This begins a withdrawal period.</p>
+<p>During the withdrawal period, anyone can invalidate the withdrawal by submitting a Merkle branch that proves the withdrawer doesn't own the asset.&nbsp;</p>
+<p>If the period passes without any successful challenges, the assets can be withdrawn.</p>
+<h2>Persistent State</h2>
+<p>The biggest difference between state channels and plasma is that plasma supports a persistent state.&nbsp;</p>
+<ul>
+  <li>A new state channel means a new state; when that channel is closed, that state is destroyed.</li>
+  <li>Plasma state exists in its own context, even if users enter and exit.</li>
+</ul>
+<p>Plasma provides much stronger security properties than state channels; a record of your transactions exist on-chain while in operation.&nbsp;</p>
+<p>It also allows users to send assets to participants who are not yet part of the system (state channels require opt-in).</p>
+<h2>Limitations</h2>
+<p>However, Plasma has trade-offs:&nbsp;</p>
+<ul>
+  <li>it requires regular (costly) transactions on mainnet</li>
+  <li>doesn’t support instant withdrawal (must wait for operator to post to mainnet)</li>
+</ul>
+<p>The biggest weakness of plasma is shared with state channels: they both rely on explicit ownership (for example, the plasma must deliver the Merkle branch).&nbsp;</p>
+<p>Each asset must have a logical owner, and if the owner isn't paying enough attention then their asset is vulnerable.</p>
+<p>This is a reasonable trade-off for some applications, but fundamentally cannot support more <a href="https://uniswap.org/">EVM-native applications that don't have an explicit owner</a>.&nbsp;</p>
+<p>Plasma even struggles with applications that can change a balance without a users explicit consent (eg paying interest).</p>
+<p>These factors the main reasons that it is just not possible to build a full EVM environment in a plasma. Therefore, the Ethereum community has taken the learnings from plasma and built something better. Something we call a rollup!</p>
+<h2>Resources</h2>
+<p>Source Material - <a href="https://twitter.com/SalomonCrypto/status/1568779570492637185">Twitter Link</a></p>
+<p>Source Material - <a href="/twitter-pdf-2022-09-11_plasma.pdf">PDF</a></p>

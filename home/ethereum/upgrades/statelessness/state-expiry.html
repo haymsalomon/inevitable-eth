@@ -1,0 +1,81 @@
+<!--
+title: State Expiry
+description: 
+published: true
+date: 2022-12-04T18:10:59.354Z
+tags: 
+editor: undefined
+dateCreated: 2022-12-04T18:10:55.072Z
+-->
+
+<figure class="image"><img src="/state-expiry-1.png"></figure>
+<h1 style="text-align:center;">Ethereum State Expiry</h1>
+<h2>Prerequisites</h2>
+<h3>Ethereum State Machine</h3>
+<p>A <a href="https://inevitableeth.com/home/ethereum/evm/state-machine">state machine</a> is a mathematical model of computation with two major components:&nbsp;</p>
+<ul>
+  <li>the state, the configuration of the system at a moment in time</li>
+  <li>a transaction, the set of instructions to change the state</li>
+</ul>
+<p>The state transition machine model provides a simple framework for breaking down computation into a step-by-step process.</p>
+<h3>Merkle Trees, Merkle Proofs and Merkle Proof Scaling</h3>
+<p>A <a href="https://inevitableeth.com/home/concepts/merkle-tree">Merkle&nbsp;tree</a> is a (tree) data structure in which each leaf node is labeled with the cryptographic hash of a data block, and each non-leaf node is labeled with the cryptographic hash of its child nodes' labels.</p>
+<p>A Merkle proof can be used to efficiently prove that a single piece of data exists in a dataset without transferring the entire dataset.&nbsp;</p>
+<p>Although a Merkle tree still is much more efficient that transferring the entire data set, &nbsp;the <a href="/home/concepts/merkle-tree/scaling">Merkle proofs are getting so large</a> we are running up against the same barriers.&nbsp;</p>
+<h3>State Size Management Theory</h3>
+<p><a href="/home/ethereum/upgrades/statelessness/theory">Vitalik's Theory of Ethereum State Size Management:</a></p>
+<ul>
+  <li>Unbounded growth - state unrelentingly grows over time</li>
+  <li>State expiry - unused state becomes inactive</li>
+  <li>Weak statelessness - block producers need the full state</li>
+  <li>Strong statelessness - no nodes need the full state</li>
+</ul>
+<h2>The World Computer</h2>
+<p>Ethereum, <a href="/home/ethereum/world-computer">the World Computer</a>, exists between a network of 1,000s of computers (<a href="https://inevitableeth.com/home/ethereum/network/node">nodes</a>), each running a local version of the <a href="https://inevitableeth.com/home/ethereum/evm">Ethereum Virtual Machine</a> (EVM).&nbsp;</p>
+<p>The nodes provide the hardware, the EVM provides the virtual computer and the blockchain records Ethereum's history.</p>
+<p>The EVM sits at the center of Ethereum, providing a decentralized computing platform to the world.</p>
+<p>Everything is designed to construct this virtual machine and expose it to the world, so that anyone who is interested can permissionlessly interact with it.</p>
+<p>The internal state of the EVM is stored in a data structure known as a Merkle tree.&nbsp;</p>
+<p>Merkle trees are very powerful, but they are not perfect.&nbsp;</p>
+<p>Specifically, they don't scale efficiently enough for the World Computer.</p>
+<p>Today, the World Computer stores the entire state of the EVM; every account, every entry, all the way back to genesis. For now, that amount of data is acceptable, but without intervention the size of the state will grow to infinity.&nbsp;</p>
+<p>We'll kiss decentralization goodbye.</p>
+<h2>State Expiry</h2>
+<p>Fortunately, the gigabrains developing Ethereum have been thinking ahead for a while now. And so, we have a framework out of which to build potential solutions.</p>
+<p>In particular, we are interested in the concept of state expiry.</p>
+<p>With state expiry, parts of the state default to inactive and must be explicitly renewed.&nbsp;</p>
+<p>While there are many ideas around renewal, we are particularly interested in schemes that refresh via "touching;" simply accessing the state is enough to defer expiry.</p>
+<p>State expiry keeps the size of the EVM's state at a manageable level; nodes will be allowed to offload stale data in order to make room for new objects. Over time, the state size should remain (somewhat) stable, configurable by the scheme we decide to implement.&nbsp;</p>
+<p>In any (good) state expiry scheme also has a method to revive expired/inactive parts of the EVM state.&nbsp;</p>
+<p>Think of it this way: each node holds the last X days of state, if you want to access further back, you must provide proof it existed in the state &gt;X days ago.&nbsp;</p>
+<h2>A State Expiry Proposal</h2>
+<figure class="image"><img src="/state-expiry-2.jpeg"></figure>
+<p><a href="https://ethresear.ch/t/resurrection-conflict-minimized-state-bounding-take-2/8739">Here's the state expiry scheme we are interested in</a>. &nbsp;</p>
+<p>Each period (~1 year) Ethereum will archive the current state tree and will initialize a new state tree.&nbsp;</p>
+<p>Archived trees cannot be modified; any changes to objects require first copying them over to the new state tree.&nbsp;</p>
+<p>Each node is required to hold a certain number of archived trees (proposal: 1 archive tree plus active tree).&nbsp;</p>
+<p>When a period ends, a node is free to release older trees.&nbsp;</p>
+<p>Thus, the EVM state size remains manageable; at most it will be two full trees covering 1 period each.&nbsp;</p>
+<h3>Recovering Expired Data</h3>
+<p>While nodes (can) release the older archive trees, they keep the Merkle root in perpetuity (this is a single string, does not introduce scaling issues).&nbsp;</p>
+<p>Reviving a piece of the inactive state is as simple as providing the Merkle proof for that old state.&nbsp;</p>
+<p>Ok in reality it's not quite so simple, but it's still straightforward. The section below basically says "if the state is active, modify it. If it's inactive, you have to prove that it was part of the state, is now inactive, and was not accessed between now and then."&nbsp;</p>
+<figure class="image"><img src="/state-expiry-3.png"></figure>
+<h2>Revisiting Statelessness</h2>
+<p>Interestingly, this state expiry scheme reframes our conception of statelessness.&nbsp;</p>
+<p>At the network level, this isn't stateless as nodes still need to hold the most recent state, but for objects older than "most recent," we can access the state solely via Merkle proofs.&nbsp;</p>
+<p>Let's say we follow the proposal and allow nodes to release archive trees that are older than 1 period.&nbsp;</p>
+<p>Well, some node operators might choose to store a few extra, just to optimize proof generation. And we could create state-archive-nodes which hold every tree.&nbsp;</p>
+<p>We can also go in the opposite direction. Again, assume the proposal's rule of 1 archive tree. Theres no reason you MUST access the state through the tree; you could verify using only Merkle proofs.&nbsp;</p>
+<p>Then the question becomes, why hold any of the trees at all?&nbsp;</p>
+<p>What's interesting about state expiry schemes is that they offer a way for different nodes to access different levels of statelessness based on their specific needs.&nbsp;</p>
+<p><a href="/home/concepts/gas">Gas</a> costs (and the like) will be optimized for 1 archive tree, but the choice is the node operator's.&nbsp;</p>
+<h2>State Expiry and Ethereum</h2>
+<p>State expiry is a very exciting and important area of Ethereum research. Bottom line, we are going to need to implement some sort of scheme.&nbsp;</p>
+<p>But thing's aren't quite so easy. Picking a scheme is one thing, implementing it is a whole other animal.&nbsp;</p>
+<p>We are talking about changing the data structures that hold the state of the EVM, the molten core of Ethereum.&nbsp;</p>
+<p>It cannot be overstated how delicate and high stakes a task this will be.&nbsp;</p>
+<p>Fortunately, we have some experience with <a href="https://ethereum.org/en/upgrades/merge/">these kinds of things</a>.</p>
+<h2>Resources</h2>
+<p>Source Material - <a href="https://twitter.com/SalomonCrypto/status/1588302097413332992">Twitter Link</a></p>
+<p>Source Material - <a href="/twitter-pdf-2022-11-03_state_expiry.pdf">PDF</a></p>

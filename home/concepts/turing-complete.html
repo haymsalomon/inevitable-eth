@@ -1,0 +1,83 @@
+<!--
+title: Turing Completeness
+description: 
+published: true
+date: 2022-11-27T00:36:27.372Z
+tags: 
+editor: undefined
+dateCreated: 2022-11-27T00:35:13.340Z
+-->
+
+<figure class="image"><img src="/turing-complete-banner.jpeg">
+  <figcaption><a href="https://hasanzadakhadija7.medium.com/what-is-the-turing-machine-a798cbc0eddd">source</a></figcaption>
+</figure>
+<h1 style="text-align:center;">Turing Machines and Turing-Completeness</h1>
+<p>To understand The World Computer you have to understand the Proto-Computer: <a href="https://www.youtube.com/watch?v=-ZS_zFg4w5k">The Turing Machine</a>.</p>
+<p>Invented by Alan Turing in the 1930s who named it an "A-machine," a Turing machine is an (abstract) model of computation.&nbsp;</p>
+<h2>Turing-Machine</h2>
+<p>The concept is built around a simple hypothetical machine. It contains 3 key components:&nbsp;</p>
+<ul>
+  <li>The tape, representing memory</li>
+  <li>The head, keeping track of the machine position</li>
+  <li>The instructions, telling the machine how to process the data.</li>
+</ul>
+<p>The instructions are a set of conditions and associated operations. There are 3 possible operations:&nbsp;</p>
+<ul>
+  <li>Read the symbol under the head</li>
+  <li>Edit (write and/or erase) the symbol under the head</li>
+  <li>Move left or right one square</li>
+</ul>
+<h2>A Simple Example</h2>
+<p>A Turing machine might look like this. While we are going to stick to 0s and 1s, a Turing machine can process any letters, numbers or symbols.&nbsp;</p>
+<h3>Head, Tape &amp; Instructions</h3>
+<figure class="image"><img src="/turing-complete-example-1.png"></figure>
+<p>Our goal is to switch the 1s to 0s and vice versa. Let's construct a set of steps to achieve this flip:</p>
+<ol>
+  <li>Read the tape and see if it is 1 or a 0</li>
+  <li>Write the new symbol</li>
+  <li>Move to the next number</li>
+</ol>
+<p>Congratulations! We've created our first instruction.</p>
+<figure class="image"><img src="/turing-complete-example-2.png"></figure>
+<h3>Machine State</h3>
+<p>If we run our instruction two more times, we'll find ourselves at a blank space. Our Turing machine will follow our instruction and wait endlessly.&nbsp;</p>
+<figure class="image"><img src="/turing-complete-example-3.png"></figure>
+<p>At this point we have to introduce the final concept required for a Turning machine: the machine state. The machine state is an additional field the Turing machine uses that allows it to take different actions based on previous actions.&nbsp;</p>
+<figure class="image"><img src="/turing-complete-example-4.jpeg"></figure>
+<p>Now that the Turing machine can understand state, it can make decisions based on the context of the data on the tape.&nbsp;</p>
+<h3>Implementing Inversion</h3>
+<p>In the example above, we introduced a state that instructs the machine to halt; but we can use the concept to begin to implement more complex functionality.</p>
+<p>Consider this Turing Machine instruction set.&nbsp;</p>
+<figure class="image"><img src="/turing-complete-example-5.png"></figure>
+<p>In state 0, the head moves right inverting each symbol.&nbsp;</p>
+<p>When it reaches an empty space, it will move to state 1.&nbsp;</p>
+<p>In state 1, the head moves left and once again inverts the symbols.&nbsp;</p>
+<p>At an empty space the program ends.</p>
+<h2>Turing-Completeness</h2>
+<p>This the end of our example, which is a little silly. All it does it invert the number back and forth, ending in the original state. But with the introduction of more states to our program, we can instruct the Turing machine to perform more complex functions.&nbsp;</p>
+<p>In fact, with enough states and a detailed enough instruction set, a Turing machine is capable of ANY computation a modern computer can do.&nbsp;</p>
+<p>Take a look at your Macbook. If you can do something on that computer, you can (theoretically) do it on a Turing machine.&nbsp;</p>
+<p>In computability theory, Turing-completeness is a designation that describes a system with formal and specific requirements. For now we are going to keep things high level. Let's use this definition:&nbsp;</p>
+<p>A system is Turing-Complete if it can simulate a Turing machine.&nbsp;</p>
+<p>Over the last century, Turing, Church and the giants who've built on their work have mathematically proven that if you can simulate a Turing machine on a computational system, you can also simulate that system on a Turing machine.&nbsp;</p>
+<p>Put simply, if a system is Turing-complete it is capable of anything that any other Turing-complete system can do.&nbsp;</p>
+<h2>Ethereum and Turing-Completeness</h2>
+<p>Here are two pieces of information:&nbsp;</p>
+<ul>
+  <li>most modern programming languages are Turing-complete</li>
+  <li>Solidity is Turing-complete</li>
+</ul>
+<p>Turing-completeness allows us to say with mathematical certainty that Ethereum is capable of anything that your computer can do.&nbsp;</p>
+<p>Ethereum is the World Computer, crypto is programmable money, De-Fi is possible...&nbsp;</p>
+<p>...because solidity is Turing-complete!&nbsp;</p>
+<p>I can already hear the peanut gallery:&nbsp;</p>
+<ul>
+  <li>"30 transactions per second???"</li>
+  <li>"Have you seen gas fees???"</li>
+  <li>"Have you tried [other blockchain]???"</li>
+</ul>
+<p>Go back and ask Dr. Turing what his contemporaries said about computing. I bet he'd have the same answer: "We are still building."&nbsp;</p>
+<p>A new type of computer is being born.</p>
+<h2>Resources</h2>
+<p>Source Material - <a href="https://twitter.com/SalomonCrypto/status/1543571618298880002">Tweet Link</a></p>
+<p>Source Material - <a href="/twitter-pdf-2022-07-03_turing-completeness.pdf">PDF</a></p>

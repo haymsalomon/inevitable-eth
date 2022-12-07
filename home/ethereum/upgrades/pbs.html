@@ -1,0 +1,111 @@
+<!--
+title: Proposer-Builder Separation
+description: 
+published: true
+date: 2022-12-04T23:47:49.472Z
+tags: 
+editor: undefined
+dateCreated: 2022-12-03T20:17:14.955Z
+-->
+
+<figure class="image"><img src="/pbs-1.jpeg"></figure>
+<h1 style="text-align:center;">Proposer-Builder Separation</h1>
+<h2>The World Computer</h2>
+<p>Ethereum exists between a network of 1,000s of computers (<a href="https://inevitableeth.com/home/ethereum/network/node">nodes</a>), each running a local version of the <a href="https://inevitableeth.com/home/ethereum/evm">Ethereum Virtual Machine</a> (EVM). All copies of the EVM are kept perfectly in sync.&nbsp;</p>
+<p>Any individual EVM is a window into the shared state of the <a href="https://inevitableeth.com/home/ethereum/world-computer">World Computer</a>.</p>
+<p>Anyone can access the World Computer by submitting a <a href="/home/ethereum/blockchain/block">transaction</a> to the network.</p>
+<p>Holistically, an Ethereum transaction is an instruction for the World Computer. Transactions are irreversible and atomic (they execute completely or they fail).</p>
+<p>To use the World Computer, users create a transaction and sends it to the mempool.</p>
+<h2>The Mempool</h2>
+<p>The mempool is a public database of pending transactions, each with their own instructions for the World Computer.</p>
+<p>In order to build a new block and progress the blockchain (and therefore the World Computer), Ethereum nodes select pending transactions from the mempool.</p>
+<p>This method has important benefits (decentralized, transparent, censorship resistant, etc) but also a critical weakness: the public nature of the mempool.&nbsp;</p>
+<p>From this setup comes the existential risk of crypto: MEV.</p>
+<h2>MEV</h2>
+<figure class="image"><img src="/pbs-2.jpeg"></figure>
+<p><a href="/home/concepts/mev/example">Deep Dive: MEV</a></p>
+<p>In November 2020, <a href="https://twitter.com/thegostep">Stephane Gosselin</a> posted "<a href="https://ethresear.ch/t/flashbots-frontrunning-the-mev-crisis/8251">Flashbots: Frontrunning the MEV crisis</a>" and introduced the community to Maximum Extractable Value (MEV).</p>
+<p>In its most basic incarnation, MEV is a form of <a href="/home/concepts/arbitrage">arbitrage</a>.</p>
+<p>Imagine a bot that is closely watching the mempool for pending transactions. Suddenly, a pending transaction with a HUGEEEE ETH market buy appears.</p>
+<p>The bot, knowing the pending transaction will raise the price of ETH, quickly buys ETH, waits for the transaction and then immediately sells it.</p>
+<p>The result:&nbsp;</p>
+<ul>
+  <li>MEV bot - bought before a huge txn drove up the price of ETH and sold immediately after, locking in a profit.</li>
+  <li>Whale - revealed his hand early and had to buy ETH at a higher price because of the MEV bot.</li>
+</ul>
+<p>The bot extracted value from the whale.</p>
+<p>This example is perhaps the most basic type of MEV; from here, things get exotic very quickly. While MEV is a very diverse category, there is a common through line: <a href="/home/concepts/mev">MEV is the value that can be captured by a participant with privileged knowledge or access to a system</a>.</p>
+<h2>Privileged Access in Ethereum</h2>
+<p>In the example above, that includes the detailed knowledge of the mempool and the ability to manipulate the order of transactions. The bot uses these levers to extract value.&nbsp;</p>
+<p>But what if you didn't need these indirect levers?&nbsp;</p>
+<p>What if you could just build the block yourself?</p>
+<p>An Ethereum node is a computer responsible for operating the World Computer and progressing the blockchain. (<a href="/home/ethereum/network/consensus/pos">Under Proof of Stake</a>) the blockchain progresses when a block proposer (selected randomly) submits a new block to the network</p>
+<p>First they need to build that block.</p>
+<h2>Implications of Being a Block Builder</h2>
+<p><a href="/home/concepts/gas">Deep Dive: Ethereum Gas</a></p>
+<p>The naive approach to block building is to scan the mempool for the transactions with the highest priority fees. Each transaction is picked in descending order until the block is filled up.&nbsp;</p>
+<p>A less naive node might notice some opportunities as its building.</p>
+<p>Remember our huge ETH buy?&nbsp;</p>
+<p>Maybe no one noticed and so as it's building a block, the node can slip in a transaction to capture the arbitrage.&nbsp;</p>
+<p>Or maybe some did notice and submitted the arbitrage transaction and the node might just decide to ignore that transaction and put their own in.</p>
+<p>Nodes do not have to respect the mempool when they are building blocks; each one is able to select transactions as it sees fit. Some nodes are going to build baseline-blocks, other nodes are going to play more aggressive.&nbsp;</p>
+<p>A few will be WAYYY better than anyone else.</p>
+<h2>The Risk of Centralization</h2>
+<p>Consider the implications of being better at building blocks.&nbsp;</p>
+<p>Lets imagine 2 nodes: naive builder (NB) and MEV builder (MB).</p>
+<ul>
+  <li>NB and MB will have the same costs &amp; opportunity to build blocks</li>
+  <li>MB will earn more yield than NB</li>
+  <li>MB's stake will grow faster than NB's stake</li>
+</ul>
+<p>As of September 2022, Ethereum is a Proof of Stake chain. What does it mean to have a Proof of Stake chain where some nodes (can) earn more than others?&nbsp;</p>
+<p>Centralization is inevitable.</p>
+<p>Centralization is the anathema of Ethereum. The World Computer is built on a single core principle: decentralization.</p>
+<p>From decentralization flows <a href="/home/concepts/credible-neutrality">credible neutrality</a>.</p>
+<p>From credible neutrality comes global dominance.</p>
+<h2>Salvation through Specialization</h2>
+<h3>Ethereum Block Structure</h3>
+<figure class="image"><img src="/pbs-6.jpeg"></figure>
+<p><a href="/home/ethereum/blockchain/block">Deep Dive: Ethereum Block</a></p>
+<p>This is what an Ethereum block looks like. At the highest level, it can be thought of as having 3 sections: admin, consensus and execution.</p>
+<p>A node must propose a new block with all 3 parts... but there's no reason the node must build the whole block.</p>
+<h3>Separating the Builder and Proposer</h3>
+<p>The team at Flashbots gave us a vision: highly specialized block builders. Each one will be a well resourced expert, finding MEV as aggressively as possible.&nbsp;</p>
+<p>They will compete to build the most attractive blocks in the hopes that the next proposing node picks their bundle</p>
+<h4>Phase 1 - mev-geth - COMPLETED</h4>
+<p>mev-geth was an Ethereum mining client; this is the software that produces blocks for Proof of Work.</p>
+<p>While mev-geth still looks to the mempool for pending transactions, and still orders them by priority fee, it also has a new option.</p>
+<p>mev-geth can accept a Bundle from a Searcher.</p>
+<p>A bundle is a group of pending transactions that are executed all at once or not at all.&nbsp;</p>
+<p>A searcher is a 3rd party MEV expert. They compete with each other to find MEV in the mempool and build the bundle with the most potential MEV.&nbsp;</p>
+<p>This becomes that bundle's budget that miners can use for priority fees and bid to be included in the next block.</p>
+<p>Searchers compete via auction for mev-geth to include their bundle into the blockchain.&nbsp;</p>
+<p>A portion of what was once MEV has been transformed from extracted value into fees for a miner.&nbsp;</p>
+<p>Miners don’t extract from the network — they are the network!</p>
+<p>The searchers are also better off than their predecessors. Before, executing a MEV operation was a risky business. If you mis-price your priority fee or are interrupted by another MEVer, you can turn a small potential profit profit into a nightmare.&nbsp;</p>
+<p>Bundles are atomic.</p>
+<h3>Phase 2 - mev-boost - In Progress</h3>
+<figure class="image"><img src="/mev-boost-1.jpeg"></figure>
+<p><a href="/home/ethereum/upgrades/pbs/mev-boost">Deep Dive: mev-boost</a></p>
+<p>They say “v2 is always what the founder originally had in mind.”&nbsp;</p>
+<p><a href="https://writings.flashbots.net/why-run-mevboost/">mev-boost</a> is a middleware in which validators can sell their blockspace to not just Flashbots, but to other builders as well.&nbsp;<br><br>mev-boost opens up the market to more builders and creates competition between them, leading to more revenue and choice for validators, and better censorship-resistance for Ethereum.&nbsp;</p>
+<p>With this two sided marketplace, any node can access mev-boost for extra MEV yield and any block builders can submit bundles.</p>
+<p>mev-boost is a huge step towards solving the problem, but it still has some explicit trust assumptions (in particular, mev-boost requires a trusted relayer to facilitate the blind auction between builders and validators).</p>
+<h3>Phase 3 - Enshrined Proposer-Builder Separation - In Development</h3>
+<p>The endgame of Flashbots is to fold itself directly into Ethereum.&nbsp;</p>
+<p>mev-boost is a piece of additional software that bolts PBS on top of Ethereum, but the long term plan is to enshrine it into the World Computer by building it into the core protocol specs.</p>
+<p>Through future EIP, we will be able to remove the need for a centralized relayer by enabling Ethereum to facilitate these auctions directly.&nbsp;</p>
+<p>Block builders place headers and bids, validators pick the best one, everything is published and settled trustlessly.</p>
+<h2>Other Implications of PBS</h2>
+<p>The concept of proposer-builder separation came from the work around MEV, but we've already come to realize that a trustless implementation will have application outside of MEV.</p>
+<p>As of today, the most important implication of protocol-enshrined PBS is that it enables <a href="/home/ethereum/upgrades/scaling/data">Danksharding</a>.&nbsp;</p>
+<p>Danksharding is an upgrade that is still in the very early stages, but once deployed will increase the <a href="/home/ethereum/upgrades/scaling/data/data-availability-bottleneck">data capacity</a> (<a href="/home/ethereum/upgrades/scaling/execution">especially for rollups</a>) of Ethereum by orders of magnitude.</p>
+<h2>Ethereum Endgame</h2>
+<figure class="image"><img src="/pbs-5.jpeg">
+  <figcaption><a href="https://vitalik.ca/general/2021/12/06/endgame.html"><i>source</i></a></figcaption>
+</figure>
+<p>We are charting a course towards a decentralized Ethereum that has centralized block production; a cutthroat game of MEV transformed into fair access for all nodes.</p>
+<p><a href="https://vitalik.ca/general/2021/12/06/endgame.html">This is Vitalik Buterin's Ethereum Endgame</a>.</p>
+<h2>Resources</h2>
+<p>Source Material - <a href="https://twitter.com/SalomonCrypto/status/1570557757190983680">Twitter Link</a></p>
+<p>Source Material - <a href="/twitter-pdf-2022-09-15_pbs.pdf">PDF</a></p>

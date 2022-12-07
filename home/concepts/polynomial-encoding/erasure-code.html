@@ -1,0 +1,75 @@
+<!--
+title: Polynomial Erasure Codes
+description: 
+published: true
+date: 2022-12-03T16:05:20.776Z
+tags: 
+editor: undefined
+dateCreated: 2022-12-03T16:02:14.236Z
+-->
+
+<figure class="image"><img src="/polynomial-erasure-code-1.jpeg"></figure>
+<h1 style="text-align:center;">Polynomial Erasure Codes</h1>
+<h2>Prerequisites</h2>
+<h3>Polynomials</h3>
+<p>Quick Refresher on polynomials</p>
+<figure class="image"><img src="/polynomial-erasure-code-2.png"></figure>
+<h3>Polynomial Encoding</h3>
+<p>It is possible to <a href="https://inevitableeth.com/home/concepts/polynomial-encoding">represent an arbitrary set of data as a polynomial</a>; you can (relatively) quickly and easily find the equation of said polynomial through a process known as the <a href="https://en.wikipedia.org/wiki/Lagrange_polynomial">Lagrange Interpolation</a>.</p>
+<p>Data → polynomial → data</p>
+<p>Data = polynomial</p>
+<h2>Encoding into a Polynomial</h2>
+<p>Encoding is the process of mapping one set of symbols (usually human readable, like letters/words) to another (usually machine readable, like numbers/math).&nbsp;</p>
+<p>One purpose of encoding is to translate data, another is to provide additional functionality.&nbsp;</p>
+<p>Polynomial encoding is a specific type of encoding that packages arbitrary data into a mathematical function know as a polynomial. Tl;dr the dataset and the polynomial convey the same underlying data, albeit expressed as a function (as opposed to a list of data points).&nbsp;</p>
+<p>Polynomial encoding is incredibly powerful, we’ve already seen how they can underpin a cryptographic commitment scheme. But that’s just the tip of the iceberg.&nbsp;</p>
+<p>Polynomials give us so much more functionality than binding datasets.&nbsp;</p>
+<h2>The Number of Terms</h2>
+<p>If you’ve been paying close enough attention, you may have noticed a pattern: when we have n data points, our polynomial always seems to have at most n terms (or maybe you’ve notice that the highest exponent is always n - 1). Let’s expand on that.&nbsp;</p>
+<p>A polynomial is an expression made up of the addition/subtraction of terms. Terms are made up of a variable, raised to some power, times a constant (coefficient). The degree of the polynomial is the highest exponent.&nbsp;</p>
+<ul>
+  <li>Degree of x<sup>2</sup>+x-5 is 2&nbsp;</li>
+  <li>Degree of 4x<sup>5</sup>-6x<sup>2</sup>+6 is 5&nbsp;</li>
+</ul>
+<p>So rewind back to polynomial encoding. It turns out that in order to generate a line that passes through n data points, the associated polynomial will have (at most) degree n-1.&nbsp;</p>
+<p>Encoding 10 datapoints? We’re (probably) going to need a polynomial that has a term with x^9.&nbsp;</p>
+<h2>Generating New Terms</h2>
+<figure class="image"><img src="/polynomial-erasure-code-3.jpeg"></figure>
+<p>We can also use this principle in reverse: to recreate a polynomial of degree n-1, we need (at least) n points that fall on that line.&nbsp;</p>
+<p>And remember, a polynomial is a formula that can generate an infinite amount of outputs - part of the original dataset or brand new.&nbsp;</p>
+<p>If our original dataset is n pieces, we need a polynomial of degree n-1... but we can grab more points from that same line. Now, we have more than n points; if one or two get lost or corrupted, we still have more than enough points to reconstruct our polynomial.&nbsp;</p>
+<p>This is the key insight we are going to build an error-correcting code from.&nbsp;</p>
+<h2>Error-Detecting Codes</h2>
+<figure class="image"><img src="/polynomial-erasure-code-4.jpeg"></figure>
+<p>Error-correcting codes are a family of encoding that add some additional information to a dataset that allows the recovery of the original data, even if some of the pieces were lost. After we create our data polynomial, we are going to use it to generate additional points along the same line.&nbsp;</p>
+<p>These additional points convey enough extra information that we can reconstruct the underlying polynomial and use it to double check all the points.&nbsp;</p>
+<p>Recipe for a polynomial error-correcting scheme:&nbsp;</p>
+<ul>
+  <li>Take the original data set of length n and generate a polynomial.&nbsp;</li>
+  <li>Use the polynomial to find k extra points.&nbsp;</li>
+  <li>Append the extra points on to the original data.&nbsp;</li>
+</ul>
+<p>We can now detect up to k errors in our code.&nbsp;</p>
+<h2>Error-Correcting Codes</h2>
+<figure class="image"><img src="/polynomial-erasure-code-5.png"></figure>
+<p>In fact, polynomial error-detection is so powerful that we can use it for more than just detection. Polynomial encoding can be used for data correction!&nbsp;</p>
+<p>All we need to do is figure out which points fall off the line and move them to where they need to be.&nbsp;</p>
+<p>At this point, you understand the important parts:&nbsp;</p>
+<ul>
+  <li>any arbitrary data can be plotted&nbsp;</li>
+  <li>you can generate a unique polynomial for that data&nbsp;</li>
+  <li>this polynomial can find extra points&nbsp;</li>
+  <li>these extra points are used to confirm the original data&nbsp;</li>
+</ul>
+<h2>Erasure Codes</h2>
+<p>There's one more application of polynomial error-schemes: erasure codes.&nbsp;</p>
+<p>We begin with all the same steps as before: build the polynomial, generate the extra data. The only difference is that instead of looking for errors, we are just interested in recovery.&nbsp;</p>
+<p>Let's take a look at <a href="https://en.wikipedia.org/wiki/Reed%E2%80%93Solomon_error_correction">Reed-Solomon codes</a>. This encoding scheme can be deployed for error detection, correction, or as an erasure code. When deployed as an erasure code, for every k pieces of additional data, it can recover up to k lost pieces.</p>
+<p>Fun fact, almost all two-dimensional bar codes (including QR codes) use Reed-Solomon encoding.&nbsp;</p>
+<p>That's right, the same technology that powers QR codes is (spoiler alert) at the very core of Danksharding.&nbsp;</p>
+<p>It's math the COOLEST?!?!&nbsp;</p>
+<p>Remember, this all falls back on the principle we discussed earlier: to recreate a polynomial of degree n-1, we need (at least) n points that fall on that line. The extra points provided by the Reed-Solomon code make sure there are always more than n available points.&nbsp;</p>
+<p>Alright anon, you've got it: polynomial erasure coding transforms data into a polynomial and adds more data to ensure the data is recoverable from just a subset!</p>
+<h2>Resources</h2>
+<p>Source Material - <a href="https://twitter.com/SalomonCrypto/status/1584212843938734081">Twitter Link</a></p>
+<p>Source Material - <a href="/twitter-pdf-2022-10-23_polynomial_erasure_code.pdf">PDF</a></p>

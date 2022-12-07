@@ -1,0 +1,93 @@
+<!--
+title: Comparing PoW and PoS
+description: 
+published: true
+date: 2022-12-01T04:48:15.472Z
+tags: 
+editor: undefined
+dateCreated: 2022-12-01T04:48:11.271Z
+-->
+
+<figure class="image"><img src="/pow-vs-pos-banner.png">
+  <figcaption><a href="https://bitpay.com/blog/proof-of-work-vs-proof-of-stake/"><i>source</i></a></figcaption>
+</figure>
+<h1 style="text-align:center;">Proof of Work vs Proof of Stake</h1>
+<h2>Preface</h2>
+<p>The following thread is a summary of a <a href="https://vitalik.ca/general/2020/11/06/pos2020.html">November 2020 blog post by Vitalik</a>.&nbsp;</p>
+<p>Although 2 years is an entirety in crypto-years, the arguments still represent the best argument why Proof of Stake (PoS) &gt; Proof of Work (PoW) I have seen (so far).</p>
+<h2>PoS is superior than PoW</h2>
+<p>3 Reasons why PoS &gt; PoW:&nbsp;</p>
+<h2>PoS Offers More Security for the Same Cost&nbsp;</h2>
+<p>Quick, back-of-napkin calculations can clearly illustrate the principle. We are going to evaluate the amount it would cost to attack a network who issues $1 of rewards per day.</p>
+<p>PoW comes in two flavors: vanilla or ASIC-resistant.&nbsp;</p>
+<p>Vanilla PoW is a simple algorithm; you can build specialized machines that are only capable of solving that puzzle (Application Specific Integrated Circuit - ASIC). ASIC-resistant PoW requires a general purpose GPU.</p>
+<h3>GPU-based PoW</h3>
+<figure class="image"><img src="/pow-vs-pos-1.jpeg"></figure>
+<p>Attack method: rent GPUs to out-mine the existing miners; control the chain long enough to make changes.&nbsp;</p>
+<p>Projected cost: ~$0.25</p>
+<h3>ASIC-based PoW&nbsp;</h3>
+<figure class="image"><img src="/pow-vs-pos-2.jpeg"></figure>
+<p>Attack method: buy enough ASICs to produce enough mining power to control the chain&nbsp;</p>
+<p>Projected cost: ~$500</p>
+<h3>Proof of Stake (PoS)</h3>
+<figure class="image"><img src="/pow-vs-pos-3.jpeg"></figure>
+<p>Attack method: provide enough stake to control enough validators to control the network.</p>
+<p>Projected cost (2020): ~$2200</p>
+<p>If you update the calculation with today's $ETH staking rate (~5%):</p>
+<p>Projected cost (2022): ~$6600</p>
+<h3>Electricity Implications</h3>
+<p>Thus, PoS gives us AT LEAST an order of magnitude improvement over PoW.</p>
+<p>Whats more, the only "cost" PoS imposes is the temporary loss of liquidity (addressed via liquid staking derivatives like stETH).</p>
+<p>In PoW, the cost is wasting an ABSURD amount of electricity.</p>
+<figure class="image"><img src="/pow-vs-pos-4.jpeg">
+  <figcaption><a href="https://flowingdata.com/2021/09/07/bitcoin-power-usage/"><i>source</i></a></figcaption>
+</figure>
+<h2>Attacks are Much Easier to Recover from in PoS</h2>
+<p>PoW is incredibly difficult to attack, but if the attack is able to gain control the network, it is (probably) entirely at the attackers mercy.</p>
+<p>PoS gives Ethereum options.</p>
+<h3>PoW Recovery</h3>
+<figure class="image"><img src="/pow-vs-pos-5.jpeg"></figure>
+<p>If PoW gets 51% attacked, PoW doesn't have the ability to react; the nature of PoW does not allow good-faith nodes to exclude bad-faith nodes.&nbsp;</p>
+<p>(At least as of 2020) the PoW solution to a 51% is "wait until the attacker is done."&nbsp;</p>
+<p>But what if they are never done?</p>
+<p>An ASIC-based system has a response available: they can deploy a hard fork and change the PoW algorithm, rendering the application-specific ASICs useless. The chain would revert to the GPU case while the community tried to design, manufacture and distribute new ASICs.</p>
+<p>The GPU case is even bleaker; there's really nothing you can do. If an attacker can gain control for even short time (a few days), most honest miners will drop out. Why bother mining if you aren't earning any block rewards?</p>
+<p>Don't be fooled, PoW is strong; the issue is that once attacked, its vulnerable.&nbsp;</p>
+<p>Even a small initial attack could permanently destroy the chain.&nbsp;</p>
+<p>On the other hand, PoS provides a suite of tools that allows the network to continually extract huge costs from attackers.</p>
+<h3>PoS Recovery</h3>
+<p>For some attacks (invalid blocks, reverting finalized blocks, etc) there is a built-in defense: slashing.&nbsp;</p>
+<p>Slashing is the process by which an attacker's (and no one else's) stake is automatically destroyed. Slashing also removes the attacker from the validator set.</p>
+<p>PoS empowers the community to take further action if slashing is insufficient for warding off an attack.&nbsp;</p>
+<p>The first line of defense it to activate a minority user-activated soft fork (UASF) and to trigger an inactivity leak.</p>
+<h4>Inactivity Leak</h4>
+<figure class="image"><img src="/pow-vs-pos-6.jpeg"></figure>
+<p>The inactivity leak is an emergency state that allows the Ethereum network to recover finality in the event that more than 1/3 of validators go offline.&nbsp;</p>
+<p>This mechanism would largely destroy the attackers funds.</p>
+<p>The beauty of the UASF defense is that no explicit "hard fork to delete coins" is required.&nbsp;</p>
+<p>Once the community has coordinated around a UASF block, the protocol takes care of the rest.</p>
+<p>So not only does PoS provide more economic security and more tools to defend Ethereum, it can redeploy them over and over.</p>
+<p>The first attack will burn billions... as will the second... as will every single attack.</p>
+<p>And each time Ethereum will automatically recover.</p>
+<h2>PoS is more Decentralized than ASICs</h2>
+<p>By this point we've recognized that GPU-based PoW isn't sufficiently secure; at least ASICs provide a reasonable amount of security.</p>
+<p>Unfortunately, ASIC-based PoW is inherently centralizing.</p>
+<p>PoW derives its security from the operation of real computers (ASICs) consuming real electricity. Just like everything else in the real world, PoW is affected by the realities of economies of scale.&nbsp;</p>
+<p>More mining = cheaper costs = more profits = more mining</p>
+<p>Economies of scale are the economic principle behind the idea of "the rich get richer." If costs are inversely proportionally to revenue, capital will eventually accrue to the largest and most competitive producers.&nbsp;</p>
+<p>The logical conclusion: monopoly.</p>
+<p>In PoS, every staked $ETH earns the same yield REGARDLESS of how much is at stake</p>
+<p>Bob's stake is growing at the same rate as Lido Finance, even though Lido is running 115k validators and Bob is running just one.</p>
+<p>The rich aren't getting rich any faster than the little guy</p>
+<h2>Counter Argument</h2>
+<p>The best argument against PoS is about weak subjectivity.</p>
+<p>Unlike PoW, a newly-online PoS node must find a third party source to determine the correct head of the chain.</p>
+<p>However, PoW does require some implicit trust (eg developers). So, let's just call it a wash.</p>
+<h2>End of Discussion</h2>
+<p>Just under 2 years ago, Vitalik laid out the core argument for Ethereum Proof of Stake, long before we were confident that PoS would ever become a reality.</p>
+<p>We are now in a post-Merge world; the deed is done!</p>
+<p>Case closed.</p>
+<h2>Resources</h2>
+<p>Source Material - <a href="https://twitter.com/SalomonCrypto/status/1578941538607845376">Twitter Link</a></p>
+<p>Source Material - <a href="/twitter-pdf-2022-10-09_pow_vs_pos.pdf">PDF</a></p>
+<p>&nbsp;</p>

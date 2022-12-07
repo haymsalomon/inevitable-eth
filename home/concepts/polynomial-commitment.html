@@ -1,0 +1,56 @@
+<!--
+title: Polynomial Commitments
+description: 
+published: true
+date: 2022-11-30T22:22:13.506Z
+tags: 
+editor: undefined
+dateCreated: 2022-11-30T22:22:09.512Z
+-->
+
+<figure class="image"><img src="/polynomial-commitments-1.jpeg"></figure>
+<h1 style="text-align:center;">Polynomial Commitments</h1>
+<h2>Prerequisites</h2>
+<h3>Hashing</h3>
+<p>Applying a <a href="https://inevitableeth.com/home/concepts/hash">hash function</a> takes data (of arbitrary contents and size) and reduces it to a unique, compact string.&nbsp;</p>
+<p>Every input produces a unique output, even if two inputs are nearly identical.</p>
+<h3>Polynomial Encoding</h3>
+<p>It is possible to <a href="/home/concepts/polynomial-encoding">represent an arbitrary set of data as a polynomial</a>; you can (relatively) quickly and easily find the equation of said polynomial through a process known as the <a href="https://en.wikipedia.org/wiki/Lagrange_polynomial">Lagrange Interpolation</a>.</p>
+<p>Data → polynomial → data</p>
+<p>Data = polynomial</p>
+<h2>Public Assurance</h2>
+<p>Let's say you have a large amount of data that, for whatever reason, is private. How can you provide a public audience assurance that you will not alter the data without allowing them to see it?</p>
+<p>The naïve option just doesn't work; we cannot just reveal all the data and allow people to publicly verify that no changes are happening.&nbsp;</p>
+<p>We need to find a way to provide a unique fingerprint of that specific set of data to act as a signature.</p>
+<h2>Hash-based Fingerprinting</h2>
+<p>Hash functions are a great candidate for this kind of job: a hash function irreversibly transforms an arbitrary amount of data into a unique string of uniform length. Even a single-digit change will result in an entirely new hash.&nbsp;</p>
+<p>So, maybe a hash-based solution?</p>
+<p>The problem with hash functions is that the process of creating a function's unique fingerprint necessarily destroys all other information. For example, you cannot verify if a particular piece of data was in the data set using a hash; it's all or nothing.&nbsp;</p>
+<p>Once generated, a hash acts as a unique identifier, a pseudo-random string of data, and not much more.</p>
+<p>So, we must look for alternative schemes.</p>
+<h2>Polynomial Fingerprints</h2>
+<p>I encourage you to review <a href="/home/concepts/polynomial-encoding">polynomial encoding</a>.&nbsp;</p>
+<p>Let's transform our database into a polynomial, which we will refer to as f(x).&nbsp;</p>
+<p>Now, we can't post f(x); that would be equivalent of posting the data.&nbsp;</p>
+<p>But what if we posted a point of data on data on that polynomial; one that didn't provide a real value?</p>
+<h2>A Non-Sensitive Value</h2>
+<p>Lets unpack that question.&nbsp;</p>
+<p>Remember how we constructed our list of data points?&nbsp;</p>
+<p>We put our data in an ordered list and one by one plotted it on a graph.&nbsp;</p>
+<figure class="image"><img src="/polynomial-commitments-2.jpeg"></figure>
+<p>When x = 4, y = 65 - which refers to a real datapoint (A).&nbsp;</p>
+<p>But when x = 4.5, y = 69.5 - which doesn't refer to real data.</p>
+<p>So here's the idea: transform our data into a polynomial and provide the public with an evaluation value for a non-sensitive part of the curve.&nbsp;</p>
+<p>Remember, the curve defined by the polynomial is infinite and your data is not; there are plenty of non-sensitive points.</p>
+<h2>Commitments</h2>
+<figure class="image"><img src="/polynomial-commitments-3.jpeg"></figure>
+<p>First and foremost, this point provides assurances that the data has not changed.&nbsp;</p>
+<p>Just like a hash function, even a tiny change to the underlying data will have massive consequences for the resulting polynomial.</p>
+<p>New data = new polynomial = new line. If the data changes so will the line, and the non-sensitive point we provided will no longer be valid.&nbsp;</p>
+<p>As long as the point we post remains on the polynomial line, the public can be confident that we are working with the same data.</p>
+<p>We call this non-sensitive point a "polynomial commitment" as its mere existence serves as cryptographic-proof that the creator is committed to working with the same polynomial.&nbsp;</p>
+<p>A polynomial commitment acts a unique fingerprint for a specific set of data.</p>
+<h2>Resources</h2>
+<p>Source Material - <a href="https://twitter.com/SalomonCrypto/status/1581462447491194880">Twitter Link</a></p>
+<p>Source Material - <a href="/twitter-pdf-2022-10-16_polynomial_commitments.pdf">PDF</a></p>
+<p>&nbsp;</p>

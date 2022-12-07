@@ -1,0 +1,107 @@
+<!--
+title: Ethereum Middleware
+description: 
+published: true
+date: 2022-12-04T19:51:23.744Z
+tags: 
+editor: undefined
+dateCreated: 2022-12-04T19:51:19.674Z
+-->
+
+<figure class="image"><img src="/middleware-banner.jpeg"></figure>
+<h1 style="text-align:center;">Ethereum Middleware</h1>
+<p><i>Originally published on the Flywheel Podcast as a video essay, </i><a href="https://www.youtube.com/watch?v=K2ExicgCZLk"><i>available here</i></a><i>.&nbsp;</i></p>
+<h2>The World Computer</h2>
+<p>Ethereum is the <a href="/home/ethereum/world-computer">World Computer</a>, a single, globally shared computing platform that exists in the space between a network of 1,000s of computers (<a href="/home/ethereum/network/node">nodes</a>).&nbsp;</p>
+<p>The nodes provide the hardware, the <a href="/home/ethereum/evm">Ethereum Virtual Machine</a> (EVM) provides the <a href="/home/concepts/virtual-machine">virtual computer</a> and the <a href="/home/ethereum/blockchain">blockchain</a> records Ethereum's history.</p>
+<h2>Disneyland</h2>
+<p>Ethereum is still very much in development, both at the computer science level and in our understanding of what Ethereum is even.&nbsp;</p>
+<p>Imagine entering Disney Land in 1955 vs today.&nbsp;</p>
+<figure class="table">
+  <table>
+    <tbody>
+      <tr>
+        <td style="text-align:center;">
+          <figure class="image"><img src="/middleware-5.png"></figure>
+        </td>
+        <td style="text-align:center;">
+          <figure class="image"><img src="/middleware-2.png"></figure>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
+<p>Our conception of what a theme park is has radically changed.</p>
+<p>Let's say (in 2022) I told you we were going to Disneyland for a week long getaway, but somehow tricked you into going to the 1955 version of the park.&nbsp;</p>
+<p>The moment the nostalgia wore off, you'd be unimpressed; that's just the nature of 70 years of technology and building.</p>
+<p>When you look at PoW Ethereum, I want you to think "1955 Disneyland."</p>
+<p>When you look at (today's) post-Merge PoS Ethereum, I want you to think "1970s Disneyland."&nbsp;</p>
+<p>Much more impressive: we've got Tomorrowland and a much more groovy crowd!</p>
+<p>We can't see the future; it's impossible to stand in today's theme park and know what's coming.</p>
+<p>But Ethereum is different.</p>
+<p>The future of Disneyland exists inside the head of like 8 executives and a cartoon mouse.</p>
+<p><a href="https://www.youtube.com/watch?v=uGeIDNEwHjs&amp;t=520s">The future of Ethereum is on YouTube</a>.</p>
+<h2>The Ethereum Validator</h2>
+<p><a href="/home/ethereum/network/consensus/pos">Deep Dive: Ethereum Proof of Stake</a></p>
+<p>I (literally) could go on for DAYS on the Ethereum roadmap, so let's focus on one concept: validators.</p>
+<p>Everything you need to know is in the article above, but we'll keep it simple: a validator stakes 32 ETH in order to participate in the network.</p>
+<p>Today, "participating in the network" consists of&nbsp;</p>
+<ul>
+  <li><a href="/home/ethereum/network/consensus/state-transition">updating the EVM</a> (<a href="/home/ethereum/network/consensus/time">once every 12 seconds</a>)&nbsp;</li>
+  <li><a href="/home/ethereum/network/consensus/attestation">attesting</a> (once every 6.4 minutes)&nbsp;</li>
+  <li><a href="/home/ethereum/network/consensus/block-proposal">proposing</a> (very rarely, ~.5 times per month)&nbsp;</li>
+  <li><a href="/home/ethereum/network/consensus/sync-committee">sync committee</a> (even rarer, maybe once a year)</li>
+</ul>
+<p>Back to our analogy, we are in 1970s Disneyland.&nbsp;</p>
+<p>If you were to compare, you'd notice that 1970s looks A LOT more like 1955 than 2022 Disneyland.</p>
+<p>And that's the case with today's validators. We basically think of them as the 2.0 version of ETH miners.</p>
+<p>But just like the 1970s seem quaint and simple to us in 2022, the idea that Ethereum validators are the energy-efficient version of miners will seem... nostalgic.</p>
+<p>Ready to see the future?&nbsp;</p>
+<p>First we need to learn about some of the more exciting Ethereum projects.</p>
+<h2>EigenLayer</h2>
+<figure class="image"><img src="/eigenlayer-1.jpeg"></figure>
+<p><a href="/home/ethereum/upgrades/middleware/eigenlayer">Deep Dive: EigenLayer</a></p>
+<p>When participating in Ethereum, a validator puts 32 ETH at stake. If a validator does something malicious, the network can confiscate that stake.&nbsp;</p>
+<p>Thus, a centralized actor (validator) replaces a trust assumption with crypto-economic security.</p>
+<p>Today, in order to reproduce this effect (replace trust with crypto-economic guarantee), each service must spin out its own proof of stake network - e.g. Chainlink and the LINK token.</p>
+<p>For one <a href="/home/concepts/oracle">oracle</a>? Not a problem.&nbsp;</p>
+<p>But what about hundreds of services which require a centralized actor?</p>
+<p>EigenLayer allows a validator to place their 32 ETH under additional slashing conditions in exchange for providing a service.</p>
+<p>The future: validators opt-in to providing limitless services and ETH becomes the only asset used to secure trustlessness.</p>
+<h2>Distributed Validator Technology</h2>
+<figure class="image"><img src="/middleware-3.jpeg">
+  <figcaption><a href="https://obol.tech/"><i>source</i></a></figcaption>
+</figure>
+<p>A validator is made up of two pieces of software, an execution client (think <a href="https://geth.ethereum.org/">GETH</a>) and a consensus client (think <a href="https://lighthouse.sigmaprime.io/">Lighthouse</a>).&nbsp;</p>
+<p>To run a validator, you need both running on the same computer.</p>
+<p><a href="https://blog.obol.tech/what-is-dvt-and-how-does-it-improve-staking-on-ethereum/">Distributed Validator Technology</a> (DVT) allows us to distribute the different software components across multiple computers.&nbsp;</p>
+<p>You can run <a href="https://consensys.net/knowledge-base/ethereum-2/teku/">Teku</a> at your house, I'll run <a href="https://nimbus.guide/">Nimbus</a> at mine and TOGETHER we'll be a single validator.&nbsp;</p>
+<p>This has HUGE implications.&nbsp;</p>
+<ul>
+  <li>validators can become much more resilient by incorporating backups into a DVT node.</li>
+  <li>the Ethereum network can further decentralized. 32 ETH is a large amount of capital; DVT allows multiple parties to trustlessly split the entrance cost.</li>
+</ul>
+<h2>Staking-as-a-Service</h2>
+<p>Seeing the future yet?</p>
+<p>Hold on, before we pull everything together, let's introduce on more development: Staking-as-a-Service (hilariously called SaaS).</p>
+<p>If you are familiar with <a href="https://rocketpool.net/">Rocket Pool</a>, you get the idea. Users bring ETH, operator stakes on their behalf.</p>
+<p>But we can take this concept further.&nbsp;</p>
+<p><a href="https://www.youtube.com/watch?v=aUijgh8tJ68">In fact, Stakewise already is</a>.</p>
+<p>Imagine a marketplace where every shop is a different ETH staker.&nbsp;</p>
+<p>Maybe stalls 20-70 are OFAC complaint, stalls 70-90 are MEV maxis and stalls 90+ are private.</p>
+<p>Any entity can permissionlessly deploy a Stakewise vault, and any user can deposit their ETH with any (public) vault.</p>
+<p>Different operators can offer different services, configurations and other customizations, while users can pick the vault that works best for them.</p>
+<h2>The Middleware Goldrush</h2>
+<p>And now, dear reader, it's time to peer in to the future. A future where the Ethereum validator is a powerful platform that can be used to transform ANY centralized action into a decentralized service, secured by ultra sound ETH.</p>
+<p>Scroll back to tweet 8 for the current responsibilities of a validator. Other than maintaining the current state of the EVM, a validator is basically a once-every-6-min-job. Any (decent) modern computer will have WAY more resources than it takes to do that.</p>
+<p>Tomorrow's Ethereum will unlock all that computing power and reshape the World Computer.</p>
+<p>DVT will further increase the available resources by allowing a validator to grow beyond a single computer. Validators will be arbitrarily large and complex.</p>
+<p>Eigenlayer will allow these validators, single computers or distributed clusters, to unlock these resources for use in products and services you cant even dream of yet (beginning with oracles, rollups and data-availability layers).</p>
+<p>All secured by/accruing value to ETH.</p>
+<p>And everyone, from <a href="https://twitter.com/Tetranode">Tetranode</a> to grandma and even to you dear reader, will be able to participate in this future.</p>
+<p>Just by scanning through some vault descriptions on a SaaS marketplace.</p>
+<p>So, dear reader, get excited. We are watching the culmination of thousands of years of technological advancement and millions of years of human coordination.&nbsp;</p>
+<p><a href="https://www.youtube.com/watch?v=K2ExicgCZLk">Get excited and get ready, for the Middleware Gold Rush imminent.</a></p>
+<h2>Resources</h2>
+<p>Source Material - <a href="https://twitter.com/SalomonCrypto/status/1589302062201700352">Twitter Link</a></p>
+<p>Source Material - <a href="/twitter-pdf-2022-11-06_middleware.pdf">PDF</a></p>

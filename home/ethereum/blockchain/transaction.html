@@ -1,0 +1,99 @@
+<!--
+title: Ethereum Transaction
+description: 
+published: true
+date: 2022-11-29T16:17:26.620Z
+tags: 
+editor: undefined
+dateCreated: 2022-11-28T22:10:26.343Z
+-->
+
+<figure class="image"><img src="/transaction-full-txn.jpeg">
+  <figcaption><i>original</i></figcaption>
+</figure>
+<h1 style="text-align:center;">Ethereum Transaction</h1>
+<p>Ethereum is the World Computer: a globally shared utility that exists between a network of 1000s of computers. Users interact with Ethereum through a wallet (like MetaMask), which creates and sends transactions to the network.&nbsp;</p>
+<p>Once accepted, the transactions are written into a block.</p>
+<p>An Ethereum transaction is made of up 3 parts:</p>
+<p>- metadata, including to/from, $ETH amount, gas details and signature data</p>
+<p>- cache, a list of accounts and keys the transaction expects to use</p>
+<p>- data, the payload of the transaction (smart contract code or API call)</p>
+<h2>Metadata</h2>
+<figure class="image"><img src="/transaction-metadata.jpeg">
+  <figcaption><i>original</i></figcaption>
+</figure>
+<ul>
+  <li><strong>blockHash</strong> - the unique signature created by <a href="/home/concepts/hash">hashing</a> the block the transaction is contained in.</li>
+  <li><strong>blockNumber</strong> - a unique, sequential number that identifies the block's position in the blockchain.</li>
+  <li><strong>chainId</strong> - signifies the transaction is on the Ethereum chain (introduced by <a href="https://eips.ethereum.org/EIPS/eip-155">EIP-155</a> to protect against an <a href="https://www.coindesk.com/markets/2016/07/29/rise-of-replay-attacks-intensifies-ethereum-divide/">ETC replay attack</a>)</li>
+  <li><strong>from</strong> - address (wallet or smart contract) the transaction is being sent from</li>
+  <li><strong>gas</strong> - <a href="/home/concepts/gas">units of gas</a> used by the transaction</li>
+  <li><strong>gasPrice</strong> - amount paid (in <a href="https://www.investopedia.com/terms/w/wei.asp">WEI</a>) per unit of gas for this transaction</li>
+  <li><strong>hash </strong>- <a href="/home/ethereum/blockchain/transaction">hash</a> of the transaction</li>
+  <li><strong>maxFeePerGas</strong> - maximum amount (WEI per gas) the user who created the transaction is willing to pay. Inclusive of base fee and priority fee</li>
+  <li><strong>maxPriorityFeePerGas</strong> - maximum amount (WEI per gas) above the base fee the user who created the transaction is willing to pay.<ul>
+      <li>This fee will be paid directly to the miner/validator as a tip to incentive inclusion.</li>
+    </ul>
+  </li>
+  <li><strong>nonce</strong> - number of transactions sent from a given address.<ul>
+      <li>Once imprinted on a block, the wallet's nonce is increased. Protects against replay attacks</li>
+    </ul>
+  </li>
+  <li><strong>(r, s, v)</strong> - three values that form the signature of the user who created the transaction. They can be used to verify that the user authorized the transaction before it was executed in the EVM.<ul>
+      <li>For more information, see: <a href="https://en.wikipedia.org/wiki/Elliptic_Curve_Digital_Signature_Algorithm">Elliptic Curve Digital Signature Algorithm</a> (ECDSA)</li>
+    </ul>
+  </li>
+  <li><strong>to</strong> - address (wallet or smart contract) the transaction is being sent to</li>
+  <li><strong>transactionIndex </strong>- position of transaction within block</li>
+  <li><strong>type</strong> - there are two types: a new contract (0x0) and all others (0x2).<ul>
+      <li><a href="https://eips.ethereum.org/EIPS/eip-2718">EIP-2718</a> introduced a wrapper (0x2) that allows for infinitely more types without affecting the core Ethereum specs</li>
+    </ul>
+  </li>
+  <li><strong>value</strong> - amount of ETH being transferred.<ul>
+      <li>Note - this is ONLY for ETH (no other token)</li>
+    </ul>
+  </li>
+</ul>
+<h2>Cache</h2>
+<p><i>(Cache is the term I use; the accessList is not officially delineated)&nbsp;</i></p>
+<figure class="image"><img src="/transaction-cache.jpeg">
+  <figcaption><i>original</i></figcaption>
+</figure>
+<p>Contains the accessList, a list of addresses and keys the transaction anticipates using. The transaction will still be able to use resources off this list, but at a higher (gas)cost.</p>
+<p>The accessList was added by EIP-2929, allowing clients to fetch/cache data to be used during the transaction.&nbsp;</p>
+<p>Today, the discount for using addresses &amp; keys in the accessList is ~10%. However, this will increase in the future as Ethereum moves to support light clients.</p>
+<h2>Data</h2>
+<figure class="image"><img src="/transaction-data.jpeg"></figure>
+<p>The data payload being delivered by the transaction. This can be used in 3 ways:</p>
+<ul>
+  <li>ETH transfer - empty</li>
+  <li>smart contract API call - name of function and parameters</li>
+  <li>new smart contract - code of the smart contract</li>
+</ul>
+<figure class="table">
+  <table>
+    <tbody>
+      <tr>
+        <td>
+          <figure class="image"><img src="/transaction-data-decode.jpeg">
+            <figcaption><i>original</i></figcaption>
+          </figure>
+        </td>
+        <td>
+          <figure class="image"><img src="/transaction-data-encode.jpeg">
+            <figcaption><i>original</i></figcaption>
+          </figure>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
+<p>Data in the input field is recorded in binary, but can be translated back to a human readable form.</p>
+<p>The input field exists on-chain, but is not part of the EVM state. It simply provides data for the contract to use during the transaction, it is not tracked by Ethereum nor used in consensus.</p>
+<p>The EVM can only use data supplied in that transaction; it cannot look back.</p>
+<p>This property becomes useful for applications that want to write historical data to the Ethereum blockchain (eg for manual retrieval later) but don't care about having direct EVM access.</p>
+<h2>Full Transaction</h2>
+<figure class="image"><img src="/transaction-full-txn-2.jpeg"></figure>
+<h2>Resources</h2>
+<p>Source Material - <a href="https://twitter.com/SalomonCrypto/status/1568092433803808770">Original Tweet</a></p>
+<p>Source Material - <a href="/twitter-pdf-2022-09-08_transactions.pdf">PDF</a></p>

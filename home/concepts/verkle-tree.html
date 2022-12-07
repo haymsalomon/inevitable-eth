@@ -1,0 +1,95 @@
+<!--
+title: Verkle Tree
+description: 
+published: true
+date: 2022-12-04T16:18:37.556Z
+tags: 
+editor: undefined
+dateCreated: 2022-12-04T16:18:33.456Z
+-->
+
+<figure class="image"><img src="/verkle-tree-1.png"></figure>
+<h1 style="text-align:center;">Verkle Trees</h1>
+<h2>Prerequisites</h2>
+<h3>Commitment Scheme</h3>
+<p>A <a href="/home/concepts/commitment">commitment scheme</a> is creates a commitment that is anchored to a piece of data. The commitment does not leak any information about the underlying data, but can be used to prove things about that data.</p>
+<h3>Merkle Tree</h3>
+<p>A <a href="https://inevitableeth.com/home/concepts/merkle-tree">Merkle&nbsp;tree</a> is a (tree) data structure in which each leaf node is labeled with the cryptographic hash of a data block, and each non-leaf node is labeled with the cryptographic hash of its child nodes' labels.</p>
+<p>A Merkle proof can be used to efficiently prove that a single piece of data exists in a dataset without transferring the entire dataset.</p>
+<h3>Vector</h3>
+<p>A <a href="/home/concepts/vector">vector</a> is a concept used to convey quantities that cannot be expressed by a single number.&nbsp;</p>
+<h2>Merkle Trees</h2>
+<p>We begin with a hash function, which transforms an arbitrary dataset into a unique, fixed-length string. A good hash function is irreversible and creates outputs that are indistinguishable from random data.&nbsp;</p>
+<p>Think of a hash like a serial number for data of any kind/size.</p>
+<p>Merkle Trees are made by successive rounds of hashing.&nbsp;</p>
+<p>All the data begins on the bottom row (leaf nodes). Then they are grouped together and fed into a hash function. These hashes are grouped (same size) and hashed again, continuing until there is a single (root) node.</p>
+<p>The purpose a Merkle tree is enable Merkle proofs, which allow verification that a piece of data exists in the underlying dataset (leaf nodes) without transmitting the entire dataset.&nbsp;</p>
+<p>This has profound implications for both privacy and bandwidth requirements.</p>
+<p>The privacy aspects aren't useful for this discussion, but they are worth nothing. Merkle proofs can verify a piece of data without having to articulate the entire dataset. You do need component pieces of the Merkle tree, but these are just (non-sensitive) hashes.</p>
+<p>We are here for the bandwidth implications.&nbsp;</p>
+<h2>Merkle Proof Scaling</h2>
+<p><a href="/home/concepts/merkle-tree/scaling">Deep Dive: Merkle Proof Scaling</a></p>
+<p>Let's say you want to post a ton of data. No one is interested in all the data, and every one has access to Merkle proofs generation (big assumption).&nbsp;</p>
+<p>Instead of posting the entire dataset, you can just post the Merkle root.</p>
+<p>Don't get me wrong, a Merkle proof is significantly more efficient than naïve approach... but it has its limits.&nbsp;</p>
+<p>Tl;dr Merkle proofs scale much less quickly than dataset size, but they still scale proportionally. Eventually proofs will outgrow bandwidth capacity.</p>
+<p>What happens if we have a dataset too big for a Merkle tree?</p>
+<p>IRL Example: the internal state of Ethereum is stored in a Merkle tree. This tree grows as more accounts &amp; smart contracts are created. Eventually proofs are going to grow too big to push through the network.</p>
+<h2>Redesigning a Solution</h2>
+<p>Let's start by asking the question "what's the purpose of a Merkle tree?"&nbsp;</p>
+<p>A Merkle root is a unique string that is generated from a large dataset. With the root, anyone can verify the original dataset and/or an individual piece of data.&nbsp;</p>
+<p>We call this a commitment scheme.</p>
+<p>Our new scheme must avoid the bottlenecks that Merkle trees face; proof size must stay constant regardless of dataset size.&nbsp;</p>
+<p>A Merkle proof contains the intermediate hashes needed to rebuild the root.&nbsp;</p>
+<p>What if we use cryptography to condense all of that into one value?</p>
+<h2>Vector Commitments</h2>
+<figure class="image"><img src="/verkle-tree-2.png"></figure>
+<p>We'll start with a Vector.&nbsp;</p>
+<p>Tl;dr vectors are a concept used to convey quantities that cannot be expressed by a single number. In two dimensions, "2 spaces right, 3 spaces up" can be represented as the vector (2,3).&nbsp;</p>
+<p>A n-dimensional vector can express n data points.</p>
+<p>Let's simplify how we think of Merkle proofs. The point of sharing all the intermediate branches is to generate the unique path from the Merkle root to your data point.&nbsp;</p>
+<p>Let's think about expressing this value as a vector.</p>
+<h2>Verkle Trees</h2>
+<p>This will form the foundation of Verkle tree.&nbsp;</p>
+<p>Here's more than you want to know on the name:</p>
+<figure class="image"><img src="/verkle-tree-3.png"></figure>
+<ul>
+  <li>V = vector&nbsp;</li>
+  <li>erkle Tree = Merkle Tree</li>
+</ul>
+<p>We will also be interested in Verkle tries which are trees organized by their keys (in example above, you can trace keys through inner nodes).</p>
+<p>Again, we've already built a scheme around a vector. The challenge is to build it so that the vector can be (trustlessly) transmitted with a constant size.&nbsp;</p>
+<p>Fortunately, modern cryptography has developed lots of tools to solve this exact problem.</p>
+<p>For example, we could deploy <a href="/home/concepts/kzg-commitment">KZG commitments</a> for this purpose.&nbsp;</p>
+<p>Tl;dr the KZG commitment scheme uses <a href="/home/concepts/elliptic-curve-cryptography">elliptic curve cryptography</a> to commit to a polynomial. A <a href="/home/concepts/polynomial-commitment">polynomial commitment</a> is actually much more powerful than a vector commitment, but can also be used as one.</p>
+<p>KZG commitments require too much computation for the Verkle trees we are interested in. We will use Pedersen commitments to commit to a vector.&nbsp;</p>
+<p>We will pick the particular scheme based on the application, but the point is that we directly prove the vector. Unlike Merkle trees, we do not need to first rebuild the vector before we prove it.&nbsp;</p>
+<p>Individual vector components are of constant size.</p>
+<h2>Verkle vs Merkle</h2>
+<figure class="image"><img src="/verkle-tree-4.jpeg"></figure>
+<p>Remember, Merkle proofs grew in size as the underlying dataset grew (albeit more slowly). When we tried to decrease the number of vertical levels, we got even more horizontal components.</p>
+<p>Verkle trees do not have this problem. Shortening the tree decreases proof size.&nbsp;</p>
+<p>Here's a rough idea, but don't dwell too long on it.&nbsp;</p>
+<p>In fact, the cryptographic schemes we are looking are so powerful that we can simplify even further.</p>
+<h2>Condensing with Multiproofs</h2>
+<p>KZG commitments, Pedersen commitments and all the other schemes we are considering can condense an arbitrary number of proofs into a single value.&nbsp;</p>
+<p>Put another way, we can use the magic of elliptic curve cryptographic to create a single vector that serves for all proofs.</p>
+<p><a href="https://dankradfeist.de/ethereum/2021/06/18/pcs-multiproofs.html">Dankrad Feist lays out the technique here in his blog</a>. It's pretty in depth and technical, not for the feint of heart.</p>
+<p>Which brings us to actual Verkle trees.</p>
+<h2>Implementing Verkle Trees</h2>
+<figure class="image"><img src="/verkle-tree-5.png"></figure>
+<p>Verkle proofs don't scale with tree width and therefore can be incredibly wide. The current proposal for the Ethereum state is looking at a width of 256, but some are pushing for 1024.</p>
+<p>One might ask "can we make it infinitely wide?"&nbsp;</p>
+<p>We can, we can create a "Verkle tree" that is just a single level, making proofs incredibly lightweight.&nbsp;</p>
+<p>In practice, this will cause a huge burden during the commitment generation phase.</p>
+<p>Turns out this might be an inherent property of commitment schemes, maybe like "in order to create a lightweight proof, a commitment needs to touch every piece of data."&nbsp;</p>
+<p>If so, the commitment scheme design ends up becoming a trade-off between prover and verifier work.</p>
+<h2>Summary</h2>
+<p>Verkle trees are an advanced improvement on an already complicated topic. But here's all you need to know:</p>
+<ul>
+  <li>Verkle trees, like Merkle trees, allow verification of data within a dataset&nbsp;</li>
+  <li>Verkle proofs are of constant size, regardless of dataset</li>
+</ul>
+<h2>Resources</h2>
+<p>Source Material - <a href="https://twitter.com/SalomonCrypto/status/1587668139466113024">Twitter Link</a></p>
+<p>Source Material - <a href="/twitter-pdf-2022-11-02_verkle_trees.pdf">PDF</a></p>
