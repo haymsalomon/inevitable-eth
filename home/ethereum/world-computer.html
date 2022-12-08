@@ -2,18 +2,188 @@
 title: The World Computer
 description: 
 published: true
-date: 2022-12-07T17:03:13.740Z
+date: 2022-12-08T02:49:56.170Z
 tags: 
 editor: ckeditor
 dateCreated: 2022-12-07T16:59:46.659Z
 -->
 
-<figure class="image"><img src="/world-computer-banner.jpeg"></figure>
 <h1 style="text-align:center;">Ethereum: The World Computer</h1>
+<h2>The Coordination Miracle</h2>
+<p>~500k years ago a few apes climbed down out of the trees and humanity was born. This made many people very angry and has been widely regarded as a bad move.&nbsp;</p>
+<p>Nevertheless, from that day forward humans got to work.</p>
+<p>The nature of all life is to struggle - against nature, each other, one's self. Whether human, insect, bacteria or whale, we all share the same contest for survival and desire to prosper.&nbsp;</p>
+<p>All life struggles, but humans struggle together.&nbsp;</p>
+<p>Humans coordinate.</p>
+<p>One uniquely-human way we coordinate is through the use of money.&nbsp;</p>
+<p>You can look at money as a more efficient way to barter, but I think of it as a coordination tool. It's how humans move resources, time and energy around society and through time.</p>
+<p>As coordination systems and technologies have improved, so to have the capabilities and ambitions of the societies that they supported.&nbsp;</p>
+<p>In Europe, the turn of the 16th century was a step change.</p>
+<h2>The Momentum of History</h2>
+<p><a href="/home/background">Deep Dive: Modern Finance, the Rise and Collapse</a></p>
+<p>We can trace the dawn of modern finance to a few decades between 1490-1540. The crucible of history forged a system built around capital investment, concentration and executive control.&nbsp;</p>
+<p><a href="/home/background/history-finance">This proto-capitalism would supercharge Europe and propel the West to world domination</a>.</p>
+<p>Over the next ~500 years, the Europeans (and Americans) would build on this system until it eventually <a href="/home/background/gfc">collapsed in the 2008 Global Financial Crisis</a>.&nbsp;</p>
+<p>The lesson of modern finance: when the power to decide winners and losers is centralized, it will inevitably be abused.</p>
+<p>A centralized system is one that requires trust, in perpetuity.&nbsp;</p>
+<p>Users have to believe that the system will treat them fairly, otherwise they will refuse use it (if they have a choice).&nbsp;</p>
+<p>But there is another way.&nbsp;</p>
+<p>One that is <a href="/home/concepts/credible-neutrality">credibly neutral</a>.</p>
+<p>In 2008, as the global financial system was in flames around him, <a href="https://bitcoin.org/bitcoin.pdf">Satoshi Nakamoto introduced the world to Bitcoin</a>.&nbsp;</p>
+<p>The promise: fair payments, for anyone, at any time, forever.&nbsp;</p>
+<p>For the first time in human history, we have a coordination system without trust.</p>
+<p>If Bitcoin is the promise, then Ethereum is the delivery:&nbsp;</p>
+<p>Fair computing built atop fair <a href="/home/concepts/settlement">settlement</a>, for anyone, at any time, forever.&nbsp;</p>
+<p>Ethereum is the World Computer.</p>
+<h2>The World Computer</h2>
+<figure class="image"><img src="/world-computer-banner.jpeg"></figure>
+<p>The World Computer is made of up 3 parts:&nbsp;</p>
 <ul>
-  <li><a href="/home/background">Legacy of Finance</a></li>
-  <li><a href="/home/ethereum/world-computer/internet-settlement">Internet Native Settlement</a></li>
-  <li><a href="/home/background/mass-comm">Mass Communications Technology</a></li>
-  <li><a href="/home/ethereum/world-computer/endgame/trustless-trust">Trustless Trust</a></li>
-  <li><a href="/home/ethereum/history">History of Ethereum</a></li>
+  <li>Ethereum Virtual Machine (EVM)&nbsp;</li>
+  <li>Ethereum Blockchain&nbsp;</li>
+  <li>Ethereum Network</li>
 </ul>
+<h3>Ethereum Virtual Machine</h3>
+<figure class="image"><img src="/evm-banner2.png"></figure>
+<p><a href="/home/ethereum/evm">Deep Dive: Ethereum Virtual Machine</a></p>
+<p>At the core of Ethereum is the EVM, the computing platform of the World Computer.&nbsp;</p>
+<p>Technically speaking, is a <a href="/home/concepts/turing-complete">Turing-complete</a> distributed <a href="/home/ethereum/evm/state-machine">state machine</a> - but don't worry about this specific classification.</p>
+<p>The purpose of the greater Ethereum apparatus is to offer a single shared computing platform in a manner that is secure, decentralized and permanently open for ALL.&nbsp;</p>
+<p>Anyone with an internet connection (and <a href="/home/concepts/gas">gas</a> money) can interact with the World Computer.</p>
+<h3>Ethereum Blockchain</h3>
+<p><a href="/home/ethereum/blockchain">Deep Dive: Ethereum Blockchain</a></p>
+<p>The blockchain acts as the memory &amp; storage of The World Computer.</p>
+<p>A <a href="/home/ethereum/blockchain/block">block</a> is made up of 3 key components:&nbsp;</p>
+<ul>
+  <li>A record of the <a href="/home/ethereum/blockchain/transaction">transactions</a> executed at the time the block was created</li>
+  <li>A <a href="/home/concepts/digital-signatures">signature</a>, unique to each specific block</li>
+  <li>A reference to the previous block's signature</li>
+</ul>
+<p>The EVM accesses data from the chain and records all changes (by necessity) to new blocks as it processes transactions</p>
+<h3>Ethereum Network</h3>
+<figure class="image"><img src="/network-banner.png"></figure>
+<p><a href="/home/ethereum/network">Deep Dive: Ethereum Network</a></p>
+<p>The EVM is the computing platform of the World Computer, the blockchain its history. The implicit question? What actually IS Ethereum?&nbsp;</p>
+<p>How does it exist in the real world?</p>
+<p>The answer lies in the Ethereum network.</p>
+<p>The Ethereum network is made up of a group of people and institutions who decide to run an Ethereum node.</p>
+<h4>Ethereum Nodes</h4>
+<figure class="image"><img src="/node-banner.jpeg"></figure>
+<p><a href="/home/ethereum/network/node">Deep Dive: Ethereum Nodes</a></p>
+<p>A node is a real computer in the world that runs the specific software that makes Ethereum possible. A single node runs two pieces of software: a consensus client and an execution client (responsible for operating the EVM).</p>
+<p>Although each node's copy is independent, every EVM is sync; the state of any local copy IS the state of the globally shared EVM.</p>
+<p>The method by which all these independent and untrusted computers keep their local copy of the EVM in sync is called a <a href="/home/ethereum/network/consensus">consensus system</a>.</p>
+<h4>Proof of Stake</h4>
+<figure class="image"><img src="/merge-banner.jpeg"></figure>
+<p><a href="/home/ethereum/network/consensus/pos">Deep Dive: Proof of Stake</a></p>
+<p>Ethereum was launched in 2015 using Proof of Work as it's consensus system. In September 2022, Ethereum successfully complete the Merge, and switched to Proof of Stake.</p>
+<p>At a high level, a node operator can escrow (stake) 32 ETH to become a validator, with the right to operate and secure Ethereum and to earn ETH. Malicious behavior is punished with "slashing."</p>
+<p>Slashing is the process of&nbsp;</p>
+<ul>
+  <li>confiscating some/all of a validator's staked ETH&nbsp;</li>
+  <li>ejecting them from the validator set.</li>
+</ul>
+<p>This is the economic incentive that secures Ethereum; we don't have to trust operators because the costs of cheating are higher than the rewards.</p>
+<h2>Trustless Trust</h2>
+<p>Ethereum PoS deploys ETH to replace a trust assumption (users need to trust operators) with an economic assumption (users know that node operators want to be profitable).</p>
+<p>This is the magic of cryptocurrency: we have a solution for untrusted coordination.</p>
+<p>Trustless trust.</p>
+<p>Ethereum gives us an option that isn’t controlled by a single entity, that can’t exclude or prejudice any party on earth.&nbsp;</p>
+<p>Politics, revenge, back-room deals will always matter… but on the World Computer they will NEVER result in censorship, exclusion, or confiscation.</p>
+<p>Trustless trust is predicated on a decentralized Ethereum. The more nodes that are controlled by a single entity, the easier it becomes to attack the network.</p>
+<p>Trustless trust comes from credible neutrality.&nbsp;</p>
+<p>Credible neutrality comes from decentralization.</p>
+<h2>The Ethereum Ecosystem: De-Fi</h2>
+<p><a href="/home/ethereum/world-computer/de-fi">Deep Dive: Decentralized-Finance</a></p>
+<p>Ethereum offers all the same features and capabilities of a normal (<a href="/home/concepts/virtual-machine">virtual</a>) computer, but with one critical difference: <a href="/home/ethereum/evm/property-rights">internet native property rights</a>.</p>
+<p>From internet native property rights comes <a href="/home/ethereum/world-computer/internet-settlement">internet native settlement</a>.&nbsp;</p>
+<p>Ownership, exchange, commerce - all available to anyone, at any time, for any reason.&nbsp;</p>
+<p>Forever.</p>
+<p>The reason to develop on the World Computer is to build applications that require ownership and exchange across the internet.&nbsp;</p>
+<p>And so, the first category of applications has taken this concept and run with it.&nbsp;</p>
+<p><a href="/home/ethereum/world-computer/de-fi/programmable-money">Programmable Money</a>. Decentralized Finance.</p>
+<p>De-Fi is the first category of applications, but it is certainly not the last.&nbsp;</p>
+<p>Think "anything that must express ownership or requires trust." NFTs. Games. Escrow. Inventory. Logistics. Voting. Social security.&nbsp;</p>
+<p>Anything that requires coordination, even (especially) across countries.</p>
+<p>Take a step back, think about the bigger picture.&nbsp;</p>
+<p>The internet was born less than 30 years ago; many of you reading this can't remember a day when life wasn't saturated by it.&nbsp;</p>
+<p>In less than a generation, the human race has fundamentally changed the way it coordinates.</p>
+<p>No one can tell you what the future holds, but the internet is <a href="/home/background/mass-comm/printing-press">not the first time technology changed the way humans coordinate</a>, and it will not be the last.&nbsp;</p>
+<p><a href="/home/background/dot-com">We can look to the past for understanding... and for guidance.</a></p>
+<h2>A Maturing Protocol</h2>
+<p>The Ethereum we have today is still young and evolving.&nbsp;</p>
+<p>To be frank, it is not yet ready to assume the mantle of global settlement platform or any of the other prominent roles it will inevitably hold.</p>
+<p>It is still too slow, too expensive and too hard to access.</p>
+<p>At the end of the day, real computers need to be running the software that makes Ethereum possible. The performance of the World Computer is limited by the minimum requirements we place on the individual nodes.</p>
+<p>Better node hardware = better Ethereum performance.</p>
+<p>But we have an issue. Better node hardware is more expensive and harder to get. Increasing a node's min reqs may increase the speed at which Ethereum can process transactions... at the cost of decentralization.</p>
+<p>Are performance and decentralization opposing forces?</p>
+<p>Because here's the thing... today we have decent decentralization and terrible speeds and our minimum specifications are already very high. Increasing node requirements will cost MUCH more decentralization than it will gain in performance.</p>
+<h2>Scalability Trilemma</h2>
+<figure class="image"><img src="/world-computer-2.png"></figure>
+<p>We articulate this dynamic with the blockchain Scalability Trilemma.&nbsp;</p>
+<p>Put simply, pick (at most) two</p>
+<ul>
+  <li>scalability</li>
+  <li>decentralization</li>
+  <li>security.</li>
+</ul>
+<p>The trilemma only makes sense if you think of Ethereum as a typical <a href="/home/background/mass-comm/computer">computer</a>, with a CPU and memory and the like.</p>
+<p>But Ethereum is very specifically not typical computer... it is THE World Computer.</p>
+<p>We don't need to think "how many transactions can Ethereum process."&nbsp;</p>
+<p>We need to think "how many transaction can Ethereum settle."</p>
+<h2>Scaling Ethereum Execution</h2>
+<figure class="image"><img src="/scaling-1.jpeg"></figure>
+<p><a href="/home/ethereum/upgrades/scaling">Deep Dive: Scaling Ethereum Execution</a></p>
+<p>This is the idea behind Ethereum transaction scaling. Move execution off-chain while retaining settlement on-chain.</p>
+<p><a href="/home/ethereum/upgrades/scaling/execution">Rollups</a> will offer a spectrum of centralization/trust assumptions and performance trade-offs, but all will post a record back to Ethereum.</p>
+<p>Each rollup is an independent blockchain that posts a (compressed) copy of every transaction it processes back to Ethereum.</p>
+<p>As rollups improve execution, they will need to post an increasing amount transaction records; <a href="/home/ethereum/upgrades/scaling/data">Danksharding</a> will VASTLY increase capacity for these records.</p>
+<p>The rollup-centric roadmap provides an answer for the execution side of the equation, but it does not address the decentralization.</p>
+<p>We need a different set of upgrades improve network decentralization.</p>
+<h2>Enabling True Decentralization</h2>
+<h3>Current State</h3>
+<figure class="image"><img src="/access-ethereum-1.jpeg"></figure>
+<p><a href="/home/ethereum/network/node/accessing-ethereum">Deep Dive: Accessing Ethereum</a></p>
+<p>Currently, there are 2 ways to access Ethereum: operate your own node or use a Node-as-a-Service provider (like <a href="https://www.alchemy.com/">Alchemy</a> or <a href="https://www.infura.io/">Infura</a>).</p>
+<p>The former is a big (<a href="https://rocketpool.net/node-operators">but totally doable</a>!) ask; the later is a great service, but is actively working against decentralization.</p>
+<p>Today, you pass a message through centralized service who interacts with Ethereum on your behalf.</p>
+<p>Tomorrow’s solution: light clients.&nbsp;</p>
+<h3>Light Clients</h3>
+<p>Light clients are pieces of software that can directly, trustlessly access Ethereum without running a full Ethereum node.</p>
+<p>Before we can support light clients, we first need to upgrade Ethereum to be stateless.</p>
+<h4>Statelessness</h4>
+<p><a href="/home/ethereum/upgrades/statelessness">Deep Dive: The Road to Stateless Ethereum</a></p>
+<p>Statelessness is a nuanced topic worth reading more about, but the idea can be summarized as "using cryptography to trustlessly access the EVM without having to store it locally."</p>
+<p>But statelessness is not enough to support light clients - the EVM is not the only component of the World Computer.&nbsp;</p>
+<h4>The Portal Network</h4>
+<figure class="image"><img src="/light-client-1.jpeg"></figure>
+<p><a href="/home/ethereum/upgrades/light-clients">Deep Dive: The Portal Network</a></p>
+<p>Light clients also need trustless access to consensus (PoS), the mempool, etc.</p>
+<p>And so light clients will turn to the Portal Network for this critical data.</p>
+<p>The Portal Network is (will be) an independent network of computers dedicated to capturing and serving the data needed to serve light clients.&nbsp;</p>
+<p>Light clients will query the Portal Network for proofs, mempools anything a its needs to verify the hashes created by Ethereum.</p>
+<h2>Generalizing Decentralized Trustlessness</h2>
+<p><a href="/home/ethereum/world-computer/endgame/trustless-trust">Deep Dive: Trustless Trust</a></p>
+<p>Yes, there is (a lot) of work to do before we are ready for light clients, but once we are there we've reached the Ethereum endgame.</p>
+<p>An endgame that is so much more ambitious and all consuming than the Ethereum we have today.</p>
+<p>In this world, a light client would power on, be able to sync with Ethereum instantly (currently &gt; a day) and immediately begin transacting.</p>
+<p>All possible with minimal hardware and a mediocre internet connection.</p>
+<figure class="image"><img src="/world-computer-3.png"></figure>
+<p>A world where trustless access is trivial has infinite possibility.</p>
+<p>And really that's what this is all about: trust, or more specifically, the ability to interact and coordinate without relying on trust at all.</p>
+<p>Ethereum provides the way for the internet to trustlessly express ownership, light clients will allow trustless interaction.</p>
+<p>You've heard of ETH as ultra sound money? That's only part of the story.</p>
+<p>In the Ethereum endgame, ETH isn't just the most decentralized monetary asset, it has a uniquely Etherean property:</p>
+<p>ETH is the pristine collateral of trustless trust.</p>
+<h2>Ethereum Endgame</h2>
+<p>In the Ethereum endgame, ETH is the global currency of trustless trust.</p>
+<p>Using ETH, any activity, interaction, data point that requires trust can be transformed into a trustless fact.</p>
+<p>~500k years ago a few apes climbed down out of the trees and humanity was born.&nbsp;</p>
+<p>Everything we have achieved thus far has been a result of collaboration... but collaboration in an environment of concentration, compulsory "trust" in leadership and centralization.</p>
+<p>In the 21st century, centralization is critically and completely failing us. SBF just proved it, once again.</p>
+<p>ETH is how we can coordinate without centralization.</p>
+<p>The internet of things, a globalizing economy, a post nation-state world…</p>
+<p>Ethereum is inevitable.</p>
+<p><br><br><br>&nbsp;</p>
+<p><br>&nbsp;</p>
