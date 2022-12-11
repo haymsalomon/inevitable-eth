@@ -1,0 +1,73 @@
+<!--
+title: KZG Ceremony
+description: 
+published: false
+date: 2022-12-11T16:35:48.536Z
+tags: 
+editor: ckeditor
+dateCreated: 2022-12-11T16:35:48.536Z
+-->
+
+<p>&nbsp;</p>
+<h1 style="text-align:center;">(Proto-) Danksharding KZG Trusted Setup</h1>
+<h2>The World Computer</h2>
+<p>Ethereum is the <a href="https://inevitableeth.com/home/ethereum/world-computer">World Computer</a>, a network of 1,000s of computers (<a href="https://inevitableeth.com/home/ethereum/network/node">nodes</a>) coordinating using <a href="https://inevitableeth.com/home/ethereum/network/consensus/pos">Proof of Stake</a> (PoS) to keep the <a href="https://inevitableeth.com/home/ethereum/evm">Ethereum Virtual Machine</a> (EVM) in sync.</p>
+<p>The EVM is the shared computing platform, the blockchain its history and ETH its lifeblood.</p>
+<p>This "network of nodes" is the foundation upon which Ethereum ultimately derives its value. The more decentralized, the more value.</p>
+<p>From decentralization comes <a href="https://inevitableeth.com/home/concepts/credible-neutrality">credible neutrality</a>.&nbsp;</p>
+<p>Without credible neutrality, we might as well be using FB-dollaroos in Farmville-DeFi.</p>
+<h2>The Scaling Problem</h2>
+<p>Today, Ethereum is SLOW, processing ~20-30 transactions per second.&nbsp;</p>
+<p>Let's be frank, that is too slow for anything with the name “The World Computer,” <a href="https://www.un.org/en/desa/world-population-reach-8-billion-15-november-2022">we have &gt;8,000,000,000 people on this planet</a>.&nbsp;</p>
+<p>We can easily increase the performance of Ethereum by simply increasing the minimum requirements of the nodes. The more powerful these computers are, the faster Ethereum can process transactions.</p>
+<p>But here's the problem: the higher the minimum requirements of a node, the less people can participate in the network. Maybe the costs are too high, maybe the hardware is unavailable, maybe they don't have access to a reliable internet connection.</p>
+<p>Any increases to minimum requirements for nodes inherently decreases the decentralization of the network.</p>
+<p>And so, the naive approach to scaling is a dead end.</p>
+<p>In fact, this concept is so well understood that we've created a cute little phrase: <a href="https://medium.com/logos-network/everything-you-know-about-the-scalability-trilemma-is-probably-wrong-bc4f4b7a7ef">the scalability trilemma</a>.</p>
+<h2>The Settlement Layer of the Internet</h2>
+<figure class="image"><img src="/scaling-1.jpeg"></figure>
+<p><a href="/home/ethereum/upgrades/scaling">Deep Dive: Scaling Ethereum Execution</a></p>
+<p>Fortunately, the gigabrains of Ethereum have come up with a solution, one that rejects the very framing of the scalability trilemma.&nbsp;</p>
+<p>It starts with taking a huge step back: what is the purpose of Ethereum?</p>
+<p>Yes, the EVM is <a href="/home/concepts/turing-complete">Turing-complete</a> <a href="/home/concepts/virtual-machine">virtual machine</a> and therefore capable of generalized <a href="/home/background/mass-comm/computer">computation</a>. We can think about turbo-charging the EVM until it can perform at the same level as a centralized platform (think <a href="https://aws.amazon.com/">AWS</a>), but we already have high performance computing.</p>
+<p>And centralized computing will always be faster and easier than decentralized computing.</p>
+<p>So, to think of Ethereum scaling as “how can we increase the World Computer's transaction throughput to be closer to someone like <a href="https://www.visa.co.uk/dam/VCOM/download/corporate/media/visanet-technology/aboutvisafactsheet.pdf">Visa</a>," is like designing a fighter jet and thinking "how can we increase its ground speed to be close to something like a <a href="https://www.youtube.com/watch?v=FuS_bXJNync">Bugatti Chiron</a>.</p>
+<p>What's special about Ethereum is not that offers a generalized computing platform, it's that it offers a trustless, immutable platform.</p>
+<p>The purpose of Ethereum is trustless <a href="/home/concepts/settlement">settlement</a>, not trustless computation.</p>
+<h3>Rollups</h3>
+<p><a href="/home/ethereum/upgrades/scaling">Deep Dive: Rollups</a></p>
+<p>Here's the idea: instead of asking Ethereum to do all the computation, we ask a much more specialized (much more centralized) entity to actually run the computation and simply post a record back to Etheruem.</p>
+<p>Let's say I have 100 numbers I want to add up. Instead of asking Ethereum to actually do the addition, I can run the addition elsewhere and simply post the numbers and the result on-chain. Everyone can verify that the answer is correct, but the EVM itself doesn't have to run the computation.</p>
+<p>This is the idea behind rollups, which are independent, high-performance blockchains that settle to Ethereum.</p>
+<p>Rollups can support MANY more transactions MUCH faster, but because they post back to Ethereum, they inherent all of the decentralized properties of Etheruem.</p>
+<p>The rollup paradigm scales the execution throughput of Ethereum by orders of magnitude, but we still have a problem. Rollups still need to post copies of the data and results to Ethereum.</p>
+<p>If we don't scale the <a href="/home/ethereum/upgrades/scaling/data/data-availability-bottleneck">data availability</a> of Ethereum mainnet, then execution scaling becomes a solution to the problem we don't have.</p>
+<h3>Danksharding</h3>
+<p><a href="/home/ethereum/upgrades/scaling/data">Deep Dive: Danksharding</a></p>
+<p>Fortunately, we have a solution: Danksharding (named after <a href="https://twitter.com/dankrad">Dankrad Feist</a>).</p>
+<p>Danksharding creates a new Ethereum data structure tailor-made for rollups: a blob.&nbsp;</p>
+<p>A blob is simply a huge, cheap storage container that cannot be accessed by the EVM.</p>
+<p>Here's an analogy: imagine Ethereum is a train company and rollup data is cargo.</p>
+<ul>
+  <li>Before Danksharding, the cargo needed to go in the passenger cabin, paying passenger pricing.</li>
+  <li>After, the cargo can go in its own separate car, but the train company can't monitor it.</li>
+</ul>
+<h4>Proto-Danksharding</h4>
+<p><a href="https://inevitableeth.com/home/ethereum/upgrades/scaling/data/proto-danksharding">Deep Dive: Proto-Danksharding</a></p>
+<p>Danksharding is a huge upgrade and needs to be approached in phases.</p>
+<p>Phases 1 is Proto-Danksharding (named for <a href="https://twitter.com/protolambda">protolambda</a> and Danksharding), which will make the changes needed to support a single blob (per block) and create an independent <a href="https://inevitableeth.com/home/concepts/gas">gas</a> market just for blobs.</p>
+<h2>The Roadmap to Scaled Ethereum</h2>
+<p>Ethereum transaction scaling should really be thought of as two parts: scaling execution (rollups) and scaling data (Danksharding).</p>
+<p>On the execution side, the vast majority of development happens outside of the Ethereum community, in the teams working on building high-performance, secure blockchains. As the paradigm evolves, <a href="https://ethereum-magicians.org/t/a-rollup-centric-ethereum-roadmap/4698">the Ethereum devs modify their roadmap to super-charge these efforts</a>, but its best to think of the energy of rollup development happening in the community.</p>
+<p>On the other hand, Danksharding (and Proto-Danksharding) are core upgrades to the protocol itself. Not only is the research and development championed by the Ethereum Foundation, but the implementation will require deep changes to the core of Ethereum.</p>
+<p>Here's (roughly) what needs to happen:</p>
+<ul>
+  <li>KZG SRS Trusted Ceremony</li>
+  <li>EIP-4844 Proto-Danksharding</li>
+  <li><a href="/home/ethereum/upgrades/pbs">Protocol-Enshrined Proposer-Builder Separation</a></li>
+  <li>Danksharding</li>
+</ul>
+<p>&nbsp;</p>
+<h2>Resources</h2>
+<p>Source Material - Twitter Link</p>
+<p>Source Material - PDF</p>
