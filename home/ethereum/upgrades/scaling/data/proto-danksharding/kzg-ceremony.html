@@ -2,7 +2,7 @@
 title: KZG Ceremony
 description: 
 published: false
-date: 2022-12-11T23:44:01.005Z
+date: 2022-12-12T02:18:58.475Z
 tags: 
 editor: ckeditor
 dateCreated: 2022-12-11T16:35:48.536Z
@@ -105,15 +105,32 @@ dateCreated: 2022-12-11T16:35:48.536Z
 </figure>
 <p><i>Note: Vitalik did a great writeup on trusted setups. If you want to </i><a href="https://vitalik.ca/general/2022/03/14/trustedsetup.html"><i>go straight to the source</i></a><i>, I understand.</i></p>
 <p>The trusted setup is an example of <a href="https://en.wikipedia.org/wiki/Secure_multi-party_computation">multiparty computation</a>, which is a branch of computer science that looks into systems where multiple parties jointly compute a function over their inputs while keeping those inputs private.</p>
+<p>This system is called a powers-of-tau setup (or ceremony).</p>
 <p>We begin with a single participant, who generates an SRS. This participant is expected to throw away the secret number they used to generate it.</p>
 <p>Then, the SRS is passed along to the next participant, who will generate their own secret number. The next participant will take the SRS and multiply each term by their new secret number. When finished, this participant is also expected to throw away their secret number.</p>
 <p>The new SRS is based on two secret numbers, one from each participant. If either one destroys the secret number, the SRS will remain secure.</p>
 <p>We've transformed our centralized trust assumption into a decentralized trust assumption.</p>
 <p>The same process repeats over and over again. Each cycle will produce another SRS, indistinguishable from random data, but secretly tied together by each participant's secret number.</p>
-<p>This system has been named a powers-of-tau setup.</p>
-<p>&nbsp;</p>
-<ul>
-  <li><strong>1 of N</strong>: there are many actors, and the system works as long as at least one of them does what you expect them to. Any system based on fraud proofs falls into this category, as do trusted setups though in that case the N is often smaller. Note that you do want the N to be as large as possible!</li>
-</ul>
-<p>&nbsp;</p>
+<figure class="image"><img src="/kzg-ceremony-2.png">
+  <figcaption><a href="https://vitalik.ca/general/2022/03/14/trustedsetup.html"><i>source</i></a></figcaption>
+</figure>
+<p>Anyone can use the intermediate outputs of the ceremony to recalculate the each SRS, but none of the outputs leak any information about any of the secret numbers.&nbsp;</p>
+<p>A powers-of-tau setup is a 1 of N trust assumption, where N is the number of participants. The system is secure as long as one participant in the system does what they are supposed to do.&nbsp;</p>
+<p>That’s where you come in!</p>
+<h2>The Ethereum KZG Ceremony</h2>
+<p>We are currently in the middle of the public contribution phase of the trusted setup needed for Ethereum Danksharding.</p>
+<p>The Ethereum foundation has created a very easy-to-use tool for anyone to participate in the powers-of-tau ceremony and contribute random, secret data.&nbsp;</p>
+<p>Then, you can delete your secret data forever.&nbsp;</p>
+<p>From that moment on, you can sleep easy for the rest of your life knowing that the “trusted” setup is actually secure.&nbsp;</p>
+<p>The only person you need to trust is yourself!</p>
+<p>What’s more, you‘ll make Ethereum more secure for everyone. Remember, it’s a 1 of N trust assumption; everyone is more comfortable the bigger N is.</p>
+<p>[walkthrough]</p>
+<h2>Other Uses&nbsp;</h2>
+<p>Here’s the cool thing about generating an SRS: once created, it can be used for any application that needs an SRS. It is not specific to Danksharding.&nbsp;</p>
+<p>In fact, this SRS will be particularly useful. It will be long enough to support Danksharding blobs and will have a historic number of contributions.&nbsp;</p>
+<p>And so, contributing to the Ethereum KZG ceremony will not have important implications for securing the World Computer, it will also secure an infinite number of future elliptic-curve-based applications.</p>
+<p>But, unfortunately this SRS is only going to be useful for so long.&nbsp;</p>
+<p>In fact, all SRSs are on a ticking clock.&nbsp;</p>
+<h2>The End of the SRS</h2>
+<p>Quantum computing has enormous implications on&nbsp;</p>
 <p>&nbsp;</p>
