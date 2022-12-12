@@ -2,13 +2,15 @@
 title: KZG Ceremony
 description: 
 published: false
-date: 2022-12-12T02:18:58.475Z
+date: 2022-12-12T02:54:07.454Z
 tags: 
 editor: ckeditor
 dateCreated: 2022-12-11T16:35:48.536Z
 -->
 
-<p>&nbsp;</p>
+<figure class="image"><img src="/kzg-ceremony-banner.jpeg">
+  <figcaption><a href="https://a16zcrypto.com/on-chain-trusted-setup-ceremony/"><i>source</i></a></figcaption>
+</figure>
 <h1 style="text-align:center;">(Proto-) Danksharding KZG Trusted Setup</h1>
 <h2>The World Computer</h2>
 <p>Ethereum is the <a href="https://inevitableeth.com/home/ethereum/world-computer">World Computer</a>, a network of 1,000s of computers (<a href="https://inevitableeth.com/home/ethereum/network/node">nodes</a>) coordinating using <a href="https://inevitableeth.com/home/ethereum/network/consensus/pos">Proof of Stake</a> (PoS) to keep the <a href="https://inevitableeth.com/home/ethereum/evm">Ethereum Virtual Machine</a> (EVM) in sync.</p>
@@ -119,12 +121,58 @@ dateCreated: 2022-12-11T16:35:48.536Z
 <p>That’s where you come in!</p>
 <h2>The Ethereum KZG Ceremony</h2>
 <p>We are currently in the middle of the public contribution phase of the trusted setup needed for Ethereum Danksharding.</p>
-<p>The Ethereum foundation has created a very easy-to-use tool for anyone to participate in the powers-of-tau ceremony and contribute random, secret data.&nbsp;</p>
+<p>The Ethereum foundation has created <a href="https://ceremony.ethereum.org/">a very easy-to-use tool for anyone to participate in the powers-of-tau ceremony</a> and contribute random, secret data.&nbsp;</p>
 <p>Then, you can delete your secret data forever.&nbsp;</p>
 <p>From that moment on, you can sleep easy for the rest of your life knowing that the “trusted” setup is actually secure.&nbsp;</p>
 <p>The only person you need to trust is yourself!</p>
 <p>What’s more, you‘ll make Ethereum more secure for everyone. Remember, it’s a 1 of N trust assumption; everyone is more comfortable the bigger N is.</p>
-<p>[walkthrough]</p>
+<h3>Walkthrough</h3>
+<p>Fortunately, contributing is super easy! All you need to do is <a href="https://ceremony.ethereum.org/">click this link</a> and follow the instructions.&nbsp;</p>
+<p>Here are screenshots of the process so you can see what it looks like.&nbsp;</p>
+<figure class="table">
+  <table>
+    <tbody>
+      <tr>
+        <td>
+          <figure class="image"><img src="/kzg-ceremony-3.png">
+            <figcaption><i>Landing page</i></figcaption>
+          </figure>
+        </td>
+        <td>
+          <figure class="image"><img src="/kzg-ceremony-4.png">
+            <figcaption><i>The actual contribution</i></figcaption>
+          </figure>
+        </td>
+        <td>
+          <figure class="image"><img src="/kzg-ceremony-5.png">
+            <figcaption><i>1 of 2 signatures</i></figcaption>
+          </figure>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <figure class="image"><img src="/kzg-ceremony-6.png">
+            <figcaption><i>2 of 2 signatures</i></figcaption>
+          </figure>
+        </td>
+        <td>
+          <figure class="image"><img src="/kzg-ceremony-7.png">
+            <figcaption><i>Waiting in queue to add secret to SRS</i></figcaption>
+          </figure>
+        </td>
+        <td>
+          <figure class="image"><img src="/kzg-ceremony-8.png">
+            <figcaption><i>Celebration screen</i></figcaption>
+          </figure>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
+<p><a href="https://notes.ethereum.org/@CarlBeek/kzg_ceremony_timelines">Here is the full timeline for the ceremony</a>. Below is the the phase we are currently in.&nbsp;</p>
+<figure class="image"><img src="/kzg-ceremony-9.png">
+  <figcaption><a href="https://notes.ethereum.org/@CarlBeek/kzg_ceremony_timelines"><i>source</i></a></figcaption>
+</figure>
 <h2>Other Uses&nbsp;</h2>
 <p>Here’s the cool thing about generating an SRS: once created, it can be used for any application that needs an SRS. It is not specific to Danksharding.&nbsp;</p>
 <p>In fact, this SRS will be particularly useful. It will be long enough to support Danksharding blobs and will have a historic number of contributions.&nbsp;</p>
@@ -132,5 +180,11 @@ dateCreated: 2022-12-11T16:35:48.536Z
 <p>But, unfortunately this SRS is only going to be useful for so long.&nbsp;</p>
 <p>In fact, all SRSs are on a ticking clock.&nbsp;</p>
 <h2>The End of the SRS</h2>
-<p>Quantum computing has enormous implications on&nbsp;</p>
-<p>&nbsp;</p>
+<p>Quantum computing has enormous implications for cryptography. We wont get into the details here, but the same calculations that are incredibly difficult to undo (critical to the security of KZG commitments) with standards computers is trivial on quatum computers.&nbsp;</p>
+<p>In particular, a quantum computer will be able to derive our underlying secret number without breaking a sweat.</p>
+<p>And with the secret number, an attacker can break any system based on the SRS.</p>
+<p>We are 10-20 years from having quantum computers capable enough of breaking an SRS like this. At that point, the entire KZG commitment scheme itself will become hopelessly broken.</p>
+<p>As will most of the cryptographic primitives that make up Ethereum.</p>
+<p>Fortunately, there are many people already working on quantum-secure replacements for all of these schemes. They will all be ready and swapped into production long before quantum computers are scaled up.</p>
+<p>And until then, we can confidently rely on our SRS…</p>
+<p>…as long as you contribute!</p>
