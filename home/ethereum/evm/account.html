@@ -1,0 +1,79 @@
+<!--
+title: Ethereum Account
+description: 
+published: true
+date: 2023-01-09T01:44:23.836Z
+tags: 
+editor: ckeditor
+dateCreated: 2023-01-09T01:44:23.836Z
+-->
+
+<figure class="image"><img src="/account-banner.png"></figure>
+<h1 style="text-align:center;">Ethereum Accounts</h1>
+<h2>The World Computer</h2>
+<p>Ethereum is the <a href="https://inevitableeth.com/home/ethereum/world-computer">World Computer</a>, a single, globally shared computing platform that exists in the space between a network of 1,000s of computers (<a href="https://inevitableeth.com/home/ethereum/network/node">nodes</a>).</p>
+<p>These nodes are real computers in the real world, communicating directly from peer to peer.</p>
+<p>The purpose of the greater Ethereum apparatus is to offer a single shared computing platform - the <a href="/home/ethereum/evm">Ethereum Virtual Machine</a> (EVM).</p>
+<p>The EVM provides the context for <a href="/home/ethereum/blockchain/transaction">transactions</a> (computation); everything you "do" on-chain happens within the EVM.</p>
+<h2>Native Property</h2>
+<p><a href="/home/ethereum/evm/property-rights">Deep Dive: Internet-Native Property Rights</a></p>
+<p>The EVM has a specific property, upon which all of Ethereum rests: native property rights.</p>
+<p>Ethereum consensus is inherently built around the ability to distribute &amp; confiscate (slash) ETH.</p>
+<p>Discrete ownership is built in at the protocol level.</p>
+<p>Within the EVM, native property rights manifest via Ethereum accounts. Accounts are the individual actors that exist within the context of the EVM.</p>
+<p>There are two kinds of accounts: Contract Accounts (CA) and Externally Owned Accounts (EOAs).</p>
+<h2>Relationship to the EVM</h2>
+<p>CAs exist entirely within Ethereum. Rather than being controlled by cryptographic keys, they are controlled by the logic contained within the smart contract's code.</p>
+<p>EOAs, on the other hand, are controlled by someone (or thing) external to the EVM (eg a user).</p>
+<p>All actions with the EVM require <a href="/home/concepts/gas">gas</a>, and therefore initializing a CA (within the EVM) has a cost.</p>
+<p>In contrast, initializing an EOA is free - all you need to do is generate the signing keys (external from the EVM), and you've gained control.</p>
+<h2>EOAs and Keypairs</h2>
+<p>This last point is worth expanding on, but first... <a href="/home/concepts/digital-signatures">Digital signatures</a>.</p>
+<p>Tl;dr a digital signature is used to publicly confirm two things:</p>
+<p>- the message was really sent by the person claiming to send it</p>
+<p>- the message has not been tampered with</p>
+<p>Digital signatures are based on keypairs, which are made up of a private and public key.</p>
+<ul>
+  <li>private key + message = signature</li>
+  <li>public key + signature + message = verification</li>
+</ul>
+<p>The keypair is the core unit of cryptography; it provides verifiable identity.</p>
+<p>Ethereum uses <a href="https://en.wikipedia.org/wiki/Elliptic_Curve_Digital_Signature_Algorithm">ECDSA</a> (<a href="https://en.bitcoin.it/wiki/Secp256k1">secp256k1</a>) to generate EOA account keypairs. Those keypairs control the Ethereum account.</p>
+<p>The concept of Account (the object holding your tokens) and the concept of Signer (the object authorized to move these tokens) are basically the same thing.</p>
+<p>This is all in contrast to CAs, which do not have signing keys at all.</p>
+<p>Instead, CAs are independent entities within the EVM that retain the same ownership rights as EOAs that ALSO retain its ownership of itself.</p>
+<p>That ownership is manifested through the contract's code.</p>
+<h2>Properties of an Account</h2>
+<p>On a technical level, both CAs and EOAs have the same 3 properties:</p>
+<ul>
+  <li>an address</li>
+  <li>an ETH balance</li>
+  <li>a nonce (a counter that uniquely identifies each transaction per account)</li>
+</ul>
+<p>CAs have two additional properties: code and storage.</p>
+<h3>Tokens</h3>
+<p>Notice that EOAs (the accounts used by the vast majority of users, including me) don't have a field for tokens or assets other than ETH.</p>
+<p>In fact, those assets exist in the records of CAs, registered to the EOA's account.</p>
+<p>Consider a user who has 100 USDC. This USDC is not "in" the EOA account.</p>
+<p>The CA account that controls USDC contains a database of Ethereum addresses and their balances.</p>
+<p>And so, the ownership of the 100 USDC appears in the CA code and not within the EOA.</p>
+<h3>Multicalls</h3>
+<p>The ability for CAs to have code/storage gives CAs much more flexibility than EOAs.</p>
+<p>For example, CAs can execute many different actions in a single Ethereum transaction. <a href="https://www.argent.xyz/blog/uniswap-multicall/">This Argent/Uniswap tool</a> allows for 1-click Uniswap LPing.</p>
+<h3>Triggers</h3>
+<p>But CAs are not "more powerful" than EOAs - they are different.</p>
+<p>The most important thing to know about Ethereum accounts is that only 1 type can initiate transactions (and therefore computation): EOAs.</p>
+<p>CAs can take actions, but they must be first triggered by an EOA.</p>
+<p>But this rule is not a law of nature - it was a philosophical decision to ensure that all transactions are triggered externally to the EVM.</p>
+<p>This is a decision that could be changed through the Ethereum Improvement Process (EIP) procedure.</p>
+<h2>Looking Forward</h2>
+<p>In fact, many more of the things we've discussed were similar design decisions, made by the visionaries building Ethereum at a specific time and for a specific reason.</p>
+<p>Reasons that might not necessarily hold up for the long haul.</p>
+<p>For example, Ethereum keypairs</p>
+<p>ECDSA (secp256k1) was a great, secure choice for the time, but it is incredibly vulnerable to quantum computers. In fact, a commercial quantum computer could completely break (today's) Ethereum...</p>
+<p>...without even trying.</p>
+<p>Fortunately, we've been thinking about this problem for a long time now.</p>
+<p>The solution, led by groups like Stark Ware, ZK-Sync and Argent: Account Abstraction!</p>
+<h2>Resources</h2>
+<p>Source Material - Twitter Link</p>
+<p>Source Material - PDF</p>
