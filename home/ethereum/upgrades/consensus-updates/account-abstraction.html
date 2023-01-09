@@ -2,7 +2,7 @@
 title: Account Abstraction
 description: 
 published: false
-date: 2023-01-09T20:02:46.447Z
+date: 2023-01-09T22:46:03.190Z
 tags: 
 editor: ckeditor
 dateCreated: 2023-01-09T20:02:46.447Z
@@ -13,92 +13,83 @@ dateCreated: 2023-01-09T20:02:46.447Z
 <p>Ethereum is the <a href="https://inevitableeth.com/home/ethereum/world-computer">World Computer</a>, a single, globally shared computing platform that exists in the space between a network of 1,000s of computers (<a href="https://inevitableeth.com/home/ethereum/network/node">nodes</a>).</p>
 <p>These nodes are real computers in the real world, communicating directly from peer to peer.</p>
 <p>The purpose of the greater Ethereum apparatus is to offer a single shared computing platform - the <a href="https://inevitableeth.com/home/ethereum/evm">Ethereum Virtual Machine</a> (EVM).</p>
+<h2>Ethereum Accounts</h2>
+<p><a href="/home/ethereum/evm/account">Deep Dive: Ethereum Accounts</a></p>
 <p>Within the EVM, the atomic unit of identity (and ownership) is the account.</p>
 <p>Accounts can be either Externally Owned Accounts (EOAs), controlled by a non-EVM entity (eg a person), or Contract Accounts (CAs), controlled by its smart contract code.</p>
 <p>EOAs and CAs have some very important differences.</p>
-<p>&nbsp;</p>
 <p>At a high level: EOAs are controlled by people (or code outside the EVM) using a keypair, CAs are controlled by code (inside the EVM).</p>
-<p>&nbsp;</p>
 <p>EOAs are the only accounts that can initiate EVM actions.</p>
+<h2>Keys and Keypairs</h2>
+<p><a href="/home/concepts/digital-signatures">Deep Dive: Digital Signatures</a></p>
 <p>A keypair (a public and private key) gives you the ability to perform digital signatures, used to publicly confirm two things:</p>
-<p>&nbsp;</p>
-<p>- the message was really sent by the person claiming to send it</p>
-<p>- the message has not been tampered with</p>
+<ul>
+  <li>the message was really sent by the person claiming to send it</li>
+  <li>the message has not been tampered with</li>
+</ul>
 <p>Here's the basic construct:</p>
-<p>&nbsp;</p>
-<p>private key + message = signature</p>
-<p>public key + signature + message = verification</p>
-<p>&nbsp;</p>
-<p>Within the context of the EVM, these "messages" are transactions. Thus, the digital signature shows the person with the private key authorized the transaction.</p>
-<p>There are many different signature/keypair schemes; @ethereum uses a scheme called ECDSA (secp256k1).</p>
-<p>&nbsp;</p>
+<ul>
+  <li>private key + message = signature</li>
+  <li>public key + signature + message = verification</li>
+</ul>
+<p>Within the context of the EVM, these "messages" are <a href="/home/ethereum/blockchain/transaction">transactions</a>. Thus, the digital signature shows the person with the private key authorized the transaction.</p>
+<h3>Ethereum's Keys</h3>
+<p>There are many different signature/keypair schemes; Ethereum uses a scheme called <a href="https://en.wikipedia.org/wiki/Elliptic_Curve_Digital_Signature_Algorithm">ECDSA</a> (<a href="https://en.bitcoin.it/wiki/Secp256k1">secp256k1</a>).</p>
 <p>Here's the only thing you need to know about any of those letters: an Ethereum account address is the last 20 bytes of the (hash of) the ECDSA (secp256k1) scheme.</p>
-<p>The result is that @ethereum has the logic of ECDSA (secp256k1) built into the core code of the EVM itself.</p>
-<p>&nbsp;</p>
+<p>The result is that Ethereum has the logic of ECDSA (secp256k1) built into the core code of the EVM itself.</p>
 <p>In order for the EVM to validate a signature from a given address, it must process all the data through the scheme.</p>
-<p>&nbsp;</p>
 <p>ECDSA (secp256k1) is hardcoded into the EVM.</p>
-<p>Here is the core insight required to understand account abstraction: currently, @ethereum accounts are so tightly coupled to keypairs that they are essentially the same thing.</p>
-<p>&nbsp;</p>
+<p>Here is the core insight required to understand account abstraction: currently, Ethereum accounts are so tightly coupled to keypairs that they are essentially the same thing.</p>
 <p>If you control a private key, you control an account.</p>
-<p>&nbsp;</p>
 <p>"Not your keys, not your crypto."</p>
+<h2>Account Abstraction</h2>
 <p>Account abstraction will decouple the entity within the EVM (account) from the entity with the authority to move your assets (keypair, or signer).</p>
-<p>&nbsp;</p>
 <p>Here's the trick: we are going to turn ALL accounts into CAs, which can define their own valid transactions.</p>
 <p>As long as the CA supports specific functions (eg validate signature), it can BE an account.</p>
-<p>&nbsp;</p>
-<p>We define these specific functions through an API. A core part of the process of implementing the account abstraction will be designing this API.</p>
-<p>Once implemented, @ethereum becomes instantly more customizable, flexible and future proof.</p>
-<p>&nbsp;</p>
+<p>We define these specific functions through an <a href="/home/concepts/api">API</a>. A core part of the process of implementing the account abstraction will be designing this API (thereby implementing <a href="/home/concepts/abstraction">abstraction</a>).</p>
+<p>Once implemented, Ethereum becomes instantly more customizable, flexible and future proof.</p>
+<h2>Quantum Resistance&nbsp;</h2>
 <p>The best way to see this is to return back to the signature scheme we use today, ECDSA (secp256k1). This scheme is incredibly powerful... for now.</p>
-<p>The problem with ECDSA (secp256k1) is that it is not quantum secure. A quantum computer could break it instantly, destroying @ethereum in the process.</p>
-<p>&nbsp;</p>
+<p>The problem with ECDSA (secp256k1) is that it is not quantum secure. A quantum computer could break it instantly, destroying Ethereum in the process.</p>
 <p>Quantum computers are not yet powerful enough to be an issue, but they will be.</p>
-<p>Account abstraction gives us the flexibility we need to move to different signature schemes as required.</p>
-<p>&nbsp;</p>
-<p>Even more powerfully, there's no reason everyone needs to use the same scheme. Every user would be free to secure their assets with whatever cryptography they like.</p>
+<p>Account abstraction gives us the flexibility we need to move to different signature schemes, as required.</p>
+<p>Even more powerfully, there's no reason everyone needs to use the same scheme.&nbsp;</p>
+<p>Every user would be free to secure their assets with whatever cryptography they like.</p>
+<h2>More Implications and Applications</h2>
 <p>But replacing the signature scheme is just the start. It get's the most talk because of the looming quantum threat, but account abstraction opens up an entire new design space:</p>
-<p>&nbsp;</p>
-<p>@ethereum user experience!</p>
-<p>&nbsp;</p>
+<p>Ethereum user experience!</p>
 <p>Here are just a few of the more exciting ideas I've seen so far!</p>
-<p>Fraud Monitoring</p>
-<p>&nbsp;</p>
+<h3>Fraud Monitoring</h3>
 <p>An account can require a second signature from a 3rd-party fraud monitor, who inspects every transaction for known scams, predefined security rules, etc.</p>
-<p>&nbsp;</p>
 <p>This 3rd-party would not have control over your assets, just transaction approval privileges.</p>
-<p>Multicalls</p>
-<p>&nbsp;</p>
+<h3>Multicalls</h3>
 <p>An account can batch together multiple transactions and execute them all with a single signature/user input.</p>
-<p>&nbsp;</p>
-<p>@hasufl said it best, so I'll leave his tweet below.</p>
-<p>&nbsp;</p>
-<p>https://twitter.com/hasufl/status/1538793436085637121</p>
-<p>Session Keys</p>
-<p>&nbsp;</p>
+<p>Hasufl said it best, so I'll leave the image he left in <a href="https://twitter.com/hasufl/status/1538793436085637121">this tweet</a> below.</p>
+<h3>Session Keys</h3>
 <p>An account can generate a key and grant it specific privileges/duration. The account can then grant this key to semi-trusted spaces (eg a browser), improving UX without exposing the whole account.</p>
-<p>&nbsp;</p>
 <p>Imagine a blockchain game without having constant approvals.</p>
-<p>Two-Factor Authentication</p>
-<p>&nbsp;</p>
+<h3>Two-Factor Authentication</h3>
 <p>An account can grant a set of authorization keys (similar to fraud monitoring) to a third party service that will only approve a transaction if you confirm with a second method (eg SMS or email).</p>
-<p>Hardware Integration</p>
-<p>&nbsp;</p>
-<p>Perhaps the coolest thing? Integration into the hardware that companies like @Apple are already shipping.</p>
-<p>&nbsp;</p>
-<p>Imagine if your private keys were held in the secure enclave on your iPhone... approve transactions with FaceID!</p>
-<p>https://support.apple.com/guide/security/secure-enclave-sec59b0b31ff/web</p>
-<p>Bottom line, account abstraction not only enables a much better, more user-friendly @ethereum, it is also the cleanest way to deal with the existential threat of quantum computers.</p>
-<p>&nbsp;</p>
-<p>But, unfortunately, implementing it has not been easy.</p>
-<p>&nbsp;</p>
-<p>https://www.argent.xyz/blog/part-2-wtf-is-account-abstraction/</p>
+<h3>Hardware Integration</h3>
+<p>Perhaps the coolest thing? Integration into the hardware that companies like Apple are already shipping.</p>
+<p>Imagine if your private keys were held in the <a href="https://support.apple.com/guide/security/secure-enclave-sec59b0b31ff/web">secure enclave</a> on your iPhone... approve transactions with FaceID!</p>
+<h2>Implementing Account Abstraction</h2>
+<p>Bottom line, account abstraction not only enables a much better, more user-friendly Ethereum, it is also the cleanest way to deal with the existential threat of quantum computers.</p>
+<p>But, unfortunately, <a href="https://www.argent.xyz/blog/part-2-wtf-is-account-abstraction/">implementing it has not been easy</a>.</p>
 <p>The good news is that rollups are offering a new, interesting opportunity to build in account abstraction from the very beginning.</p>
-<p>&nbsp;</p>
-<p>While the @ethereum gigabrains are hard at work, projects like @zksync, @StarkWareLtd and @argentHQ are out there inventing the tech.</p>
-<p>So, fear not, dear reader, the greater @ethereum community knows what it is doing!</p>
-<p>&nbsp;</p>
+<p>While the Ethereum gigabrains are hard at work, projects like <a href="https://zksync.io/">ZK-Sync</a>, <a href="https://starkware.co/">StarkWare</a> and <a href="https://www.argent.xyz/">Argent</a> are out there inventing the tech.</p>
+<p>So, fear not, dear reader, the greater Ethereum community knows what it is doing!</p>
 <p>I can't tell you when account abstraction is coming, I can't even tell you what it will look like or where it will be...</p>
-<p>&nbsp;</p>
 <p>But when it comes, account abstraction will leap us forward.</p>
+<h2>Resources</h2>
+<p>Source Material - Twitter Link</p>
+<p>Further Reading</p>
+<ul>
+  <li>WTF is Account Abstraction<ul>
+      <li><a href="https://www.argent.xyz/blog/wtf-is-account-abstraction/">Part 1</a></li>
+      <li><a href="https://www.argent.xyz/blog/part-2-wtf-is-account-abstraction/">Part 2</a></li>
+      <li><a href="https://www.argent.xyz/blog/part-3-wtf-is-account-abstraction/">Part 3</a></li>
+    </ul>
+  </li>
+  <li><a href="https://blog.pantherprotocol.io/ethereum-account-abstraction-everything-you-need-to-know/">Ethereum Account Abstraction - Everything You Need to Know</a></li>
+</ul>
