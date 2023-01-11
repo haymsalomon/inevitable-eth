@@ -1,0 +1,114 @@
+<!--
+title: Single-Slot Finality
+description: 
+published: true
+date: 2023-01-11T01:42:13.607Z
+tags: 
+editor: ckeditor
+dateCreated: 2023-01-11T01:42:13.607Z
+-->
+
+<figure class="image"><img src="/single-slot-finality-1.png"></figure>
+<h1 style="text-align:center;">Single-Slot Finality</h1>
+<h2>The World Computer</h2>
+<p>Ethereum is the <a href="https://inevitableeth.com/home/ethereum/world-computer">World Computer</a>, a single, globally shared computing platform that exists in the space between a network of 1,000s of computers (<a href="https://inevitableeth.com/home/ethereum/network/node">nodes</a>). These nodes are real computers in the real world, communicating directly from peer to peer.&nbsp;</p>
+<p>The purpose of the greater Ethereum apparatus is to offer a single shared computing platform - the <a href="https://inevitableeth.com/home/ethereum/evm">Ethereum Virtual Machine</a> (EVM).</p>
+<p>These nodes must stay perfectly in sync, processing the same <a href="https://inevitableeth.com/home/ethereum/blockchain/transaction">transactions</a> and doing the same actions that every other node is doing.</p>
+<p>The way Ethereum coordinates and stays in sync is through a process called <a href="https://inevitableeth.com/home/ethereum/network/consensus/pos">Proof of Stake</a> (PoS).</p>
+<h2>Ethereum Time</h2>
+<p><a href="/home/ethereum/network/consensus/time">Deep Dive: Time in Ethereum</a></p>
+<p>Before we continue, it's important to understand time on the World Computer.</p>
+<ul>
+  <li><a href="/home/ethereum/blockchain/block">Blocks</a> (bundles of transactions) execute atomically: all together or not at all</li>
+  <li>Every 12 seconds, Ethereum produces a block, filling a slot.</li>
+  <li>32 slots = 1 epoch</li>
+</ul>
+<h2>Finality</h2>
+<p><a href="/home/ethereum/network/consensus/finality">Deep Dive: Finality</a></p>
+<p>Every 12 seconds, a randomly selected validator <a href="/home/ethereum/network/consensus/block-proposal">proposes</a> a new block to the network.</p>
+<p>Here's the question: when does that block become irreversible?&nbsp;</p>
+<p>When does a block gain the crypto-economic securities of ETH and forever join the immutable record that is the blockchain?</p>
+<p>Let us define this specific property: a block that has become enshrined within the Ethereum blockchain is "finalized."</p>
+<p>A finalized block cannot be changed or undone without destroying AT LEAST 1/3 of all staked ETH.</p>
+<h2>Practical Byzantine Fault Tolerance</h2>
+<p><a href="/home/concepts/bft">Deep Dive: Byzantine General's Problem &amp; Fault Tolerance</a></p>
+<p>Finality in Ethereum is built on top of the Byzantine's General Problem; specifically a solution known as Practical Byzantine Fault Tolerance (pBFT).</p>
+<p>pBFT is based on 2 rounds of voting. After the second round, mathematical finality is reached.</p>
+<h2>Ethereum PoS</h2>
+<p>At the beginning of each epoch, the entire validator set is shuffled into 32 committees - one for each slot.</p>
+<p>Over the next 32 slots, each committee will <a href="/home/ethereum/network/consensus/attestation">vote</a> on the block proposed in its corresponding slot.</p>
+<p>By the end of the epoch, every validator has voted 1 time.</p>
+<p>The cycle repeats; validators are shuffled into 32 committees, each validator votes on the block corresponding to its assigned committee.</p>
+<p>Because each block builds on the ones before it, each vote for later block is also an implicit vote for earlier votes.</p>
+<p>After two epochs, every block has been voted on by the entire validator set two times - once in the epoch it was introduced and again (implicitly) in the following epoch.</p>
+<p>Thus, according to pBFT, we can say confidently say the block has been finalized after 2 epochs.</p>
+<p>Today, this is how Ethereum works: your transactions are not considered settled until at least 2 epochs have passed.</p>
+<p>2 epochs = 2 * 32 slots = 2 * 32 * 12 seconds = 12.8 mins.</p>
+<p>And honestly, that's pretty good. Way better than trad-fi.</p>
+<p>But we can do better!</p>
+<h2>Single-Slot Finality</h2>
+<p>The end-goal is Single Slot Finality (SSF) - blocks that are final at the end of a single slot.</p>
+<p>Permissionless transfer, of any size with 12 second settlement time.&nbsp;</p>
+<p>The literal dream of value transfer!</p>
+<p>But there are more than just user-experience reasons to purse SSF.</p>
+<h3>Reorgs</h3>
+<p>It turns out that 2-epoch finality introduces a huge (although VERY difficult to execute) vulnerability: <a href="https://www.paradigm.xyz/2021/07/ethereum-reorgs-after-the-merge">short-range reorgs</a>.</p>
+<p>Tl;dr a reorg describes a situation where a block that was previously part of the chain is removed by a competing block.</p>
+<p>Imagine a scenario where an attacker identifies a potential profit in (for example) undoing a particularly large liquidation. Ethereum PoS leaves a (max 2 epoch) window for an attacker to attempt to engineer a reorg.</p>
+<p>SSF will completely remove this existential risk.</p>
+<h3>Complexity</h3>
+<p>But perhaps the most important reason to pursue SSF is because the current system is too complex.</p>
+<p>In particular, the interface between fork-choice and finality and the infrastructure needed to shuffle all the validators are particularly cumbersome and prone to bugs.</p>
+<h2>Path to SSF</h2>
+<p>And so, SSF is the endgame for Ethereum - that much is clear. We do not know what the solution looks like, nor the route we are going to take, but we do understand the big questions that need answers.</p>
+<p>We'll borrow Vitalik Buterin's <a href="https://notes.ethereum.org/@vbuterin/single_slot_finality">structure</a>.</p>
+<h3>1 - Develop the consensus algorithm</h3>
+<p>Today, Ethereum PoS (including the underlying consensus algorithm) is fundamentally structured around the epoch cycle.&nbsp;</p>
+<p>Moving to SSF will require a complete re-write of the system (although many components will be reused).</p>
+<p>While this sounds like an very large task, it is by no means insurmountable.</p>
+<p>It's not like we are building SSF for the first time; Cosmos' consensus mechanism (called Tendermint) has been doing it for years!</p>
+<p>And so, the Ethereum wizards will create Ethereum PoS v2.</p>
+<h3>2 - Determine an aggregation strategy</h3>
+<p><a href="https://beaconcha.in/">Currently there are ~500k Ethereum validators</a>; in order to achieve SSF, we need every validator to vote (twice) on every single slot.</p>
+<p>There are 2 things we need to think about: network congestion and signature aggregation.</p>
+<h4>BLS Signatures</h4>
+<p><a href="/home/concepts/bls-signatures">Deep Dive: BLS Signatures</a></p>
+<p>Under-the-hood, these "votes" are actually BLS digital signatures.</p>
+<p>The cool thing about BLS signatures is that they can be aggregated and combined; 1000s of signatures can be stored and verified with a single aggregate signature.</p>
+<h4>Network Congestion</h4>
+<p>500k sigs every 12 secs would be a huge (32x) increase. There as basically two ways to address this:</p>
+<ul>
+  <li>create more layers of aggregation, keeping bandwidth reqs low but increasing latency and complexity</li>
+  <li>increase the bandwidth capabilities/reqs of the network</li>
+</ul>
+<h4>Signature Aggregation</h4>
+<p>The other thing to consider is the BLS aggregation itself.</p>
+<p>The process isn't difficult, and we've made some HUGE improvements over the last few years, but it ends up being the primary bottleneck.</p>
+<p>At a certain point, we just can't aggregate more signatures per slot.</p>
+<h3>3 - Design validator economics</h3>
+<p>Despite all the possible improvements we can make on BLS aggregation (and elsewhere across the system), it's possible that SSF Ethereum may have to cap the number of validators.</p>
+<p>The question: "who gets to be a validator?"</p>
+<p>First, some good news: in a SSF world, the validator count will significantly drop.</p>
+<p>Today, each validator is exactly 32 ETH; if one user has 64 ETH, s/he will create 2 validators.</p>
+<p>With SSF, the 32 ETH cap isn't necessary. Each staker will need only 1 validator (regardless of how much ETH s/he is staking).</p>
+<p>But let's imagine a world where even after this consolidation, there are still more people interested in staking than there is capacity for processing signatures.</p>
+<p>Then, we basically have two choices: super-committees or caps.</p>
+<h4>Super Committees</h4>
+<p>In a <a href="https://ethresear.ch/t/a-model-for-cumulative-committee-based-finality/10259">super-committee solution</a>, every slot a large (10k+), randomly selected group of validators would form that slots super-committee.</p>
+<p>Every slot the committee changes (partially or in full) so that, over time, all validators participate.</p>
+<h4>Caps</h4>
+<p>In a cap system, the validator set is capped. When full, either the queue closes and no one else can join, or the oldest validators get kicked out.</p>
+<p>Either system could be applied based on ETH deposited or on validator count.</p>
+<p>But perhaps the coolest idea lies in a different kind of cap: an economic cap system.</p>
+<p>If there are too many validators, all new validators are penalized (reducing the real-returns of staking ETH).</p>
+<p>Thus, an economic equilibrium will form, set by the market.</p>
+<h2>Summary</h2>
+<p>Again, we'll borrow from the master; I'll leave Vitalik Buterin's summary on the way out.</p>
+<p>Bottom line, single slot finality is an important upgrade coming to Ethereum.</p>
+<p>Not only will it improve the user experience, the World Computer is begging for it!</p>
+<figure class="image"><img src="/single-slot-finality-2.png">
+  <figcaption><a href="https://notes.ethereum.org/@vbuterin/single_slot_finality"><i>source</i></a></figcaption>
+</figure>
+<h2>Resources</h2>
+<p>Source Material - Twitter Link&nbsp;</p>
+<p>Vitalik's <a href="https://notes.ethereum.org/@vbuterin/single_slot_finality">"Paths toward single-slot finality"</a></p>
