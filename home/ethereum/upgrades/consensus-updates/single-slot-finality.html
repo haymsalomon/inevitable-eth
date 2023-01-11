@@ -2,7 +2,7 @@
 title: Single-Slot Finality
 description: 
 published: true
-date: 2023-01-11T01:42:13.607Z
+date: 2023-01-11T01:59:31.884Z
 tags: 
 editor: ckeditor
 dateCreated: 2023-01-11T01:42:13.607Z
@@ -42,7 +42,7 @@ dateCreated: 2023-01-11T01:42:13.607Z
 <p>Because each block builds on the ones before it, each vote for later block is also an implicit vote for earlier votes.</p>
 <p>After two epochs, every block has been voted on by the entire validator set two times - once in the epoch it was introduced and again (implicitly) in the following epoch.</p>
 <p>Thus, according to pBFT, we can say confidently say the block has been finalized after 2 epochs.</p>
-<p>Today, this is how Ethereum works: your transactions are not considered settled until at least 2 epochs have passed.</p>
+<p>Today, this is how Ethereum works: your transactions are not considered <a href="/home/concepts/settlement">settled</a> until at least 2 epochs have passed.</p>
 <p>2 epochs = 2 * 32 slots = 2 * 32 * 12 seconds = 12.8 mins.</p>
 <p>And honestly, that's pretty good. Way better than trad-fi.</p>
 <p>But we can do better!</p>
