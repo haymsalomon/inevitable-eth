@@ -1,0 +1,93 @@
+<!--
+title: Blockchain Bridges
+description: 
+published: true
+date: 2023-01-12T01:34:13.145Z
+tags: 
+editor: ckeditor
+dateCreated: 2023-01-12T01:34:13.145Z
+-->
+
+<figure class="image"><img src="/bridge-banner.png"></figure>
+<h1 style="text-align:center;">Blockchain Bridges</h1>
+<h2>The World Computer</h2>
+<p>Ethereum is the <a href="https://inevitableeth.com/home/ethereum/world-computer">World Computer</a>, a single, globally shared computing platform that exists in the space between a network of 1,000s of computers (<a href="https://inevitableeth.com/home/ethereum/network/node">nodes</a>). These nodes are real computers in the real world, communicating directly from peer to peer.&nbsp;</p>
+<p>The purpose of the greater Ethereum apparatus is to offer a single shared computing platform - the <a href="https://inevitableeth.com/home/ethereum/evm">Ethereum Virtual Machine</a> (EVM).</p>
+<p>The EVM provides the context for <a href="/home/ethereum/blockchain/transaction">transactions</a> (computation); everything you "do" on-chain happens within the EVM.</p>
+<h2>Isolated EVM</h2>
+<p>By design, the EVM is completely isolated from the outside world. A smart contract has no way to access the internet to either read or send data.</p>
+<p>As far as a smart contract is concerned, NOTHING exists outside of user accounts, other contracts, etc.</p>
+<p>And yet, a TRULY isolated EVM would render Ethereum quite limited. Humans exist outside the EVM and we really care in what happens in the real world.</p>
+<p>Here's just one example: the price of ETH. Seems pretty relevant, and yet the price is set almost entirely off-chain.</p>
+<h2>Blockchain Oracles</h2>
+<p>&nbsp;</p>
+<p><a href="/home/concepts/oracle">Deep Dive: Oracles</a></p>
+<p>Fortunately, the solution is not complicated. Smart contracts can only communicate within the EVM, but outside entities can push content within the EVM.</p>
+<p>&nbsp;</p>
+<p>A service that publishes off-chain data into an on-chain smart contract is called an oracle.</p>
+<p>After an oracle posts data on-chain, into the EVM, and therefore accessible by other entities within the EVM.</p>
+<p>&nbsp;</p>
+<p>While a smart contract can't query the internet for the price of $ETH, it can query the oracle smart contract for its record of the price of $ETH.</p>
+<p>Thus, oracles provide a bridge for information that needs to pass between the internet (and, by extension, the real world) and the isolated space of the EVM.</p>
+<p>Oracles are not limited to bridging info between @ethereum and the internet, they can also bridge information between two independent blockchains.</p>
+<p>&nbsp;</p>
+<p>Want the price of $AVAX on @avalancheavax? An oracle can query its Avalanche contract and report to its Ethereum contract.</p>
+<p>Oracles not only make a blockchain computer relevant, but also gives it access to the entire blockchain ecosystem.</p>
+<p>&nbsp;</p>
+<p>The greater oracle network are the informational neurons that bind this entire industry together.</p>
+<p>&nbsp;</p>
+<p>Which brings us, dear reader, to cryptographic bridges.</p>
+<p>Bridges are a specialized form of oracle service that focus on the transfer of value between different blockchains.</p>
+<p>&nbsp;</p>
+<p>A bridge maintains contracts on multiple blockchains that all track each other. Through internal accounting, users can move value across chains.</p>
+<p>Let's imagine a bridge that connects to @ethereum and AltChain; this bridge will maintain a smart contract on both chains and a service (external to both chains) that monitors both.</p>
+<p>&nbsp;</p>
+<p>A change in one contract is mirrored in the other by the bridge service.</p>
+<p>Let's imagine we want to send 1 $ETH from @ethereum to AltChain.</p>
+<p>&nbsp;</p>
+<p>First, we will send our $ETH to the Ethereum smart contract, updating our balance with the bridge service. The off-chain service will notice this update and push a similar update to the contract on AltChain.</p>
+<p>Now let's say we want to withdraw that value on AltChain.</p>
+<p>&nbsp;</p>
+<p>We can send a transaction to the AltChain smart contract, which will send us our $ETH and update its internal balance. Once propagated, the @ethereum contract will also reflect that we no longer have a deposit.</p>
+<p>But here's the problem: the asset $ETH doesn't really exist on AltChain (in fact, it doesn't really exist anywhere outside of the EVM).</p>
+<p>&nbsp;</p>
+<p>So what does it mean to "get $ETH" on AltChain (or @solana, @avalancheavax, etc)?</p>
+<p>Take a look at "$ETH" on @avalancheavax, linked below. Can you tell what's happening?</p>
+<p>&nbsp;</p>
+<p>This contract is issuing its own, brand-new, token and just calling it $ETH (specifically WETH.e).</p>
+<p>&nbsp;</p>
+<p>https://snowtrace.io/token/0x49d5c2bdffac6ce2bfdb6640f4f80f226bc10bab</p>
+<p>This is the core insight necessary to understanding bridges: when an asset is bridged between chains, the asset itself isn't moving</p>
+<p>&nbsp;</p>
+<p>Rather, the bridge service is projecting the value of the asset by issuing synthetic assets that represent real assets on the native chain</p>
+<p>These synthetic assets only hold value because the people holding them believe that, if push came to shove, they would be able to redeem their synthetic assets and gain the original asset back on the chain where they actually exist (and actually have value).</p>
+<p>Which brings us to the elephant in the room: trust.</p>
+<p>&nbsp;</p>
+<p>Considering @ethereum is about building a trustless computing platform, it's very ironic how much trust is required for these kinds of system to work.</p>
+<p>&nbsp;</p>
+<p>And it's not just one; it's an entire stack of trust assumptions.</p>
+<p>Bridges rely on:</p>
+<p>&nbsp;</p>
+<p>- Trust in all the smart contracts, across every deployed chain</p>
+<p>- Trust every deposit will be honored</p>
+<p>- Trust the bridge operator is able to keep everything in sync</p>
+<p>- Trust the bridge operator doesn't issue extra synthetic tokens</p>
+<p>- And many more</p>
+<p>Fortunately, we've made a lot of progress.</p>
+<p>&nbsp;</p>
+<p>First and foremost, we've learned A LOT about how the technology works. Through a combination of gigabrain research and incredibly expensive lessons, bridges are incredibly sophisticated.</p>
+<p>Today, there is a huge ecosystem of bridges that offer users a wide range of trust assumptions. Different users can opt-in to the services that they are personally comfortable with to move assets where they need to be.</p>
+<p>&nbsp;</p>
+<p>Furthermore, CEXs often native bridging ability.</p>
+<p>Looking further ahead, we are finding new and exciting ways to handle the trust issue.</p>
+<p>&nbsp;</p>
+<p>For example, @eigenlayer will transform $ETH into the pristine collateral of trustless-trust, allowing any service (including bridges) to operate trustlessly.</p>
+<p>As the @ethereum ecosystem progresses, bridging will both become more and less important.</p>
+<p>&nbsp;</p>
+<p>More, as more assets (particularly real-world assets) need to be expressed on-chain.</p>
+<p>&nbsp;</p>
+<p>Less, as the ZK-EVM renders most of this cross-chain stuff moot.</p>
+<p>&nbsp;</p>
+<p>But that's for next time!</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
