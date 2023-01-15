@@ -2,7 +2,7 @@
 title: EVM Object Format (EOF)
 description: 
 published: true
-date: 2023-01-15T01:15:51.852Z
+date: 2023-01-15T01:16:28.041Z
 tags: 
 editor: ckeditor
 dateCreated: 2023-01-15T00:45:24.426Z
@@ -40,7 +40,7 @@ dateCreated: 2023-01-15T00:45:24.426Z
   <figcaption><a href="https://etherscan.io/tx/0x2ea1150808638522d935c7d66b6d67782389b5123682ca466c9b97ac0eb0c050"><i>source</i></a></figcaption>
 </figure>
 <p>That data is the smart contract code, rewritten in a way that is legible for the EVM. The Stakewise devs didn't write this, it was translated from solidity (probably).</p>
-<p>The issue is just how unstructured this "input" field is. Anyone can put anything in and the EVM will do its best to interpret it.</p>
+<p>The issue is just how unstructured this "input" field is. Anyone can put in anything and the EVM will do its best to interpret it.</p>
 <p>Byte by byte.</p>
 <h2>The Effects of Simplicity</h2>
 <p>Two problems: 1) we are filling up the EVM with junk code and so 2) the EVM must spend a ton of resources looking for junk.</p>
