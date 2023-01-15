@@ -2,7 +2,7 @@
 title: EVM Object Format (EOF)
 description: 
 published: true
-date: 2023-01-15T00:45:24.426Z
+date: 2023-01-15T00:52:21.218Z
 tags: 
 editor: ckeditor
 dateCreated: 2023-01-15T00:45:24.426Z
@@ -23,14 +23,17 @@ dateCreated: 2023-01-15T00:45:24.426Z
   <p>"We've overdone it. You can deploy garbage, and the EVM will execute it... byte by byte. We've invented a garbage eating machine!"</p>
 </blockquote>
 <figure class="image"><img src="/eof-1.png">
-  <figcaption><a href="https://www.youtube.com/watch?v=pyxtgilJgKg">source</a></figcaption>
+  <figcaption><a href="https://www.youtube.com/watch?v=pyxtgilJgKg"><i>source</i></a></figcaption>
 </figure>
+<h2>An Unstructured Present</h2>
+<p><a href="/home/ethereum/blockchain/transaction">Deep Dive: Ethereum Transaction</a></p>
 <p>First, let's get some vocab out of the way.</p>
 <p>- Smart contract = computer program in the EVM (forget about the word "contract")</p>
 <p>- Transaction = ANY action within the EVM</p>
 <p>In order to deploy a smart contract, a user submits a transaction that includes the code that makes up that smart contract.</p>
-<p>See the "input" field in the transaction diagram? That's where smart contract code goes.</p>
-<p>Just fill in the blank.</p>
+<p>See the "input" field in the transaction diagram? That's where smart contract code goes. Just fill in the blank.</p>
+<figure class="image"><img src="/transaction-full-txn.jpeg"></figure>
+<h3>Example: Stakewise</h3>
 <p>Real example: <a href="https://etherscan.io/tx/0x2ea1150808638522d935c7d66b6d67782389b5123682ca466c9b97ac0eb0c050">the contract for SWISE</a>, <a href="https://stakewise.io/">Stakewise's</a> governance token.</p>
 <figure class="image"><img src="/eof-2.png">
   <figcaption><a href="https://etherscan.io/tx/0x2ea1150808638522d935c7d66b6d67782389b5123682ca466c9b97ac0eb0c050"><i>source</i></a></figcaption>
@@ -38,40 +41,49 @@ dateCreated: 2023-01-15T00:45:24.426Z
 <p>That data is the smart contract code, rewritten in a way that is legible for the EVM. The Stakewise devs didn't write this, it was translated from solidity (probably).</p>
 <p>The issue is just how unstructured this "input" field is. Anyone can put anything in and the EVM will do its best to interpret it.</p>
 <p>Byte by byte.</p>
+<h2>The Effects of Simplicity</h2>
 <p>Two problems: 1) we are filling up the EVM with junk code and so 2) the EVM must spend a ton of resources looking for junk.</p>
 <p>A metaphor: let's say you're a baker who specializes in bread.</p>
 <p>Imagine if you were forced to accept every order that came across your desk. Every job, you MUST start and do your best effort until its clear you will fail.</p>
-<p>Even if the order says "beef wellington."</p>
+<p>Even if the order says "<a href="https://en.wikipedia.org/wiki/Beef_Wellington">Beef Wellington</a>."</p>
 <p>The solution: scan the order beforehand and reject it if it doesn't comply to our standards.</p>
 <p>But if an order was a flip-book, revealing one instruction at a time? You'd start the oven, prepare the puff pastry, etc, before you realized you couldn't make the dish.</p>
-<p>This is roughly what happens inside the EVM. The EVM doesn't have a way to understand a smart contract holistically. It simply must read each line of code and (attempt to) execute it.</p>
+<p>This is roughly what happens inside the EVM.&nbsp;</p>
+<p>The EVM doesn't have a way to understand a smart contract holistically. It simply must read each line of code and (attempt to) execute it.</p>
 <p>This is the effect of designing for simplicity; execution is simple, but very costly.</p>
+<h2>Endless Checking</h2>
 <p>Every time the EVM processes a new transaction, it first must run through a series of checks, broken into three buckets:</p>
 <ol>
   <li>Does the instruction exist?</li>
   <li>Does the instruction violate the computing environment?</li>
   <li>Is there enough gas to cover the transaction?</li>
 </ol>
-<p>Does the instruction exist?</p>
+<h3>Does the instruction exist?</h3>
 <p>The smart contract that presents an instruction that is not valid (think "realizing we need beef").</p>
 <p>To be clear, we are discussing EVM instructions, written in machine code (not the solidity code).</p>
-<p>Does the instruction violate the computing environment?</p>
+<h3>Does the instruction violate the computing environment?</h3>
 <p>For the techies, here the EVM is looking for stack underflow/overflow.</p>
 <p>For the plebs, imagine that every computer program gets a limited amount of memory to execute within - this step enforces the boundary.</p>
-<p>Is there enough gas to cover the transaction?</p>
+<h3>Is there enough gas to cover the transaction?</h3>
+<p><a href="/home/concepts/gas">Deep Dive: Ethereum Gas</a></p>
 <p>It's worth your time to have a nuanced understand of what gas is on Ethereum.&nbsp;</p>
 <p>Tl;dr gas is an accounting unit that describes the underlying computing resources of Ethereum/the EVM.</p>
+<h3>Too Much of a Good Thing</h3>
 <p>Each one of these checks isn't too onerous - in fact all three together can be done relatively quickly.</p>
 <p>The problem is that ALL of them need to happen EVERY time a new instruction is executed... multiple (sometimes thousands) of times a transaction.</p>
 <p>And so, EOF.</p>
+<h2>EVM Object Format</h2>
+<figure class="image"><img src="/eof-3.png"></figure>
 <p>At a high level EVM Object Format (EOF) brings enough structure smart contracts that most of these checks are not needed.</p>
 <p>With structure, the EVM can analyze a smart contract BEFORE it is deployed on-chain; if it fails any of the tests, it can be rejected outright.</p>
 <p>Once EOF has been built into the protocol, the EVM will have a map of what each smart contract will look like.</p>
 <p>It will know where the code is and can therefore check all of it beforehand, and then we can stop checking after every single instruction.</p>
+<h3>Versioning</h3>
 <p>The "version" field is particularly useful as it gives the EVM a native sense of version control, relevant to for both the application layer and for Ethereum.</p>
 <p>For applications its straightforward: devs have a very powerful tool for introducing or removing features.</p>
 <p>For Ethereum, versioning makes deploying large changes that affect the core of the protocol much easier (eg account abstraction).</p>
 <p>Rather than worrying about backwards-compatibility, the EVM can apply legacy rules to incompatible versions.</p>
+<h2>Implementation</h2>
 <p>At this point you have a good, high-level understanding of what EOF; we will draw our introduction to a close.</p>
 <p>For more information, <a href="https://www.youtube.com/watch?v=pyxtgilJgKg">start with this video</a>. Then, hit up the EIPs:</p>
 <ul>
