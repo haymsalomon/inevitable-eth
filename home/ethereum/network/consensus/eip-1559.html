@@ -1,0 +1,116 @@
+<!--
+title: EIP-1559
+description: 
+published: true
+date: 2023-01-18T02:51:03.064Z
+tags: 
+editor: ckeditor
+dateCreated: 2023-01-18T02:51:03.064Z
+-->
+
+<figure class="image"><img src="/eip-1559-banner.png"></figure>
+<h1 style="text-align:center;">EVM Object Format (EOF)</h1>
+<h2>The World Computer</h2>
+<p>Ethereum is the <a href="https://inevitableeth.com/home/ethereum/world-computer">World Computer</a>, a single, globally shared computing platform that exists in the space between a network of 1,000s of computers (<a href="https://inevitableeth.com/home/ethereum/network/node">nodes</a>). These nodes are real computers in the real world, communicating directly from peer to peer.&nbsp;</p>
+<p>The purpose of the greater Ethereum apparatus is to offer a single shared computing platform - the <a href="https://inevitableeth.com/home/ethereum/evm">Ethereum Virtual Machine</a> (EVM).</p>
+<p>The EVM exists within the nodes that make up the Ethereum network; every computer is running software that has a live copy of the EVM.</p>
+<p>A <a href="/home/ethereum/blockchain/block">block</a> contains a list of changes within the EVM (<a href="/home/ethereum/blockchain/transaction">transactions</a>). Every node processes every new block, keeping all the EVMs in sync.</p>
+<p><a href="/home/ethereum/network/consensus/time">Every 12 seconds</a> a new block is created, and so every node must be capable of processing every block (syncing their EVM) in less than 12 seconds.</p>
+<p>The more complicated the blocks, the higher the minimum specs (and therefore barriers to entry).</p>
+<h2>Allocating Scarce Resources</h2>
+<p><a href="/home/concepts/gas">Deep Dive: Gas</a></p>
+<p>Ethereum expresses these computational requirements with an accounting unit know as gas.</p>
+<p>(From the protocol's perspective) gas represents the amount of real-world computer resources each transaction takes to process.</p>
+<p>Each block has a gas limit, representing the maximum amount of computation (or other resources, like storing some kinds of data) a node is expected to do every 12 seconds.</p>
+<p>And so, the question becomes "how can Ethereum allocate these resources fairly and efficiently?"</p>
+<p>The answer depends on when you are asking about: before or after August 2021 (<a href="/home/ethereum/history">London Hard Fork</a>).</p>
+<h2>Genesis Fee System</h2>
+<figure class="image"><img src="/eip-1559-1.png"></figure>
+<p>Today, we live under a fee system governed by EIP-1559 - a huge overhaul from the genesis system. But it's worth reviewing what came before.</p>
+<p>In the pre-EIP-1559 system, every block had a fixed gas limit of 10MM gas.</p>
+<p>Each transaction uses a certain amount of gas; a builder is free to choose whichever pending transactions they want as long as the net gas used by all transactions is less than the limit.</p>
+<p>When a user generated a transaction, s/he specified a price they are willing to pay per unit of gas.</p>
+<p>This was multiplied by the total gas used by that transaction is the fee offered to the builder as an incentive for including that transaction in the next block.</p>
+<p>When a builder built a block, (normally) they would sort all the pending transactions by the total fee and go down the list, filling the block as full as possible.</p>
+<p>Then the builder added a transaction, moving all the fees from transactions in that block the proposer.</p>
+<p>Now the block is ready for the proposer (possibly the same entity). The proposer digitally signs and broadcasts it to the network.</p>
+<p>Each node receives the block and processes every transaction. By the end, every EVM is in sync and the process is ready to begin again.</p>
+<h2>Sub-Optimally Simply</h2>
+<p>The old system worked, but its simplicity led to a suboptimal experience for users (imagine bidding significantly more than 2nd place)</p>
+<p>The most pressing issue lies in the distinction between two types of auction systems: first-price and uniform-price.</p>
+<figure class="table">
+  <table>
+    <tbody>
+      <tr>
+        <td>
+          <p style="text-align:center;"><span class="text-big"><strong>First Price Auction</strong></span></p>
+        </td>
+        <td>
+          <p style="text-align:center;"><span class="text-big"><strong>Uniform Price Auction</strong></span></p>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <p style="text-align:center;">A type of auction where the winning bidder pays the amount of their final bid, as opposed to second price auctions where the winning bidder pays the amount of the highest unsuccessful bid. This is what we colloquially think of as an auction - you pay what you bid.</p>
+        </td>
+        <td>
+          <p style="text-align:center;">A type of auction in which a fixed number of identical items are sold for an identical price. Bidders place a bid for the quantity they want, indicating what price they are willing to pay for each unit. These bids are concealed from other bidders. Once the auction has ended, the auctioneer assesses the bids made, and decides at which price the total quantity of units on offer should be sold.<br><br>The highest bid is the first considered and then each progressively lower bid is considered until the auctioneer decides on an appropriate price. The price that is decided is the ‘uniform price’ at which all units will be sold. Participants who made a bid of the uniform price or above are the winning bidders of the auction.</p>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
+<p>The old fee markets were incredibly inefficient. <a href="https://notes.ethereum.org/@vbuterin/eip-1559-faq">Per Vitalik Buterin</a>,&nbsp;</p>
+<blockquote>
+  <p>The difference between average gasprice and 10th percentile gasprice in a regular block is something like 3x for median and 5-8x for mean. People needlessly overpay massively.</p>
+  <p>Everyone who does not overpay suffers a delay of 1-2 minutes or even longer, and this delay does not actually benefit anyone; the total load to the chain is the same regardless of whether a given unit of load hits the chain at time N or time N + 60. <strong>There is no actual social benefit from participants “expressing a low time preference”</strong> in the fee market mechanism, at least under normal conditions; it is pure deadweight loss. We would all be better off if more transactions were just included immediately, which EIP 1559 allows.</p>
+</blockquote>
+<p>There is a lot of nuance under these systems, it's worth digging in to understand the incentive structures that fill up every Ethereum block (before and after EIP-1559).</p>
+<p><a href="https://hackmd.io/@adietrichs/eip-1559">Here's the best detailed breakdown of the what and why by Ansgar Dietrichs.</a></p>
+<p>But EIP-1559 is even more important than auctions, the system it installed was what enshrined ETH as the asset used to pay fees on Ethereum.</p>
+<p>Without EIP-1559, there was no requirement to pay in ETH; in fact some didn't.</p>
+<figure class="image"><img src="/eip-1559-2.png">
+  <figcaption><a href="https://ethereum-magicians.org/t/transactions-without-gas/6064"><i>source</i></a></figcaption>
+</figure>
+<h2>EIP-1559 Fee System</h2>
+<figure class="image"><img src="/eip-1559-3.png"></figure>
+<p>Which brings us to the system we have today: the EIP-1559 Fee System.</p>
+<p>From the 30k ft view, things look roughly the same. Users create transactions and set fees. Block builders create blocks based on the fees their earn.</p>
+<p>But this system is much more powerful.</p>
+<p>EIP-1559 splits the fees paid to proposers into two categories: base fees and priority fees.</p>
+<p>When generating a transaction, a user now indicates two number: the maximum base fee per unit of gas they are willing to pay, and the tip (priority fee) for the proposer.</p>
+<h3>Balancing Demand</h3>
+<p>Base fees are set by the protocol, fluctuating with demand.</p>
+<p>Post EIP-1559, blocks have a variable size. The average block target is 15MM gas, but can increase by up to 2x in periods of high demand.</p>
+<p>These two mechanisms work balance Ethereum's computational load.</p>
+<p>When lots of people want to use Ethereum, the maximum gas limit increases and creates block space. However, the base fee will also increase.</p>
+<p>This increase is exponential and indefinite. Soon it becomes too high for anyone to be willing to pay, and so demand subsides.</p>
+<p>Under EIP-1559, the base fee is set once per block; all transactions that set a maximum base fee high enough are eligible for conclusion.</p>
+<p>Different transactions may pay different total base fees if they use different amounts of gas, but they pay the same unit cost.</p>
+<h3>Burning the Base Fee</h3>
+<p>The biggest difference between pre and post EIP-1559 is what happens to the base fee: today, the base fee collected from every transaction is sent to an unrecoverable address - lost forever.</p>
+<p>We call this "burning;" it's like they were lit on fire and destroyed.</p>
+<p>This is a huge deal - the EIP-1559 burn represents revenue earned by the protocol.</p>
+<p>We choose to "destroy" it in order to offset the ETH issued by Proof of Stake to secure Ethereum, but there are plenty of other ways the community could choose to use that revenue.</p>
+<p>I cannot overstate just how big the EIP-1559 burn is. Since the move to Proof of Stake (and the drop in ETH issuance), the burn is often larger than issuance, leading to an (often) deflationary ETH.</p>
+<p><a href="https://ultrasound.money/">Thus, ultra-sound money</a>.</p>
+<h3>Priority Fee</h3>
+<p>The other kind of fee that exists post EIP-1559 is the priority fee. This is the fee paid to the block proposer as an incentive to include the transaction in the next block.</p>
+<p>As in the previous system, this fee is transferred directly to the proposer within each block.</p>
+<p>(Normally) block builders are focused on maximizing the total priority fees possible within the gas limit the protocol gives the for that slot.</p>
+<p>Builders don't really care about the base fee, other than how it affects the overall demand (and therefore price).</p>
+<h3>Enshrining ETH</h3>
+<p>While this priority fee could feasibly be paid in any asset, the base fee must be paid in ETH, ensuring that ETH retains the extra premium it gains from its role as payment asset for Ethereum.</p>
+<p>As an added bonus, the base fee becomes a reliable oracle for gas fees.</p>
+<h2>Summary</h2>
+<p>That completes the EIP-1559 system. Here are the big takeaways:</p>
+<ul>
+  <li>block size is flexible up to 2x, but targets a 15MM gas limit</li>
+  <li>base fee, set by the protocol, scales with block space demand</li>
+  <li>together both block size and base fee control demand</li>
+  <li>base fee is burned</li>
+</ul>
+<p>But EIP-1559 is not the final state of the Ethereum fee system. In fact, there are already important upgrades being developed by the Etherean magicians.</p>
+<p>The EIP-1559 you know today is just he beginning; wait until you see the endgame.</p>
+<h2>Resources</h2>
+<p>Source Material -</p>
