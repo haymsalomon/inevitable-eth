@@ -1,0 +1,78 @@
+<!--
+title: Crypto-Economics and PoS
+description: 
+published: true
+date: 2023-01-23T01:12:26.247Z
+tags: 
+editor: ckeditor
+dateCreated: 2023-01-23T01:12:26.247Z
+-->
+
+<figure class="image"><img src="/crypto-economics-banner.png"></figure>
+<h1 style="text-align:center;">Crypto-Economics and PoS</h1>
+<h2>The World Computer</h2>
+<p>Ethereum is the <a href="https://inevitableeth.com/home/ethereum/world-computer">World Computer</a>, a single, globally shared computing platform that exists in the space between a network of 1,000s of computers (<a href="https://inevitableeth.com/home/ethereum/network/node">nodes</a>).&nbsp;</p>
+<p>These nodes are real computers in the real world, communicating directly from peer to peer.&nbsp;</p>
+<p>The purpose of the greater Ethereum apparatus is to offer a single shared computing platform - the <a href="https://inevitableeth.com/home/ethereum/evm">Ethereum Virtual Machine</a> (EVM).</p>
+<p>The EVM provides the context for transactions (computation); everything you "do" on-chain happens within the EVM.</p>
+<p>Each node runs a local version of the EVM, which is then held perfectly in sync with every other copy of the EVM through a process called <a href="https://inevitableeth.com/home/ethereum/network/consensus/pos">Proof of Stake</a> (PoS).</p>
+<p>Any individual EVM is a window into the shared state of the World Computer.</p>
+<p>There are a lot of ways to think about PoS, but let's take a step back and think big picture.</p>
+<h2>Trust Within Ethereum</h2>
+<p>Taken all together, Ethereum is decentralized and untrusted, but if you look under the hood you'll find that every step is predicated on a centralized entity (validator).</p>
+<p>Consider a <a href="/home/ethereum/network/consensus/block-proposal">block proposal</a>. Every slot, a single validator, running on a single machine, controlled by a single person (or company) is chosen to have a full monopoly over what is included in the next block...</p>
+<p>...an action that gives them (temporary) control over the EVM.</p>
+<p>The block proposer could submit a block that grants them 100,000 ETH. Or maybe a block that changes the <a href="https://chain.link/">Chainlink</a> oracle price of BTC to liquidate their <a href="https://www.euler.finance/">Euler Finance</a> counterparties.</p>
+<p>The proposer has complete control over a trustless system; is this a paradox?</p>
+<p>The answer, of course, is that we are not trusting the proposer - that's precisely the function of PoS.</p>
+<p>Yes, the proposer has complete control over the EVM, but in order to get that control they needed to put ETH at stake (risk of slashing).</p>
+<p>PoS has been specifically designed so that the punishment for misbehaving has more economic consequences than it could possibly be worth.</p>
+<p>We don't need to trust that the proposer is a good actor, we just need to trust that they are (economically) rational.</p>
+<p>By forcing users to "stake" capital, thereby putting it at risk of confiscation in the event of bad behavior, PoS transforms a trust assumption into an economic assumption.</p>
+<p>Or, more specifically, a <a href="https://www.youtube.com/watch?v=pKqdjaH1dRo">crypto-economic assumption</a>.</p>
+<h2>Crypto-Economics</h2>
+<p>Ever heard someone refer to Ethereum as "trustless?" Trustless is simply shorthand for the crypto-economics of PoS.</p>
+<p>Technically, there is plenty of trust within the network. But the trust is not in the good faith of their peer nodes, its in the cold, hard numbers.</p>
+<p>If you Google crypto-economics, you'll find a growing body of research that covers many topics.</p>
+<p>Here's the tl;dr: crypto-economics studies how we can combine cryptography and economic incentives to create robust systems that are independent from human trust.</p>
+<p>Think about crypto-economics in contrast to cryptography.</p>
+<p>Cryptography is built on provable mathematics; there is nothing to trust other than the core properties of the universe.</p>
+<p>Crypto-economics introduces trust, but mitigates it with economic incentives.</p>
+<h2>Creating Trustless Trust</h2>
+<p>By recognizing Ethereum PoS as a crypto-economic system, we can easily realize that PoS is applicable to many more systems than just securing a blockchain.</p>
+<p>We can use this same principle to transform ANY centralized trust assumption into a crypto-economic one.</p>
+<p>Take, for example, an oracle service.</p>
+<h3>PoS and Oracles</h3>
+<p><a href="/home/concepts/oracle">Deep Dive: Oracles</a></p>
+<p>An oracle is a smart contract that has the current copy of whatever data it holds. For example, the <a href="https://etherscan.io/address/0x5f4ec3df9cbd43714fe2740f5e3616155c5b8419">Chainlink ETH oracle is a smart contract</a> that updates with the latest market price of ETH every block.</p>
+<p>The problem: anyone who relies on the data within the oracle's smart contract is implicitly trusting whoever submitted the data in the first place.</p>
+<p>What's the point of entering the trustless EVM if you need to trust everyone who supplies you with data?</p>
+<h3>Quantifying Trustless Trust</h3>
+<p>The solution is simple: we simply create a Proof of Stake system!</p>
+<ol>
+  <li>Issue a new token</li>
+  <li>Only allow people staking token to update the smart contract</li>
+  <li>Slash (remove a portion of staked capital) any participant who provides provably false data</li>
+</ol>
+<p>Just like with Ethereum, this will create a "trustless" solution. Users don't have to trust the intentions of the oracle providers, they know that any malfeasance will cost them dearly.</p>
+<p>In fact, they can directly quantify the crypto-economic security.</p>
+<p>While this quantification depends on the specific system, the Byzantine General's problem gives us a good heuristic for PoS systems: no system can be attacked without destroying AT LEAST 1/3 of staked capital.</p>
+<p>And so, the more staked capital, the more security.</p>
+<h2>Fracturing Capital</h2>
+<p>At this point you understand the basics of crypto-economics, especially in regards to (Ethereum) PoS.</p>
+<p>I cannot overstate how important this is - it might be the biggest gift of our entire industry: PoS allows us to transform trust requirements into economics ones.</p>
+<p>But here's a thought you should be having: the power of PoS is directly dependent on how much capital you can convince to opt-in to staking.</p>
+<p>Each time a new centralized service launches a PoS system, it fractures the capital available for trustless trust.</p>
+<p>If we just have Ethereum, Chainlink and maybe a few more PoS services, we will be ok. Each PoS network can be large and capitalized enough to sufficiently protect and de-trust each service.</p>
+<p>But does that put a soft cap on the number of these services?</p>
+<p>I believe that without a solution, the answer is yes.&nbsp;</p>
+<p>Good thing <a href="https://twitter.com/sreeramkannan">Sreeram Kannan</a> has a solution: <a href="/home/ethereum/upgrades/middleware/eigenlayer">EigenLayer</a>.</p>
+<p>Tl;dr EigenLayer will create a marketplace for re-staking, creating general-purpose decentralized trust.</p>
+<p>All concentrated into ETH.</p>
+<h2>Trustless Trust</h2>
+<p><a href="/home/ethereum/world-computer/endgame/trustless-trust">Deep Dive: Trustless Trust</a></p>
+<p>If you look forward and squint hard enough, you care just barely make out what the @ethereum endgame looks like.</p>
+<p>Having trouble making it out? EigenLayer makes it much more clear.</p>
+<p>ETH is the pristine collateral of trustless trust.</p>
+<h2>Resources</h2>
+<p>Source Material - Twitter Link</p>
