@@ -1,0 +1,80 @@
+<!--
+title: Polygon zkEVM
+description: 
+published: true
+date: 2023-04-01T00:36:42.238Z
+tags: 
+editor: ckeditor
+dateCreated: 2023-04-01T00:36:42.238Z
+-->
+
+<figure class="image"><img src="/overview-1.png"></figure>
+<h1 style="text-align:center;">Polygon zkEVM</h1>
+<h2>The World Computer</h2>
+<p>Ethereum is the <a href="https://inevitableeth.com/home/ethereum/world-computer">World Computer</a>, a single, globally shared computing platform that exists in the space between a network of 1,000s of computers (<a href="https://inevitableeth.com/home/ethereum/network/node">nodes</a>).&nbsp;</p>
+<p>These nodes are real computers in the real world, communicating directly from peer to peer.&nbsp;</p>
+<p>The purpose of the greater Ethereum apparatus is to offer a single shared computing platform - the <a href="https://inevitableeth.com/home/ethereum/evm">Ethereum Virtual Machine</a> (EVM).</p>
+<p>The EVM provides the context for transactions (computation); everything you "do" on-chain happens within the EVM.</p>
+<p>Today, Ethereum (specifically the EVM) is slow and expensive; much too inefficient to run a financial system, consumer applications, etc.</p>
+<p>But this slowness is a feature, not a bug. The EVM is slow to allow for nodes with INCREDIBLY generous minimum specifications.</p>
+<p>Details for another thread; suffice to say that the lower the minimum requirements, the more nodes that can join. The more nodes that can join, the more decentralized the network is.</p>
+<p>Decentralization = credible neutrality = world domination</p>
+<p>So... how to scale Ethereum?</p>
+<h2>Scaling Ethereum</h2>
+<p><a href="/home/ethereum/upgrades/scaling">Deep Dive: Scaling Ethereum</a>&nbsp;</p>
+<p>Key insight: it's not important that execution is credibly neutral, just that settlement is.</p>
+<p>Put another way, if we can post a (verifiable) record of every transaction &amp; result onto Ethereum, then execution (actual computational work) can be done outside of the EVM.</p>
+<p>The endgame solution of this design are called <a href="/home/ethereum/upgrades/scaling/execution/zk-rollup">Zero-Knowledge Rollups</a>.</p>
+<p>Tl;dr rollups are performance optimized chains that process transactions off-chain. Periodically they post a ZK-proof and a copy of every transaction to Ethereum.</p>
+<p>And that is EXACTLY what Polygon Labs has delivered!</p>
+<p>That's right, ladies and gentlemen... long before we thought possible, even before we figured out how to actually implement optimistic rollups, we not only have a ZK-Rollup...</p>
+<h2>Polygon zkEVM</h2>
+<p><a href="https://twitter.com/0xPolygonLabs/status/1640360125188767745">WE HAVE A FREAKING ZKEVM!!!</a></p>
+<h3>EVM-Equivalence</h3>
+<p>In a moment, we will trace through an actual zkEVM transaction and dissect how a ZK-Rollup works. But first, we need to discuss EVM-equivalence.</p>
+<p>Because Polygon's zkEVM is special not only because its a ZK-Rollup, but because it is (also) EVM-equivalent.</p>
+<p><a href="https://twitter.com/_bfarmer/status/1641861598179639296">Brendan Farmer dropped a very good thread that covers the issue</a>, so I'll let him do the talking.</p>
+<p>Here's what we care about: if you develop something for Ethereum, it will (probably) work on the zkEVM.</p>
+<p>No reformatting... no retooling... not even recompiling.</p>
+<p>With EVM-equivalence, the zkEVM is ready to every single* dApp that is running on Ethereum, Arbitrum, Optimism and any other EVM-equivalent chain.</p>
+<p>Even the developer tooling works!</p>
+<p>*there are some minor differences... for now.</p>
+<h3>Tracing a Transaction</h3>
+<p>Ok, so all of that sounds good on paper, but what does it look like?</p>
+<p>We'll start with a transaction... <a href="https://zkevm.polygonscan.com/tx/0x110fa9718ae63a2cf610517988e1e3fc65982ab69fb64c02378f944744686a73">here's one selected for no particular reason</a>.</p>
+<p>A simple transfer of .0007 $ETH.</p>
+<p>Think back to our distinction from earlier: execution vs settlement. In this example...</p>
+<p>Execution: the computational work required to debit 0x256...8a6's balance and to credit 0x87e...7dd's balance</p>
+<p>Settlement: the final balances &amp; a record of the transaction.</p>
+<p>When a user creates a transaction in the zkEVM, it is executed on high performance machines called sequencers. Sequencers are centralized, but can execute transaction VERY quickly and cheaply.</p>
+<p>Once the sequencers work out the net result of the transaction, the it can be published to Ethereum.</p>
+<p>Instead of posting (the net result of) each transaction, the zkEVM will create a batch - a list of transactions previously executed on the ZK-Rollup.</p>
+<p>As each sequencer generates a batch, it sends it to an aggregator. The aggregator is the entity responsible for the "ZK."</p>
+<p>&lt;NOTE&gt;</p>
+<p>Zero-Knowledge is a buzzword that really doesn't mean much. <a href="/home/concepts/zk-proof">Here's a quick primer</a>, but don't stress too much.</p>
+<p>The important thing to understand with ZK-based solutions is "what purpose is cryptography serving."</p>
+<p>&lt;/NOTE&gt;</p>
+<p>Once aggregators have all the transaction data, they are responsible for generating validity proofs for each batch.</p>
+<p>The validity proof is a small piece of data that can be used by anyone to verify the entire dataset.</p>
+<p>It's difficult to generate, but easy to verify.</p>
+<p>After proof generation, the aggregator can post the proof and a record of every transaction to the zkEVM smart contract on the Ethereum chain.</p>
+<p>That smart contract first verifies the proof within the EVM. Once verified, the smart contract updates with all the txns.</p>
+<p>This verification+update step is crucial; it serves as the basis for settlement/finalization for the zkEVM. Once it has been completed, the zkEVM is officially saying "these txns have been executed and cannot be undone."</p>
+<p>And so, finality can happen (almost) instantly.</p>
+<p>Let's look!</p>
+<p>Our <a href="https://zkevm.polygonscan.com/tx/0x110fa9718ae63a2cf610517988e1e3fc65982ab69fb64c02378f944744686a73">transaction</a> landed at <a href="https://zkevm.polygonscan.com/batch/2552">batch 2552</a>, which was <a href="https://etherscan.io/tx/0x8f6aed75b142c8e6aad1b60a0066f169f2221a3289616ce3b434e31f8a1772aa">sent to the Ethereum smart contract with this transaction (L1 Sequence Hash)</a> and was <a href="https://etherscan.io/tx/0xce30e01fa571cc7339de1d8c6f3abd1d143095ec497b1f5700b193e954684a68">verified by the Ethereum smart contract with this txn (L1 Verify Batch Hash).</a></p>
+<figure class="image"><img src="/overview-2.png"></figure>
+<p>And that's your ZK-Rollup, right in a single screenshot!</p>
+<p>Execution achieved by Polygon Labs' zkEVM sequencer, settlement achieved by Ethereum's decentralization.</p>
+<p>Centralized (fast, cheap) execution, with decentralized (credibly neutral) settlement.</p>
+<h2>Open Source</h2>
+<p>Up until now I've been handwaving away the centralization problem for ZK-Rollups, but it time to address it head on. Basically, we have two problems:</p>
+<ul>
+  <li>What happens if Polygon Labs puts me on the naughty list?</li>
+  <li>What happens if Polygon Labs disappears tomorrow?</li>
+</ul>
+<p>Fortunately, the solution to both problems is the same: <a href="https://polygon.technology/blog/polygon-zkevm-is-now-fully-open-source">everything is open sourced</a>.</p>
+<p>Today, the process is managed by a security council, (I imagine that) in the future anyone will be able to deploy credibly neutral infrastructure for the zkEVM.</p>
+<p>From here, there is so much more I want to talk about Polygon Labs' zkEVM. zkEVM bridging and shard provers, Proof of Donation/Efficiency, app chains...</p>
+<p>Guess I'm going to need more threads!</p>
+<p>Bottom line, now is an INCREDIBLY exciting time for Polygon and for Ethereum.</p>
